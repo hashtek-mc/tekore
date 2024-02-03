@@ -17,6 +17,9 @@ import fr.hashtek.tekore.common.sql.account.AccountGetter;
 
 public class JoinEvent implements Listener, HashLoggable {
 
+	/**
+	 * Called when a player logs into the server.
+	 */
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event)
 	{
