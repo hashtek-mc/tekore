@@ -102,8 +102,8 @@ public class Tekord extends Plugin implements HashLoggable {
 	/**
 	 * Adds a player's data to the main HashMap.
 	 * 
-	 * @param player		Player
-	 * @param playerData	Player's data
+	 * @param	player		Player
+	 * @param	playerData	Player's data
 	 */
 	public void addPlayerData(ProxiedPlayer player, PlayerData playerData)
 	{
@@ -114,7 +114,7 @@ public class Tekord extends Plugin implements HashLoggable {
 	/**
 	 * Remove a player's data from the main HashMap.
 	 * 
-	 * @param player	Player
+	 * @param	player	Player
 	 */
 	public void removePlayerData(ProxiedPlayer player)
 	{

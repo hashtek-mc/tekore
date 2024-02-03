@@ -37,7 +37,7 @@ public enum Rank {
 	/**
 	 * From a raw string (which equals to a rank's database name), return a Rank (if it does exists).
 	 * 
-	 * @param databaseName	Rank's database name
+	 * @param	databaseName	Rank's database name
 	 */
 	public static Rank getRankByDatabaseName(String databaseName)
 	{

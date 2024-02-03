@@ -45,6 +45,8 @@ public class SQLManager implements HashLoggable {
 	
 	/**
 	 * Connects to the database.
+	 * 
+	 * @throws	SQLException	SQL failure
 	 */
 	public void connect() throws SQLException
 	{
@@ -72,6 +74,8 @@ public class SQLManager implements HashLoggable {
 	
 	/**
 	 * Disconnects from the database.
+	 * 
+	 * @throws	SQLException	SQL failure
 	 */
 	public void disconnect() throws SQLException
 	{

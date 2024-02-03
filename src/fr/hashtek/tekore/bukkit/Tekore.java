@@ -69,8 +69,8 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	/**
 	 * Adds a player's data to the main HashMap.
 	 * 
-	 * @param player		Player
-	 * @param playerData	Player's data
+	 * @param	player		Player
+	 * @param	playerData	Player's data
 	 */
 	public void addPlayerData(Player player, PlayerData playerData)
 	{
@@ -81,7 +81,7 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	/**
 	 * Remove a player's data from the main HashMap.
 	 * 
-	 * @param player	Player
+	 * @param	player	Player
 	 */
 	public void removePlayerData(Player player)
 	{

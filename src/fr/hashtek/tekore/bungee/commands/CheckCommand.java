@@ -27,8 +27,8 @@ public class CheckCommand extends Command implements HashLoggable {
 	/**
 	 * Command parsing.
 	 * 
-	 * @param sender	Player who executed the command
-	 * @param args		Arguments passed
+	 * @param	sender	Player who executed the command
+	 * @param	args	Arguments passed
 	 */
 	private boolean parseInput(ProxiedPlayer sender, String[] args)
 	{
@@ -50,9 +50,9 @@ public class CheckCommand extends Command implements HashLoggable {
 	/**
 	 * Sends a full dump of the targeted player's data to the command sender.
 	 * 
-	 * @param target			Targeted player
-	 * @param targetPlayerData	Targed player's data
-	 * @param sender			Player who executed the command
+	 * @param	target				Targeted player
+	 * @param	targetPlayerData	Targed player's data
+	 * @param	sender				Player who executed the command
 	 */
 	private void displayPlayerData(ProxiedPlayer target, PlayerData targetPlayerData, ProxiedPlayer sender)
 	{
@@ -81,8 +81,8 @@ public class CheckCommand extends Command implements HashLoggable {
 	/**
 	 * Called when command is executed.
 	 * 
-	 * @param sender	Player who executed the command
-	 * @param args		Arguments passed
+	 * @param	sender	Player who executed the command
+	 * @param	args	Arguments passed
 	 */
 	@Override
 	public void execute(CommandSender sender, String[] args)

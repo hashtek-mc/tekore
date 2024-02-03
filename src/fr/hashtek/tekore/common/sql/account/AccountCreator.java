@@ -15,7 +15,8 @@ public class AccountCreator {
 	/**
 	 * Inserts into `core` table.
 	 * 
-	 * @param playerData	Player's data
+	 * @param	playerData		Player's data
+	 * @throws	SQLException	SQL failure
 	 */
 	private static void queryCore(PlayerData playerData) throws SQLException
 	{
@@ -32,7 +33,8 @@ public class AccountCreator {
 	/**
 	 * Inserts into `profiles` table.
 	 * 
-	 * @param playerData	Player's data
+	 * @param	playerData		Player's data
+	 * @throws	SQLException	SQL failure
 	 */
 	private static void queryProfile(PlayerData playerData) throws SQLException
 	{
@@ -51,7 +53,8 @@ public class AccountCreator {
 	/**
 	 * Inserts into `stats` table.
 	 * 
-	 * @param playerData	Player's data
+	 * @param	playerData		Player's data
+	 * @throws	SQLException	SQL failure
 	 */
 	private static void queryStats(PlayerData playerData) throws SQLException
 	{
@@ -67,8 +70,9 @@ public class AccountCreator {
 	/**
 	 * Adds a new account to the database.
 	 * 
-	 * @param conn			SQL connection
-	 * @param playerData	Player's data
+	 * @param	conn			SQL connection
+	 * @param	playerData		Player's data
+	 * @throws	SQLException	SQL failure
 	 */
 	public static void createPlayerAccount(Connection conn, PlayerData playerData)
 		throws SQLException

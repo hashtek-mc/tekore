@@ -14,7 +14,7 @@ public class PlayerProfile {
 	/**
 	 * Creates a new instance of PlayerProfile.
 	 * 
-	 * @param rank	Player's rank
+	 * @param	rank	Player's rank
 	 */
 	PlayerProfile(Rank rank)
 	{

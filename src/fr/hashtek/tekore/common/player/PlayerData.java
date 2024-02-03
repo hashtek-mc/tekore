@@ -30,7 +30,7 @@ public class PlayerData {
 	 * Creates an instance of PlayerData for an unknown-type player.
 	 * Setups SQLManager based on player type (Bungee or Bukkit).
 	 * 
-	 * @param player	Unknown-type player
+	 * @param	player	Unknown-type player
 	 */
 	public PlayerData(Object player) throws Exception
 	{
@@ -55,7 +55,7 @@ public class PlayerData {
 	 * Creates an empty instance of PlayerData based on a username.
 	 * Mainly used for "/check" bungee command.
 	 * 
-	 * @param username	Player's username
+	 * @param	username	Player's username
 	 */
 	public PlayerData(String username)
 	{
@@ -94,15 +94,11 @@ public class PlayerData {
 	}
 	
 	/**
-	 * Fetches data from database and fills up PlayerData.
+	 * Sets a PlayerData's data from the SQL database.
 	 */
 	public void fetchDataFromSql(SQLManager sqlManager) throws NoSuchFieldException, SQLException
 	{
-		try {
-			AccountGetter.getPlayerAccount(sqlManager.getConnection(), this);
-		} catch (NoSuchFieldException | SQLException exception) {
-			throw exception;
-		}
+		AccountGetter.getPlayerAccount(sqlManager.getConnection(), this);
 	}
 	
 	

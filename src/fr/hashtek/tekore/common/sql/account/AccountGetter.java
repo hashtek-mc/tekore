@@ -13,6 +13,14 @@ public class AccountGetter {
 	private static Connection connection;
 	
 	
+	/**
+	 * Sets PlayerData's core attributes from the SQL database
+	 * 
+	 * @param	playerData				Player's data
+	 * @param	resultSet				SQL result set
+	 * @param	isPlayerDataComplete	Shortly, if UUID and username needs to be fetched from the database.
+	 * @throws	SQLException			SQL failure
+	 */
 	private static void setCoreAttributes(PlayerData playerData, ResultSet resultSet, boolean isPlayerDataIncomplete)
 		throws SQLException
 	{
@@ -22,6 +30,14 @@ public class AccountGetter {
 		}
 	}
 	
+	/**
+	 * Sets PlayerData's profile attributes from the SQL database
+	 * 
+	 * @param	playerData				Player's data
+	 * @param	resultSet				SQL result set
+	 * @param	isPlayerDataComplete	Shortly, if UUID and username needs to be fetched from the database.
+	 * @throws	SQLException			SQL failure
+	 */
 	private static void setProfileAttributes(PlayerData playerData, ResultSet resultSet, boolean isPlayerDataIncomplete)
 		throws SQLException
 	{
@@ -31,6 +47,14 @@ public class AccountGetter {
 		playerData.getProfile().setRank(rank);
 	}
 	
+	/**
+	 * Sets PlayerData's stats attributes from the SQL database
+	 * 
+	 * @param	playerData				Player's data
+	 * @param	resultSet				SQL result set
+	 * @param	isPlayerDataComplete	Shortly, if UUID and username needs to be fetched from the database.
+	 * @throws	SQLException			SQL failure
+	 */
 	private static void setStatsAttributes(PlayerData playerData, ResultSet resultSet, boolean isPlayerDataIncomplete)
 		throws SQLException
 	{
@@ -38,12 +62,12 @@ public class AccountGetter {
 	}
 	
 	/**
+	 * Sets a PlayerData's data from the SQL database.
 	 * 
-	 * @param conn
-	 * @param playerData
-	 * @return
-	 * @throws SQLException
-	 * @throws NoSuchFieldException
+	 * @param	conn					SQL connection
+	 * @param	playerData				Player's data
+	 * @throws	SQLException			SQL failure
+	 * @throws	NoSuchFieldException	Player account not found
 	 */
 	public static PlayerData getPlayerAccount(Connection conn, PlayerData playerData)
 		throws SQLException, NoSuchFieldException

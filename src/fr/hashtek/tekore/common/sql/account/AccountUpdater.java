@@ -14,8 +14,9 @@ public class AccountUpdater {
 	/**
 	 * Updates a player's account in the SQL database.
 	 * 
-	 * @param conn			SQL connection
-	 * @param playerData	Player's data
+	 * @param	conn			SQL connection
+	 * @param	playerData		Player's data
+	 * @throws	SQLException	SQL failure
 	 */
 	public static void updatePlayerAccount(Connection conn, PlayerData playerData)
 		throws SQLException
