@@ -1,15 +1,19 @@
 package fr.hashtek.tekore.common.player;
 
-import fr.hashtek.hashlogger.HashLogger;
+import java.sql.SQLException;
+
 import fr.hashtek.tekore.bukkit.Tekore;
 import fr.hashtek.tekore.bungee.Tekord;
-import fr.hashtek.tekore.common.Exit;
 import fr.hashtek.tekore.common.sql.SQLManager;
+import fr.hashtek.tekore.common.sql.account.AccountGetter;
 
+/**
+ * PlayerData aims to store some data of a player.
+ * Some will go to the database, some others won't because it's useless.
+ * This class is the main reason we created a core.
+ */
 public class PlayerData {
 	
-	private static final String FILENAME = "Tekord.java";
-
 	private Object player;
 
 	private String uuid;
@@ -19,59 +23,85 @@ public class PlayerData {
 	private PlayerProfile profile;
 
 	private SQLManager sql;
+	private boolean doesExists;
 	
 	
-	public PlayerData(Object player)
+	/**
+	 * Creates an instance of PlayerData for an unknown-type player.
+	 * Setups SQLManager based on player type (Bungee or Bukkit).
+	 * 
+	 * @param player	Unknown-type player
+	 */
+	public PlayerData(Object player) throws Exception
 	{
-		HashLogger.debug(FILENAME, "Creating PlayerData for \"" + player + "\"...");
-		
 		this.player = player;
 		
-		if (setBukkitPlayer() == Exit.FAILURE)
-			return;
+		try {
+			this.setBukkitPlayer();
+		} catch (NoClassDefFoundError _unused) {
+			try {
+				this.setBungeePlayer();
+			} catch (NoClassDefFoundError ex) {
+				throw new Exception("Player type is not BukkitPlayer or BungeePlayer.");
+			}
+		}
 		
 		this.setUniqueId(this.uuid);
 		
 		this.profile = new PlayerProfile();
-		
-		HashLogger.debug(FILENAME, "Successfully created PlayerData for \"" + this.username + "\".");
 	}
 	
-	
-	private Exit setBukkitPlayer()
+	/**
+	 * Creates an empty instance of PlayerData based on a username.
+	 * Mainly used for "/check" bungee command.
+	 * 
+	 * @param username	Player's username
+	 */
+	public PlayerData(String username)
 	{
-		try {
-			if (player instanceof org.bukkit.entity.Player) {
-				HashLogger.debug(FILENAME, player + " is a BukkitPlayer");
-				
-				this.player = (org.bukkit.entity.Player) player;
-				this.uuid = ((org.bukkit.entity.Player) player).getUniqueId().toString();
-				this.username = ((org.bukkit.entity.Player) player).getName();
-				this.sql = Tekore.getInstance().getSQLManager();
-				
-				return Exit.SUCCESS;
-			} else 
-				throw new NoClassDefFoundError();
-		} catch (NoClassDefFoundError exception) {
-			return setBungeePlayer();
-		}
+		this.username = username;
+		
+		this.profile = new PlayerProfile();
 	}
 	
-	private Exit setBungeePlayer()
+	
+	/**
+	 * Fills up PlayerData using Bukkit's API (used only if player is Bukkit).
+	 */
+	private void setBukkitPlayer() throws NoClassDefFoundError
+	{
+		if (player instanceof org.bukkit.entity.Player) {
+			this.player = (org.bukkit.entity.Player) player;
+			this.uuid = ((org.bukkit.entity.Player) player).getUniqueId().toString();
+			this.username = ((org.bukkit.entity.Player) player).getName();
+			this.sql = Tekore.getInstance().getSQLManager();
+		} else 
+			throw new NoClassDefFoundError();
+	}
+	
+	/**
+	 * Fills up PlayerData using Bungee's API (used only if player is Bungee).
+	 */
+	private void setBungeePlayer() throws NoClassDefFoundError
 	{
 		if (player instanceof net.md_5.bungee.api.connection.ProxiedPlayer) {
-			HashLogger.debug(FILENAME, player + " is a BungeePlayer");
-			
 			this.player = (net.md_5.bungee.api.connection.ProxiedPlayer) player;
 			this.uuid = ((net.md_5.bungee.api.connection.ProxiedPlayer) player).getUniqueId().toString();
 			this.username = ((net.md_5.bungee.api.connection.ProxiedPlayer) player).getName();
 			this.sql = Tekord.getInstance().getSQLManager();
-			
-			return Exit.SUCCESS;
-		} else {
-			HashLogger.err(FILENAME, "Failed creating PlayerData for \"" + player + "\"\n" +
-				"Reason : Player type is not BukkitPlayer or BungeePlayer.");
-			return Exit.FAILURE;
+		} else
+			throw new NoClassDefFoundError();
+	}
+	
+	/**
+	 * Fetches data from database and fills up PlayerData.
+	 */
+	public void fetchDataFromSql(SQLManager sqlManager) throws NoSuchFieldException, SQLException
+	{
+		try {
+			AccountGetter.getPlayerAccount(sqlManager.getConnection(), this);
+		} catch (NoSuchFieldException | SQLException exception) {
+			throw exception;
 		}
 	}
 	
@@ -101,6 +131,11 @@ public class PlayerData {
 		return this.sql;
 	}
 	
+	public boolean doesExists()
+	{
+		return this.doesExists;
+	}
+	
 	
 	public void setUniqueId(String uuid)
 	{
@@ -116,6 +151,11 @@ public class PlayerData {
 	public void setProfile(PlayerProfile profile)
 	{
 		this.profile = profile;
+	}
+	
+	public void setExistence(boolean exists)
+	{
+		this.doesExists = exists;
 	}
 
 }

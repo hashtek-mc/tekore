@@ -10,19 +10,19 @@ import fr.hashtek.tekore.common.player.PlayerData;
 
 public class AccountGetter {
 	
-	@SuppressWarnings("unused")
-	private static final String FILENAME = "AccountGetter.java";
-	
 	private static Connection connection;
 	
 	
-	private static void setCoreAttributes(PlayerData playerData, ResultSet resultSet)
+	private static void setCoreAttributes(PlayerData playerData, ResultSet resultSet, boolean isPlayerDataIncomplete)
 		throws SQLException
 	{
-		
+		if (isPlayerDataIncomplete) {
+			playerData.setUniqueId(resultSet.getString("core.uuid"));
+			playerData.setUsername(resultSet.getString("core.username"));
+		}
 	}
 	
-	private static void setProfileAttributes(PlayerData playerData, ResultSet resultSet)
+	private static void setProfileAttributes(PlayerData playerData, ResultSet resultSet, boolean isPlayerDataIncomplete)
 		throws SQLException
 	{
 		String rawRank = resultSet.getString("profiles.rank");
@@ -31,26 +31,38 @@ public class AccountGetter {
 		playerData.getProfile().setRank(rank);
 	}
 	
-	private static void setStatsAttributes(PlayerData playerData, ResultSet resultSet)
+	private static void setStatsAttributes(PlayerData playerData, ResultSet resultSet, boolean isPlayerDataIncomplete)
 		throws SQLException
 	{
 		
 	}
 	
+	/**
+	 * 
+	 * @param conn
+	 * @param playerData
+	 * @return
+	 * @throws SQLException
+	 * @throws NoSuchFieldException
+	 */
 	public static PlayerData getPlayerAccount(Connection conn, PlayerData playerData)
 		throws SQLException, NoSuchFieldException
 	{
+		boolean isPlayerDataIncomplete = playerData.getUniqueId() == null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
 		String query = "SELECT * FROM core " +
 			"JOIN profiles ON core.uuid = profiles.uuid " +
 			"JOIN stats ON core.uuid = stats.uuid " +
-			"WHERE core.uuid = ?";
+			"WHERE core." + (isPlayerDataIncomplete ? "username" : "uuid") + " = ?";
 		
 		connection = conn;
 		
 		statement = connection.prepareStatement(query);
-		statement.setString(1, playerData.getFormattedUniqueId());
+		if (!isPlayerDataIncomplete)
+			statement.setString(1, playerData.getFormattedUniqueId());
+		else
+			statement.setString(1, playerData.getUsername());
 		resultSet = statement.executeQuery();
 		
 		connection.commit();
@@ -59,9 +71,9 @@ public class AccountGetter {
 			if (!resultSet.next())
 				throw new NoSuchFieldException();
 			
-			setCoreAttributes(playerData, resultSet);
-			setProfileAttributes(playerData, resultSet);
-			setStatsAttributes(playerData, resultSet);
+			setCoreAttributes(playerData, resultSet, isPlayerDataIncomplete);
+			setProfileAttributes(playerData, resultSet, isPlayerDataIncomplete);
+			setStatsAttributes(playerData, resultSet, isPlayerDataIncomplete);
 		} while (resultSet.next());
 		
 		if (resultSet != null)

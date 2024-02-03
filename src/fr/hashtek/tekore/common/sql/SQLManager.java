@@ -4,79 +4,94 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
-import fr.hashtek.tekore.common.Exit;
 
-public class SQLManager {
+public class SQLManager implements HashLoggable {
 	
-	private static final String FILENAME = "SQLManager.java";
-
 	private Connection connection;
+	
+	private HashLogger logger;
 	
 	private String database;
 	private String host;
 	private String user;
 	private String password;
 	
+	
 	public SQLManager(
+		HashLogger logger,
 		String database,
 		String host,
 		String user,
 		String password
 	)
 	{
+		this.logger = logger;
 		this.database = database;
 		this.host = host;
 		this.user = user;
 		this.password = password;
 	}
 	
+	
+	/**
+	 * Returns true if plugin is connected to the database.
+	 */
 	private boolean isConnected()
 	{
 		return connection != null;
 	}
 	
-	public Exit connect()
+	/**
+	 * Connects to the database.
+	 */
+	public void connect() throws SQLException
 	{
 		final String connectionString = String.format(
 			"jdbc:mysql://%s/%s?autoReconnect=true",
 			this.host, this.database);
 		
+		logger.info(this, "Connecting to the database...");
+		
 		if (this.isConnected()) {
-			HashLogger.err(FILENAME, "Already connected to the database.");
-			return Exit.FAILURE;
+			logger.warning(this, "Already connected to the database. Can't connect.");
+			return;
 		}
 		
 		try {
 			this.connection = DriverManager.getConnection(
 				connectionString, this.user, this.password);
 			this.connection.setAutoCommit(false);
-			HashLogger.info("Successfully connected to database.");
+			logger.info(this, "Successfully connected to the database.");
 		} catch (SQLException exception) {
-			HashLogger.err(FILENAME, "Failed to connect to database.", exception);
-			return Exit.FAILURE;
+			logger.fatal(this, "Failed to connect to the database.", exception);
+			throw exception;
 		}
-		return Exit.SUCCESS;
 	}
 	
-	public Exit disconnect()
+	/**
+	 * Disconnects from the database.
+	 */
+	public void disconnect() throws SQLException
 	{
+		logger.info(this, "Disconnecting from the database.");
+		
 		if (!isConnected()) {
-			HashLogger.err(FILENAME, "Not connected to the database.");
-			return Exit.FAILURE;
+			logger.warning(this, "Not connected to the database. Can't disconnect.");
+			return;
 		}
 		
 		try {
 			connection.close();
 		} catch (SQLException exception) {
-			HashLogger.err(FILENAME, "Failed to close database connection.", exception);
-			return Exit.FAILURE;
+			logger.error(this, "Failed to close database connection.", exception);
+			throw exception;
 		}
 		
-		HashLogger.info("Successfully disconnected from the database.");
-		
-		return Exit.SUCCESS;
+		logger.info(this, "Successfully disconnected from the database.");
 	}
+	
 	
 	public Connection getConnection()
 	{

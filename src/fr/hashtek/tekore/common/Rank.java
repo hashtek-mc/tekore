@@ -4,17 +4,19 @@ public enum Rank {
 	
 	// TODO: Change power values (cf. @hopecalypse).
 	
-	PLAYER  (0,   "player",  "Joueur",        "Joueur",  "§7"),
-	BUILDER (50,  "builder", "Builder",       "Builder", "§2"),
-	DEV     (80,  "dev",     "Développeur",   "Dev.",    "§3"),
-	MOD     (90,  "mod",     "Modérateur",    "Mod.",    "§c"),
-	ADMIN   (100, "admin",   "Administateur", "Admin.",  "§c");
+	PLAYER	(0,		"player",	"Joueur",			"Joueur",	"§7"),
+	BUILDER	(50,	"builder",	"Builder",			"Builder",	"§2"),
+	DEV		(80,	"dev",		"Développeur",		"Dev.",		"§3"),
+	MOD		(90,	"mod",		"Modérateur",		"Mod.",		"§c"),
+	ADMIN	(100,	"admin",	"Administateur",	"Admin.",	"§c");
+	
 	
 	private int power;
 	private String databaseName;
 	private String chatName;
 	private String tablistName;
 	private String color;
+	
 	
 	Rank(
 		int power,
@@ -32,6 +34,11 @@ public enum Rank {
 	}
 	
 	
+	/**
+	 * From a raw string (which equals to a rank's database name), return a Rank (if it does exists).
+	 * 
+	 * @param databaseName	Rank's database name
+	 */
 	public static Rank getRankByDatabaseName(String databaseName)
 	{
 		for (Rank rank: Rank.values())

@@ -1,11 +1,14 @@
 package fr.hashtek.tekore.bungee;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 
+import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
-import fr.hashtek.tekore.bungee.events.OnLogin;
-import fr.hashtek.tekore.bungee.events.OnQuit;
-import fr.hashtek.tekore.common.Exit;
+import fr.hashtek.hashlogger.LogLevel;
+import fr.hashtek.tekore.bungee.commands.CheckCommand;
+import fr.hashtek.tekore.bungee.events.LoginEvent;
+import fr.hashtek.tekore.bungee.events.QuitEvent;
 import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.sql.SQLManager;
 import net.md_5.bungee.BungeeCord;
@@ -13,60 +16,112 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 
-public class Tekord extends Plugin {
+public class Tekord extends Plugin implements HashLoggable {
 	
-	@SuppressWarnings("unused")
-	private static final String FILENAME = "Tekord.java";
-
 	private static Tekord instance;
 	private SQLManager sql;
+	private HashLogger logger;
 	
-	PluginManager pluginManager;
+	private PluginManager pluginManager;
 	
 	private HashMap<ProxiedPlayer, PlayerData> playerDatas = new HashMap<ProxiedPlayer, PlayerData>();
 	
+	
+	/**
+	 * Called on proxy start.
+	 */
 	@Override
 	public void onEnable()
 	{
-		HashLogger.info("Starting Tekord...");
-		
 		instance = this;
-		pluginManager = this.getProxy().getPluginManager();
-				
-		sql = new SQLManager("hashdb", "127.0.0.1", "root", "");
-		if (sql.connect() == Exit.FAILURE ||
-			setupListeners() == Exit.FAILURE ||
-			setupCommands() == Exit.FAILURE
-		)
-			BungeeCord.getInstance().stop();			
+		this.setupHashLogger();
 		
-		HashLogger.info("Tekord loaded.");
+		logger.info(this, "Starting Tekord...");
+
+		pluginManager = this.getProxy().getPluginManager();
+		
+		try {
+			sql = new SQLManager(this.logger, "hashdb", "127.0.0.1", "root", "");
+			sql.connect();
+		} catch (SQLException exception) {
+			BungeeCord.getInstance().stop();
+			return;
+		}
+		
+		setupListeners();
+		setupCommands();
+		
+		logger.info(this, "Tekord loaded.");
 	}
 	
+	/**
+	 * Called on proxy stop.
+	 */
 	@Override
 	public void onDisable()
 	{
-		HashLogger.info("Disabling Tekord...");
+		logger.info(this, "Disabling Tekord...");
 		
-		sql.disconnect(); // TODO: Check return value.
+		try {
+			sql.disconnect();
+		} catch (SQLException exception) {
+			// TODO: Do some things.
+		}
 		
 		/* ... */
 		
-		HashLogger.info("Tekord disabled...");
+		logger.info(this, "Tekord disabled...");
 	}
 	
-	private Exit setupListeners()
+	/**
+	 * Creates an instance of HashLogger.
+	 */
+	private void setupHashLogger()
 	{
-		pluginManager.registerListener(this, new OnLogin());
-		pluginManager.registerListener(this, new OnQuit());
-		
-		return Exit.SUCCESS;
+		this.logger = new HashLogger(this, LogLevel.DEBUG);
+		this.logger.setShowTimestamp(true);
 	}
 	
-	private Exit setupCommands()
+	/**
+	 * Setup all event listeners.
+	 */
+	private void setupListeners()
 	{
-		return Exit.SUCCESS;
+		this.pluginManager.registerListener(this, new LoginEvent());
+		this.pluginManager.registerListener(this, new QuitEvent());
 	}
+	
+	/**
+	 * Setup all command listeners.
+	 */
+	private void setupCommands()
+	{
+		this.pluginManager.registerCommand(this, new CheckCommand());
+	}
+	
+	/**
+	 * Adds a player's data to the main HashMap.
+	 * 
+	 * @param player		Player
+	 * @param playerData	Player's data
+	 */
+	public void addPlayerData(ProxiedPlayer player, PlayerData playerData)
+	{
+		this.removePlayerData(player);
+		this.playerDatas.put(player, playerData);
+	}
+	
+	/**
+	 * Remove a player's data from the main HashMap.
+	 * 
+	 * @param player	Player
+	 */
+	public void removePlayerData(ProxiedPlayer player)
+	{
+		if (this.playerDatas.containsKey(player))
+			this.playerDatas.remove(player);
+	}
+	
 	
 	public static Tekord getInstance()
 	{
@@ -75,24 +130,17 @@ public class Tekord extends Plugin {
 	
 	public SQLManager getSQLManager()
 	{
-		return sql;
+		return this.sql;
+	}
+	
+	public HashLogger getHashLogger()
+	{
+		return this.logger;
 	}
 	
 	public PlayerData getPlayerData(ProxiedPlayer player)
 	{
 		return playerDatas.get(player);
-	}
-	
-	public void addPlayerData(ProxiedPlayer player, PlayerData playerData)
-	{
-		this.removePlayerData(player);
-		this.playerDatas.put(player, playerData);
-	}
-	
-	public void removePlayerData(ProxiedPlayer player)
-	{
-		if (this.playerDatas.containsKey(player))
-			this.playerDatas.remove(player);
 	}
 	
 }
