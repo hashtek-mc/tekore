@@ -1,34 +1,32 @@
-package fr.hashtek.tekore.bungee.events;
+package fr.hashtek.tekore.bukkit.events;
 
 import java.sql.SQLException;
 
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
-import fr.hashtek.tekore.bungee.Tekord;
+import fr.hashtek.tekore.bukkit.Tekore;
 import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.sql.SQLManager;
 import fr.hashtek.tekore.common.sql.account.AccountCreator;
 import fr.hashtek.tekore.common.sql.account.AccountGetter;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.PostLoginEvent;
-import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.event.EventHandler;
 
-public class LoginEvent implements Listener, HashLoggable {
-	
-	/**
-	 * Called when a player logs into the proxy (post-bungee, pre-bukkit).
-	 */
+public class JoinEvent implements Listener, HashLoggable {
+
 	@EventHandler
-	public void onPostLogin(PostLoginEvent event)
+	public void onJoin(PlayerJoinEvent event)
 	{
-		Tekord tekord = Tekord.getInstance();
-		HashLogger logger = tekord.getHashLogger();
+		Tekore tekore = Tekore.getInstance();
+		HashLogger logger = tekore.getHashLogger();
 		
-		ProxiedPlayer player = event.getPlayer();
+		Player player = event.getPlayer();
 		PlayerData playerData = null;
-		SQLManager sql = null;
+		
+		logger.info(this, player.getName() + " logged in, creating PlayerData...");
 		
 		try {
 			playerData = new PlayerData(player);
@@ -38,8 +36,10 @@ public class LoginEvent implements Listener, HashLoggable {
 				exception);
 			return;
 		}
+		
+		logger.info(this, "PlayerData successfully created. Now fetching data...");
 
-		sql = playerData.getSQLManager();
+		SQLManager sql = playerData.getSQLManager();
 		
 		try {
 			AccountGetter.getPlayerAccount(sql.getConnection(), playerData);
@@ -54,11 +54,15 @@ public class LoginEvent implements Listener, HashLoggable {
 			}
 		} catch (SQLException exception) {
 			logger.critical(this, "Failed to get \"" + playerData.getUniqueId() + "\"'s account.", exception);
-			player.disconnect(new TextComponent("I am a poor dev that can't do his work properly.")); // TODO: Change this !!
+			player.kickPlayer("I am a poor dev that can't do his work properly."); // TODO: Change this !!
 			return;
 		}
 		
-		tekord.addPlayerData(player, playerData);
+		logger.info(this, "Data successfully fetched. Now adding to the main HashMap...");
+		
+		tekore.addPlayerData(player, playerData);
+		
+		logger.info(this, "Done.");
 	}
 	
 }

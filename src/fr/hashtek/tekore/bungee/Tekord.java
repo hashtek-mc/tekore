@@ -8,7 +8,7 @@ import fr.hashtek.hashlogger.HashLogger;
 import fr.hashtek.hashlogger.LogLevel;
 import fr.hashtek.tekore.bungee.commands.CheckCommand;
 import fr.hashtek.tekore.bungee.events.LoginEvent;
-import fr.hashtek.tekore.bungee.events.QuitEvent;
+import fr.hashtek.tekore.bungee.events.DisconnectEvent;
 import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.sql.SQLManager;
 import net.md_5.bungee.BungeeCord;
@@ -83,16 +83,16 @@ public class Tekord extends Plugin implements HashLoggable {
 	}
 	
 	/**
-	 * Setup all event listeners.
+	 * Setups all event listeners.
 	 */
 	private void setupListeners()
 	{
 		this.pluginManager.registerListener(this, new LoginEvent());
-		this.pluginManager.registerListener(this, new QuitEvent());
+		this.pluginManager.registerListener(this, new DisconnectEvent());
 	}
 	
 	/**
-	 * Setup all command listeners.
+	 * Setups all command listeners.
 	 */
 	private void setupCommands()
 	{

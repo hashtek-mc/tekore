@@ -5,11 +5,14 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
 import fr.hashtek.hashlogger.LogLevel;
+import fr.hashtek.tekore.bukkit.events.JoinEvent;
+import fr.hashtek.tekore.bukkit.events.QuitEvent;
 import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.sql.SQLManager;
 
@@ -18,6 +21,8 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	private static Tekore instance;
 	private SQLManager sql;
 	private HashLogger logger;
+	
+	private PluginManager pluginManager;
 	
 	private HashMap<Player, PlayerData> playerDatas = new HashMap<Player, PlayerData>();
 
@@ -32,6 +37,8 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 		
 		logger.info(this, "Starting Tekore...");
 		
+		this.pluginManager = this.getServer().getPluginManager();
+		
 		try {			
 			sql = new SQLManager(this.logger, "hashdb", "127.0.0.1", "root", "");
 			sql.connect();
@@ -39,6 +46,9 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 			Bukkit.shutdown();
 			return;
 		}
+		
+		this.setupListeners();
+		this.setupCommands();
 	
 		logger.info(this, "Tekore loaded.");
 	}
@@ -64,6 +74,23 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	{
 		this.logger = new HashLogger(this, LogLevel.DEBUG);
 		this.logger.setShowTimestamp(true);
+	}
+	
+	/**
+	 * Setups all event listeners.
+	 */
+	private void setupListeners()
+	{
+		this.pluginManager.registerEvents(new JoinEvent(), this);
+		this.pluginManager.registerEvents(new QuitEvent(), this);
+	}
+	
+	/**
+	 * Setups all command listeners.
+	 */
+	private void setupCommands()
+	{
+		
 	}
 	
 	/**
