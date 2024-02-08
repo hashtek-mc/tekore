@@ -13,15 +13,15 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
-public class CheckCommand extends Command implements HashLoggable {
+public class NeofetchCommand extends Command implements HashLoggable {
 
 	private Tekord tekord;
 	private HashLogger logger;
 	
 	
-	public CheckCommand()
+	public NeofetchCommand()
 	{
-		super("check");
+		super("neofetch");
 	}
 	
 	/**
@@ -34,7 +34,7 @@ public class CheckCommand extends Command implements HashLoggable {
 	{
 		if (args.length != 1) {
 			logger.info(this, "Invalid usage.");
-			sender.sendMessage(new TextComponent("§cSyntaxe: /check <joueur>"));
+			sender.sendMessage(new TextComponent("§cSyntaxe: /neofetch <joueur>"));
 			return false;
 		}
 		
@@ -68,7 +68,7 @@ public class CheckCommand extends Command implements HashLoggable {
 		Rank targetRank = targetPlayerData.getProfile().getRank();
 		
 		sender.sendMessage(
-			new TextComponent("§bCheck" + "\n"),
+			new TextComponent("§b§lNeofetch" + "\n"),
 			new TextComponent("§3Pseudo : §r" + targetPlayerData.getUsername() + "\n"),
 			new TextComponent("§3UUID : §r" + targetPlayerData.getUniqueId() + "\n"),
 			new TextComponent("§3Rank : " + targetRank.getColor() + targetRank.getChatName() +

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
 import fr.hashtek.hashlogger.LogLevel;
-import fr.hashtek.tekore.bungee.commands.CheckCommand;
+import fr.hashtek.tekore.bungee.commands.NeofetchCommand;
 import fr.hashtek.tekore.bungee.events.LoginEvent;
 import fr.hashtek.tekore.bungee.events.DisconnectEvent;
 import fr.hashtek.tekore.common.player.PlayerData;
@@ -65,12 +65,12 @@ public class Tekord extends Plugin implements HashLoggable {
 		try {
 			sql.disconnect();
 		} catch (SQLException exception) {
-			// TODO: Do some things.
+			logger.critical(this, "Failed to disconnect from the database.");
 		}
 		
 		/* ... */
 		
-		logger.info(this, "Tekord disabled...");
+		logger.info(this, "Tekord disabled.");
 	}
 	
 	/**
@@ -79,7 +79,6 @@ public class Tekord extends Plugin implements HashLoggable {
 	private void setupHashLogger()
 	{
 		this.logger = new HashLogger(this, LogLevel.DEBUG);
-		this.logger.setShowTimestamp(true);
 	}
 	
 	/**
@@ -96,7 +95,7 @@ public class Tekord extends Plugin implements HashLoggable {
 	 */
 	private void setupCommands()
 	{
-		this.pluginManager.registerCommand(this, new CheckCommand());
+		this.pluginManager.registerCommand(this, new NeofetchCommand());
 	}
 	
 	/**

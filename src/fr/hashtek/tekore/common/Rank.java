@@ -2,8 +2,6 @@ package fr.hashtek.tekore.common;
 
 public enum Rank {
 	
-	// TODO: Change power values (cf. @hopecalypse).
-	
 	PLAYER	(0,		"player",	"Joueur",			"Joueur",	"§7"),
 	BUILDER	(50,	"builder",	"Builder",			"Builder",	"§2"),
 	DEV		(80,	"dev",		"Développeur",		"Dev.",		"§3"),

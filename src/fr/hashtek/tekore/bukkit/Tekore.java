@@ -73,7 +73,6 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	private void setupHashLogger()
 	{
 		this.logger = new HashLogger(this, LogLevel.DEBUG);
-		this.logger.setShowTimestamp(true);
 	}
 	
 	/**
