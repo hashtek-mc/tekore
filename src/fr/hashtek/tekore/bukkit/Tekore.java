@@ -3,7 +3,6 @@ package fr.hashtek.tekore.bukkit;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,6 +14,7 @@ import fr.hashtek.tekore.bukkit.events.JoinEvent;
 import fr.hashtek.tekore.bukkit.events.QuitEvent;
 import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.sql.SQLManager;
+import fr.hashtek.tekore.common.sql.account.AccountManager;
 
 public class Tekore extends JavaPlugin implements HashLoggable {
 	
@@ -23,9 +23,11 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	private HashLogger logger;
 	
 	private PluginManager pluginManager;
+	private AccountManager accountManager;
 	
 	private HashMap<Player, PlayerData> playerDatas = new HashMap<Player, PlayerData>();
 
+	
 	/**
 	 * Called on server start.
 	 */
@@ -35,22 +37,22 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 		instance = this;
 		this.setupHashLogger();
 		
-		logger.info(this, "Starting Tekore...");
+		this.logger.info(this, "Starting Tekore...");
 		
-		this.pluginManager = this.getServer().getPluginManager();
-		
-		try {			
-			sql = new SQLManager(this.logger, "hashdb", "127.0.0.1", "root", "");
-			sql.connect();
+		try {
+			this.sql = new SQLManager(this.logger, "hashtekdb", "127.0.0.1", "root", "");
+			this.sql.connect();
 		} catch (SQLException exception) {
-			Bukkit.shutdown();
+			this.logger.fatal(this, "Failed to connect to the SQL database. Shutting down server.");
+			this.getServer().shutdown();
 			return;
 		}
 		
+		this.setupManagers();
 		this.setupListeners();
 		this.setupCommands();
 	
-		logger.info(this, "Tekore loaded.");
+		this.logger.info(this, "Tekore loaded.");
 	}
 	
 	/**
@@ -59,16 +61,25 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	@Override
 	public void onDisable()
 	{
-		logger.info(this, "Disabling Tekore...");
+		this.logger.info(this, "Disabling Tekore...");
 		
-		// ...
+		for (Player player: this.getServer().getOnlinePlayers())
+			player.kickPlayer("Nous revenons dans quelques minutes...");
 		
-		logger.info(this, "Tekore disabled.");
+		try {
+			this.sql.disconnect();
+		} catch (SQLException exception) {
+			this.logger.critical(this, "Failed to disconnect from the database.", exception);
+		}
+		
+		this.logger.info(this, "Tekore disabled.");
 	}
 	
 	/**
 	 * Creates an instance of HashLogger.
 	 * This HashLogger instance will be used server-wide, in every plugin that uses Tekore.
+	 * 
+	 * TODO: Read log level from the configuration file.
 	 */
 	private void setupHashLogger()
 	{
@@ -76,20 +87,41 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	}
 	
 	/**
-	 * Setups all event listeners.
+	 * Setups all managers.
 	 */
-	private void setupListeners()
+	private void setupManagers()
 	{
-		this.pluginManager.registerEvents(new JoinEvent(), this);
-		this.pluginManager.registerEvents(new QuitEvent(), this);
+		this.logger.info(this, "Setting up managers...");
+		
+		this.pluginManager = this.getServer().getPluginManager();
+		this.accountManager = new AccountManager(this.sql.getConnection());
+		
+		this.logger.info(this, "Managers set up!");
 	}
 	
 	/**
-	 * Setups all command listeners.
+	 * Registers all event listeners.
+	 */
+	private void setupListeners()
+	{
+		this.logger.info(this, "Registering listeners...");
+		
+		this.pluginManager.registerEvents(new JoinEvent(this), this);
+		this.pluginManager.registerEvents(new QuitEvent(this), this);
+		
+		this.logger.info(this, "Listeners loaded!");
+	}
+	
+	/**
+	 * Registers all command listeners.
 	 */
 	private void setupCommands()
 	{
+		this.logger.info(this, "Registering commands...");
 		
+		/* ... */
+
+		this.logger.info(this, "Commands registered!");
 	}
 	
 	/**
@@ -116,24 +148,55 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	}
 	
 	
+	/**
+	 * Returns the instance of Tekore.
+	 * 
+	 * @return	Tekore instance
+	 */
 	public static Tekore getInstance()
 	{
 		return instance;
 	}
 	
+	/**
+	 * Returns the SQL manager.
+	 * 
+	 * @return	SQL manager
+	 */
 	public SQLManager getSQLManager()
 	{
-		return sql;
+		return this.sql;
 	}
 	
+	/**
+	 * Returns the logger
+	 * 
+	 * @return	Logger
+	 */
 	public HashLogger getHashLogger()
 	{
 		return this.logger;
 	}
 	
+	/**
+	 * Returns the account manager
+	 * 
+	 * @return	Account manager
+	 */
+	public AccountManager getAccountManager()
+	{
+		return this.accountManager;
+	}
+	
+	/**
+	 * Returns the PlayerData linked to a Player.
+	 * 
+	 * @param	player	Player
+	 * @return	Player's data
+	 */
 	public PlayerData getPlayerData(Player player)
 	{
-		return playerDatas.get(player);
+		return this.playerDatas.get(player);
 	}
 	
 }

@@ -8,10 +8,10 @@ import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
 
 public class SQLManager implements HashLoggable {
+
+	private HashLogger logger;
 	
 	private Connection connection;
-	
-	private HashLogger logger;
 	
 	private String database;
 	private String host;
@@ -19,6 +19,15 @@ public class SQLManager implements HashLoggable {
 	private String password;
 	
 	
+	/**
+	 * Creates a new instance of SQLManager.
+	 * 
+	 * @param	logger		Logger
+	 * @param	database	Database name
+	 * @param	host		Host
+	 * @param	user		Username
+	 * @param	password	Password
+	 */
 	public SQLManager(
 		HashLogger logger,
 		String database,
@@ -36,11 +45,11 @@ public class SQLManager implements HashLoggable {
 	
 	
 	/**
-	 * Returns true if plugin is connected to the database.
+	 * Returns true if instance is connected to the database.
 	 */
 	private boolean isConnected()
 	{
-		return connection != null;
+		return this.connection != null;
 	}
 	
 	/**
@@ -52,24 +61,25 @@ public class SQLManager implements HashLoggable {
 	{
 		final String connectionString = String.format(
 			"jdbc:mysql://%s/%s?autoReconnect=true",
-			this.host, this.database);
+			this.host, this.database
+		);
 		
-		logger.info(this, "Connecting to the database...");
+		this.logger.info(this, "Connecting to the database...");
 		
 		if (this.isConnected()) {
-			logger.warning(this, "Already connected to the database. Can't connect.");
+			this.logger.warning(this, "Already connected to the database. Can't connect.");
 			return;
 		}
 		
 		try {
-			this.connection = DriverManager.getConnection(
-				connectionString, this.user, this.password);
-			this.connection.setAutoCommit(false);
-			logger.info(this, "Successfully connected to the database.");
+			this.connection = DriverManager.getConnection(connectionString, this.user, this.password);
+			this.connection.setAutoCommit(false);	
 		} catch (SQLException exception) {
-			logger.fatal(this, "Failed to connect to the database.", exception);
+			this.logger.fatal(this, "Failed to connect to the database.", exception);
 			throw exception;
 		}
+
+		this.logger.info(this, "Successfully connected to the database.");
 	}
 	
 	/**
@@ -79,27 +89,32 @@ public class SQLManager implements HashLoggable {
 	 */
 	public void disconnect() throws SQLException
 	{
-		logger.info(this, "Disconnecting from the database.");
+		this.logger.info(this, "Disconnecting from the database...");
 		
 		if (!isConnected()) {
-			logger.warning(this, "Not connected to the database. Can't disconnect.");
+			this.logger.warning(this, "Not connected to the database. Can't disconnect.");
 			return;
 		}
 		
 		try {
-			connection.close();
+			this.connection.close();
 		} catch (SQLException exception) {
-			logger.error(this, "Failed to close database connection.", exception);
+			this.logger.error(this, "Failed to close database connection.", exception);
 			throw exception;
 		}
 		
-		logger.info(this, "Successfully disconnected from the database.");
+		this.logger.info(this, "Successfully disconnected from the database.");
 	}
 	
 	
+	/**
+	 * Returns the active connection to the SQL database.
+	 * 
+	 * @return	SQL connection
+	 */
 	public Connection getConnection()
 	{
-		return connection;
+		return this.connection;
 	}
 	
 }

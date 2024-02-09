@@ -1,74 +1,99 @@
 package fr.hashtek.tekore.common;
 
-public enum Rank {
+public class Rank {
 	
-	PLAYER	(0,		"player",	"Joueur",			"Joueur",	"§7"),
-	BUILDER	(50,	"builder",	"Builder",			"Builder",	"§2"),
-	DEV		(80,	"dev",		"Développeur",		"Dev.",		"§3"),
-	MOD		(90,	"mod",		"Modérateur",		"Mod.",		"§c"),
-	ADMIN	(100,	"admin",	"Administateur",	"Admin.",	"§c");
-	
-	
+	private String uuid;
+	private String name;
 	private int power;
-	private String databaseName;
-	private String chatName;
-	private String tablistName;
-	private String color;
+	private String chatPrefix;
+	private String tabPrefix;
 	
-	
-	Rank(
+
+	/**
+	 * Creates a new instance of Rank.
+	 * 
+	 * @param	uuid		Rank's UUID
+	 * @param	name		Rank's raw name
+	 * @param	power		Rank's power
+	 * @param	chatPrefix	Prefix used for chat
+	 * @param	tabPrefix	Prefix used only for tablist
+	 */
+	public Rank(
+		String uuid,
+		String name,
 		int power,
-		String databaseName,
-		String chatName,
-		String tablistName,
-		String color
+		String chatPrefix,
+		String tabPrefix
 	)
 	{
+		this.uuid = uuid;
+		this.name = name;
 		this.power = power;
-		this.databaseName = databaseName;
-		this.chatName = chatName;
-		this.tablistName = tablistName;
-		this.color = color;
+		this.chatPrefix = chatPrefix;
+		this.tabPrefix = tabPrefix;
 	}
 	
 	
 	/**
-	 * From a raw string (which equals to a rank's database name), return a Rank (if it does exists).
+	 * Returns rank's UUID.
 	 * 
-	 * @param	databaseName	Rank's database name
+	 * @return	Rank UUID
 	 */
-	public static Rank getRankByDatabaseName(String databaseName)
+	public String getUuid()
 	{
-		for (Rank rank: Rank.values())
-			if (rank.getDatabaseName().equals(databaseName))
-				return rank;
-		return null;
+		return this.uuid;
 	}
 	
-	
+	/**
+	 * Returns rank's power.
+	 * 
+	 * @return	Rank's power
+	 */
 	public int getPower()
 	{
 		return this.power;
 	}
 	
-	public String getDatabaseName()
+	/**
+	 * Returns rank's raw name.
+	 * 
+	 * @return	Rank's raw name
+	 */
+	public String getName()
 	{
-		return this.databaseName;
+		return this.name;
 	}
 	
-	public String getChatName()
+	/**
+	 * Returns rank's chat prefix.
+	 * 
+	 * @return	Rank's chat prefix
+	 */
+	public String getChatPrefix()
 	{
-		return this.chatName;
+		return this.chatPrefix;
 	}
 	
-	public String getTablistName()
+	/**
+	 * Returns rank's tablist prefix.
+	 * 
+	 * @return	Rank's tablist prefix
+	 */
+	public String getTabPrefix()
 	{
-		return this.tablistName;
+		return this.tabPrefix;
 	}
 	
+	/**
+	 * Returns rank's color based on its prefix.
+	 * 
+	 * @return	Rank's color
+	 */
 	public String getColor()
 	{
-		return this.color;
+		if (this.chatPrefix.charAt(0) != '§')
+			return "";
+		return this.chatPrefix.substring(0, 2);
 	}
 
 }

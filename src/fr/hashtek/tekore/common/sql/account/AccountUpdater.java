@@ -3,48 +3,54 @@ package fr.hashtek.tekore.common.sql.account;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import fr.hashtek.tekore.common.player.PlayerData;
 
 public class AccountUpdater {
 
-	private static Connection connection;
+	private Connection sqlConnection;
+	
+	
+	/**
+	 * Creates a new instance of AccountUpdater.
+	 * 
+	 * @param	sqlConnection	SQL connection
+	 */
+	public AccountUpdater(Connection sqlConnection)
+	{
+		this.sqlConnection = sqlConnection;
+	}
 	
 	
 	/**
 	 * Updates a player's account in the SQL database.
 	 * 
-	 * @param	conn			SQL connection
 	 * @param	playerData		Player's data
 	 * @throws	SQLException	SQL failure
 	 */
-	public static void updatePlayerAccount(Connection conn, PlayerData playerData)
+	public void updatePlayerAccount(PlayerData playerData)
 		throws SQLException
 	{
-		PreparedStatement statement = null;
-		String query = "UPDATE core " +
-			"JOIN profiles on profiles.uuid = core.uuid " +
-			"JOIN stats on stats.uuid = core.uuid " +
-			"SET " +
-			
-			"core.username = ?, " +
-			// "core.last_login = ?" + 
-			
-			"profiles.rank = ?, " +
-			
-			"stats.total_uptime = ? " +
-			
-			"WHERE core.uuid = ?;";
+		Timestamp now = new Timestamp(System.currentTimeMillis());
 		
-		connection = conn;
+		PreparedStatement statement = null;
+		String query = "UPDATE players SET " +
+			"username = ?, " +
+			"lastUpdate = ?, " +
+			"rankUuid = ? " +
+			"WHERE uuid = ?;";
 
-		statement = connection.prepareStatement(query);
+		statement = sqlConnection.prepareStatement(query);
+		
 		statement.setString(1, playerData.getUsername());
-		statement.setString(2, playerData.getProfile().getRank().getDatabaseName());
-		statement.setLong(3, 0);
-		statement.setString(4, playerData.getFormattedUniqueId());
+		statement.setTimestamp(2, now);
+		statement.setString(3, playerData.getRank().getUuid());
+		statement.setString(4, playerData.getUniqueId());
+		
 		statement.executeUpdate();
-		connection.commit();
+		
+		this.sqlConnection.commit();
 	}
 	
 }

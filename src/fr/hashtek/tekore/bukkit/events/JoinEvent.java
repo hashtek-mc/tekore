@@ -11,61 +11,64 @@ import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
 import fr.hashtek.tekore.bukkit.Tekore;
 import fr.hashtek.tekore.common.player.PlayerData;
-import fr.hashtek.tekore.common.sql.SQLManager;
-import fr.hashtek.tekore.common.sql.account.AccountCreator;
-import fr.hashtek.tekore.common.sql.account.AccountGetter;
+import fr.hashtek.tekore.common.sql.account.AccountManager;
 
 public class JoinEvent implements Listener, HashLoggable {
 
+	private Tekore core;
+	private HashLogger logger;
+	
+	
+	/**
+	 * Creates a new instance of JoinEvent.
+	 * 
+	 * @param	core	Tekore instance
+	 */
+	public JoinEvent(Tekore core)
+	{
+		this.core = core;
+		this.logger = core.getHashLogger();
+	}
+	
+	
 	/**
 	 * Called when a player logs into the server.
+	 * 
+	 * TODO: Change Player#kickPlayer messages.
 	 */
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event)
 	{
-		Tekore tekore = Tekore.getInstance();
-		HashLogger logger = tekore.getHashLogger();
+		AccountManager accountManager = this.core.getAccountManager();
 		
 		Player player = event.getPlayer();
 		PlayerData playerData = null;
 		
-		logger.info(this, player.getName() + " logged in, creating PlayerData...");
+		this.logger.info(this, "\"" + player.getName() + "\" logged in, launching login sequence...");
 		
 		try {
 			playerData = new PlayerData(player);
 		} catch (Exception exception) {
-			logger.critical(this,
-				"Failed to create a PlayerData for \"" + player.getUniqueId() + "\".",
-				exception);
+			this.logger.critical(this, "Failed to create a PlayerData for \"" + player.getName() + "\".", exception);
+			player.kickPlayer("I am a poor dev that can't do his work properly.");
 			return;
 		}
-		
-		logger.info(this, "PlayerData successfully created. Now fetching data...");
-
-		SQLManager sql = playerData.getSQLManager();
 		
 		try {
-			AccountGetter.getPlayerAccount(sql.getConnection(), playerData);
-		} catch (NoSuchFieldException e) {
-			try {
-				AccountCreator.createPlayerAccount(sql.getConnection(), playerData);				
-			} catch (SQLException exception) {
-				logger.critical(this,
-					"Failed to create an account for \"" + playerData.getUniqueId() + "\".",
-					exception);
-				return;
-			}
+			accountManager.getPlayerAccount(playerData);
+		} catch (NoSuchFieldException unused) {
+			this.logger.critical(this, "Account does not exist. Can't create one, that's Tekord job.");
+			player.kickPlayer("I am a poor dev that can't do his work properly.");
+			return;
 		} catch (SQLException exception) {
-			logger.critical(this, "Failed to get \"" + playerData.getUniqueId() + "\"'s account.", exception);
-			player.kickPlayer("I am a poor dev that can't do his work properly."); // TODO: Change this !!
+			this.logger.critical(this, "Failed to get \"" + playerData.getUsername() + "\"'s account.", exception);
+			player.kickPlayer("I am a poor dev that can't do his work properly.");
 			return;
 		}
 		
-		logger.info(this, "Data successfully fetched. Now adding to the main HashMap...");
+		this.core.addPlayerData(player, playerData);
 		
-		tekore.addPlayerData(player, playerData);
-		
-		logger.info(this, "Done.");
+		logger.info(this, "Login sequence successfully executed for \"" + playerData.getUsername() + "\".");
 	}
 	
 }

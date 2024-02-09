@@ -1,29 +1,30 @@
 package fr.hashtek.tekore.common.player;
 
-import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import fr.hashtek.tekore.bukkit.Tekore;
 import fr.hashtek.tekore.bungee.Tekord;
+import fr.hashtek.tekore.common.Rank;
 import fr.hashtek.tekore.common.sql.SQLManager;
-import fr.hashtek.tekore.common.sql.account.AccountGetter;
 
 /**
  * PlayerData aims to store some data of a player.
  * Some will go to the database, some others won't because it's useless.
- * This class is the main reason we created a core.
+ * This class is the main reason we decided to create a core.
  */
 public class PlayerData {
 	
 	private Object player;
 
 	private String uuid;
-	private String formattedUuid;
 	private String username;
 	
-	private PlayerProfile profile;
+	private Timestamp createdAt;
+	private Timestamp lastUpdate;
+	
+	private Rank rank;
 
 	private SQLManager sql;
-	private boolean doesExists;
 	
 	
 	/**
@@ -32,36 +33,32 @@ public class PlayerData {
 	 * 
 	 * @param	player	Unknown-type player
 	 */
-	public PlayerData(Object player) throws Exception
+	public PlayerData(Object player) throws NoClassDefFoundError
 	{
 		this.player = player;
 		
 		try {
 			this.setBukkitPlayer();
-		} catch (NoClassDefFoundError _unused) {
+		} catch (NoClassDefFoundError unused) {
 			try {
 				this.setBungeePlayer();
 			} catch (NoClassDefFoundError ex) {
-				throw new Exception("Player type is not BukkitPlayer or BungeePlayer.");
+				throw new NoClassDefFoundError("Player type is not BukkitPlayer or BungeePlayer.");
 			}
 		}
 		
 		this.setUniqueId(this.uuid);
-		
-		this.profile = new PlayerProfile();
 	}
 	
 	/**
 	 * Creates an empty instance of PlayerData based on a username.
-	 * Mainly used for "/check" bungee command.
+	 * Mainly used for neofetch command.
 	 * 
 	 * @param	username	Player's username
 	 */
 	public PlayerData(String username)
 	{
 		this.username = username;
-		
-		this.profile = new PlayerProfile();
 	}
 	
 	
@@ -80,7 +77,7 @@ public class PlayerData {
 	}
 	
 	/**
-	 * Fills up PlayerData using Bungee's API (used only if player is Bungee).
+	 * Fills up PlayerData using Bungeecord's API (used only if player is Bungee).
 	 */
 	private void setBungeePlayer() throws NoClassDefFoundError
 	{
@@ -93,65 +90,116 @@ public class PlayerData {
 			throw new NoClassDefFoundError();
 	}
 	
+	
 	/**
-	 * Sets a PlayerData's data from the SQL database.
+	 * Returns player's UUID.
+	 * 
+	 * @return	Player's UUID
 	 */
-	public void fetchDataFromSql(SQLManager sqlManager) throws NoSuchFieldException, SQLException
-	{
-		AccountGetter.getPlayerAccount(sqlManager.getConnection(), this);
-	}
-	
-	
 	public String getUniqueId()
 	{
 		return this.uuid;
 	}
 	
-	public String getFormattedUniqueId()
-	{
-		return this.formattedUuid;
-	}
-	
+	/**
+	 * Returns player's username.
+	 * 
+	 * @return	Player's username
+	 */
 	public String getUsername()
 	{
 		return this.username;
 	}
 	
-	public PlayerProfile getProfile()
+	/**
+	 * Returns player's first login.
+	 * 
+	 * @return	Player's first login
+	 */
+	public Timestamp getCreatedAt()
 	{
-		return this.profile;
+		return this.createdAt;
 	}
 	
+	/**
+	 * Returns player's last login.
+	 * 
+	 * @return	Player's last login
+	 */
+	public Timestamp getLastUpdate()
+	{
+		return this.lastUpdate;
+	}
+	
+	/**
+	 * Returns player's rank.
+	 * 
+	 * @return	Player's rank.
+	 */
+	public Rank getRank()
+	{
+		return this.rank;
+	}
+	
+	/**
+	 * Returns associated SQL manager.
+	 * 
+	 * @return	Associated SQL manager
+	 */
 	public SQLManager getSQLManager()
 	{
 		return this.sql;
 	}
 	
-	public boolean doesExists()
-	{
-		return this.doesExists;
-	}
 	
-	
+	/**
+	 * Sets player's UUID.
+	 * 
+	 * @param	uuid	UUID
+	 */
 	public void setUniqueId(String uuid)
 	{
 		this.uuid = uuid;
-		this.formattedUuid = uuid.replaceAll("-", "");
 	}
 	
+	/**
+	 * Sets player's username.
+	 * 
+	 * @param	username	Username
+	 */
 	public void setUsername(String username)
 	{
 		this.username = username;
 	}
 	
-	public void setProfile(PlayerProfile profile)
+	/**
+	 * Sets player's first login.
+	 * 
+	 * @param	createdAt	Timestamp
+	 */
+	public void setCreatedAt(Timestamp createdAt)
 	{
-		this.profile = profile;
+		this.createdAt = createdAt;
 	}
 	
-	public void setExistence(boolean exists)
+	/**
+	 * Sets player's last update.
+	 * 
+	 * @param	lastUpdate	Last update
+	 */
+	public void setLastUpdate(Timestamp lastUpdate)
 	{
-		this.doesExists = exists;
+		this.lastUpdate = lastUpdate;
+	}
+	
+	/**
+	 * Sets player's rank.
+	 * 
+	 * @param	rank	Rank
+	 */
+	public void setRank(Rank rank)
+	{
+		this.rank = rank;
 	}
 
 }

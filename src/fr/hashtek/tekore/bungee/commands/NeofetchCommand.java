@@ -5,8 +5,9 @@ import fr.hashtek.hashlogger.HashLogger;
 import fr.hashtek.tekore.bungee.Tekord;
 import fr.hashtek.tekore.common.Rank;
 import fr.hashtek.tekore.common.player.PlayerData;
-import fr.hashtek.tekore.common.sql.SQLManager;
+import fr.hashtek.tekore.common.sql.account.AccountManager;
 import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -15,14 +16,19 @@ import net.md_5.bungee.api.plugin.Command;
 
 public class NeofetchCommand extends Command implements HashLoggable {
 
-	private Tekord tekord;
+	private Tekord cord;
 	private HashLogger logger;
 	
 	
+	/**
+	 * Creates a new instance of NeofetchCommand.
+	 * Used to register the command.
+	 */
 	public NeofetchCommand()
 	{
 		super("neofetch");
 	}
+	
 	
 	/**
 	 * Command parsing.
@@ -40,7 +46,7 @@ public class NeofetchCommand extends Command implements HashLoggable {
 		
 		if (args[0].length() > 16) {
 			logger.info(this, "Invalid username.");
-			sender.sendMessage(new TextComponent("§cUn pseudo ne peut contenir plus de 16 caractères."));
+			sender.sendMessage(new TextComponent("§cUn pseudo ne peut pas contenir plus de 16 caractères."));
 			return false;
 		}
 		
@@ -56,26 +62,31 @@ public class NeofetchCommand extends Command implements HashLoggable {
 	 */
 	private void displayPlayerData(ProxiedPlayer target, PlayerData targetPlayerData, ProxiedPlayer sender)
 	{
-		String isConnected = "";
+		boolean isConnected = target != null && target.isConnected();
+		String targetServer = "";
 		
-		if (target != null && target.isConnected()) {
-			ServerInfo targetServer = target.getServer().getInfo();
+		if (isConnected) {
+			ServerInfo server = target.getServer().getInfo();
+			targetServer = ChatColor.GRAY + " " + ChatColor.ITALIC + "(" + server.getName() + ")";
+		}
+		
+		Rank targetRank = targetPlayerData.getRank();
+		
+		String nameField = targetRank.getColor() + targetPlayerData.getUsername() + "@" + targetRank.getName();
+		
+		StringBuffer separator = new StringBuffer();
+		for (int k = 0; k < nameField.length() + targetServer.length(); k++)
+			separator.append("-");
 			
-			isConnected = "§aOui §7§o⇒ " + targetServer.getName() + " (" + targetServer.getSocketAddress() + ")";
-		} else
-			isConnected = "§cNon";
-		
-		Rank targetRank = targetPlayerData.getProfile().getRank();
-		
-		sender.sendMessage(
-			new TextComponent("§b§lNeofetch" + "\n"),
-			new TextComponent("§3Pseudo : §r" + targetPlayerData.getUsername() + "\n"),
-			new TextComponent("§3UUID : §r" + targetPlayerData.getUniqueId() + "\n"),
-			new TextComponent("§3Rank : " + targetRank.getColor() + targetRank.getChatName() +
-				" §o(" + targetRank.getDatabaseName() + ")" + "\n"),
-			new TextComponent("§3Connecté(e) au proxy : §r" + isConnected),
-			new TextComponent("")
-		);
+		sender.sendMessage(new TextComponent(
+			"\n" +
+			(isConnected ? ChatColor.GREEN : ChatColor.RED) + "● " + nameField + targetServer + "\n" +
+			ChatColor.WHITE + "" + ChatColor.STRIKETHROUGH + separator + "\n" +
+			ChatColor.DARK_AQUA + "UUID: " + ChatColor.WHITE + targetPlayerData.getUniqueId() + "\n" +
+			ChatColor.DARK_AQUA + "First login: " + ChatColor.WHITE + targetPlayerData.getCreatedAt() + "\n" +
+			ChatColor.DARK_AQUA + "Last seen: " + ChatColor.WHITE + targetPlayerData.getLastUpdate() +
+			"\n"
+		));
 	}
 	
 	/**
@@ -87,10 +98,9 @@ public class NeofetchCommand extends Command implements HashLoggable {
 	@Override
 	public void execute(CommandSender sender, String[] args)
 	{
-		this.tekord = Tekord.getInstance();
-		this.logger = tekord.getHashLogger();
-		
-		SQLManager sqlManager = Tekord.getInstance().getSQLManager();
+		this.cord = Tekord.getInstance();
+		this.logger = cord.getHashLogger();
+		AccountManager accountManager = cord.getAccountManager();
 		
 		ProxiedPlayer player = (ProxiedPlayer) sender;
 		
@@ -105,12 +115,12 @@ public class NeofetchCommand extends Command implements HashLoggable {
 		logger.info(this, "Targeted player: " + targetPlayerData.getUsername());
 		
 		try {
-			targetPlayerData.fetchDataFromSql(sqlManager);
+			accountManager.getFullPlayerAccount(targetPlayerData);
 		} catch (Exception exception) {
 			logger.info(this, targetPlayerData.getUsername() + " is not a valid player.");
-			sender.sendMessage(
-				new TextComponent("§c" + targetPlayerData.getUsername() + " n'existe pas ou ne s'est jamais connecté à ce serveur.")
-			);
+			sender.sendMessage(new TextComponent(
+				ChatColor.RED + targetPlayerData.getUsername() + " n'existe pas ou ne s'est jamais connecté à ce serveur."
+			));
 			return;
 		}
 		

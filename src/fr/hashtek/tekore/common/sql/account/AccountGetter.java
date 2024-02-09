@@ -7,98 +7,84 @@ import java.sql.SQLException;
 
 import fr.hashtek.tekore.common.Rank;
 import fr.hashtek.tekore.common.player.PlayerData;
+import fr.hashtek.tekore.common.sql.rank.RankGetter;
 
 public class AccountGetter {
 	
-	private static Connection connection;
+	private Connection sqlConnection;
 	
 	
 	/**
-	 * Sets PlayerData's core attributes from the SQL database
+	 * Creates a new instance of AccountGetter.
 	 * 
-	 * @param	playerData				Player's data
-	 * @param	resultSet				SQL result set
-	 * @param	isPlayerDataComplete	Shortly, if UUID and username needs to be fetched from the database.
-	 * @throws	SQLException			SQL failure
+	 * @param	sqlConnection	SQL connection
 	 */
-	private static void setCoreAttributes(PlayerData playerData, ResultSet resultSet, boolean isPlayerDataIncomplete)
-		throws SQLException
+	public AccountGetter(Connection sqlConnection)
 	{
-		if (isPlayerDataIncomplete) {
-			playerData.setUniqueId(resultSet.getString("core.uuid"));
-			playerData.setUsername(resultSet.getString("core.username"));
-		}
+		this.sqlConnection = sqlConnection;
 	}
 	
-	/**
-	 * Sets PlayerData's profile attributes from the SQL database
-	 * 
-	 * @param	playerData				Player's data
-	 * @param	resultSet				SQL result set
-	 * @param	isPlayerDataComplete	Shortly, if UUID and username needs to be fetched from the database.
-	 * @throws	SQLException			SQL failure
-	 */
-	private static void setProfileAttributes(PlayerData playerData, ResultSet resultSet, boolean isPlayerDataIncomplete)
-		throws SQLException
-	{
-		String rawRank = resultSet.getString("profiles.rank");
-		Rank rank = Rank.getRankByDatabaseName(rawRank);
-		
-		playerData.getProfile().setRank(rank);
-	}
 	
 	/**
-	 * Sets PlayerData's stats attributes from the SQL database
+	 * Fills up a PlayerData using a ResultSet results.
 	 * 
 	 * @param	playerData				Player's data
-	 * @param	resultSet				SQL result set
-	 * @param	isPlayerDataComplete	Shortly, if UUID and username needs to be fetched from the database.
+	 * @param	resultSet				ResultSet results
+	 * @param	fillAllData				Should fetch UUID and username from the database too ?
 	 * @throws	SQLException			SQL failure
+	 * @throws	NoSuchFieldException	No account found
 	 */
-	private static void setStatsAttributes(PlayerData playerData, ResultSet resultSet, boolean isPlayerDataIncomplete)
-		throws SQLException
-	{
-		
-	}
-	
-	/**
-	 * Sets a PlayerData's data from the SQL database.
-	 * 
-	 * @param	conn					SQL connection
-	 * @param	playerData				Player's data
-	 * @throws	SQLException			SQL failure
-	 * @throws	NoSuchFieldException	Player account not found
-	 */
-	public static PlayerData getPlayerAccount(Connection conn, PlayerData playerData)
+	private void fillPlayerData(PlayerData playerData, ResultSet resultSet, boolean fillAllData)
 		throws SQLException, NoSuchFieldException
 	{
-		boolean isPlayerDataIncomplete = playerData.getUniqueId() == null;
+		if (fillAllData) {
+			playerData.setUniqueId(resultSet.getString("uuid"));
+			playerData.setUsername(resultSet.getString("username"));
+		}
+		
+		playerData.setCreatedAt(resultSet.getTimestamp("createdAt"));
+		playerData.setLastUpdate(resultSet.getTimestamp("lastUpdate"));
+	
+		Rank rank = null;
+		RankGetter rankGetter = new RankGetter(this.sqlConnection);
+		
+		rank = rankGetter.getRankFromResultSet(resultSet, "ranks.");
+		
+		playerData.setRank(rank);
+	}
+	
+	/**
+	 * Gets a player's data from the SQL database and
+	 * fills up a PlayerData with the fetched data.
+	 * 
+	 * @param	playerData				Player's data
+	 * @param	fillAllData				Should fetch UUID and username from the database too ?
+	 * @throws	SQLException			SQL failure
+	 * @throws	NoSuchFieldException	No account found
+	 */
+	public PlayerData getPlayerAccount(PlayerData playerData, boolean fillAllData)
+		throws SQLException, NoSuchFieldException
+	{
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
-		String query = "SELECT * FROM core " +
-			"JOIN profiles ON core.uuid = profiles.uuid " +
-			"JOIN stats ON core.uuid = stats.uuid " +
-			"WHERE core." + (isPlayerDataIncomplete ? "username" : "uuid") + " = ?";
+		String query = "SELECT * FROM players " +
+			"JOIN ranks ON ranks.uuid = players.rankUuid " +
+			"WHERE players." + (fillAllData ? "username" : "uuid") + " = ?;";
 		
-		connection = conn;
+		statement = sqlConnection.prepareStatement(query);
 		
-		statement = connection.prepareStatement(query);
-		if (!isPlayerDataIncomplete)
-			statement.setString(1, playerData.getFormattedUniqueId());
-		else
-			statement.setString(1, playerData.getUsername());
+		statement.setString(1, fillAllData
+			? playerData.getUsername()
+			: playerData.getUniqueId());
+		
 		resultSet = statement.executeQuery();
 		
-		connection.commit();
+		this.sqlConnection.commit();
 		
-		do {
-			if (!resultSet.next())
-				throw new NoSuchFieldException();
-			
-			setCoreAttributes(playerData, resultSet, isPlayerDataIncomplete);
-			setProfileAttributes(playerData, resultSet, isPlayerDataIncomplete);
-			setStatsAttributes(playerData, resultSet, isPlayerDataIncomplete);
-		} while (resultSet.next());
+		if (!resultSet.next())
+			throw new NoSuchFieldException();
+		
+		this.fillPlayerData(playerData, resultSet, fillAllData);
 		
 		if (resultSet != null)
 			resultSet.close();
