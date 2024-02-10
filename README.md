@@ -17,19 +17,19 @@ de votre plugin.
 ```java
 public class Test extends JavaPlugin {
 
-	private Tekore core;
-	
-	@Override
-	public void onEnable()
-	{
-	    this.core = Tekore.getInstance();
-	}
-	
-	public Tekore getCore()
-	{
-	    return this.core;
-	}
-	
+    private Tekore core;
+    
+    @Override
+    public void onEnable()
+    {
+        this.core = Tekore.getInstance();
+    }
+    
+    public Tekore getCore()
+    {
+        return this.core;
+    }
+    
 }
 ```
 
@@ -63,26 +63,26 @@ public class JoinEvent implements Listener, HashLoggable {
     private HashLogger logger; // Logger du Tekore
     
     public JoinEvent(Tekore core)
-	{
-		this.core = core;
-		this.logger = this.core.getHashLogger(); // Récupération du logger du Tekore
-	}
-	
-	@EventHandler
-	public void onJoin(PlayerJoinEvent event)
-	{
-	    Player player = event.getPlayer();
-	    PlayerData playerData = this.core.getPlayerData(player); // Récupération des données
-	    
-	    /* Modifiez ce que vous voulez */
-	    
-	    // Mise à jour des données dans la base de données.
-	    try {
-			this.core.getAccountManager().updatePlayerAccount(playerData);
-		} catch (SQLException exception) {
-			this.logger.critical(this, "Failed to update PlayerData.", exception);
-		}
-	}
+    {
+        this.core = core;
+        this.logger = this.core.getHashLogger(); // Récupération du logger du Tekore
+    }
+    
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event)
+    {
+        Player player = event.getPlayer();
+        PlayerData playerData = this.core.getPlayerData(player); // Récupération des données
+        
+        /* Modifiez ce que vous voulez */
+        
+        // Mise à jour des données dans la base de données.
+        try {
+            this.core.getAccountManager().updatePlayerAccount(playerData);
+        } catch (SQLException exception) {
+            this.logger.critical(this, "Failed to update PlayerData.", exception);
+        }
+    }
     
 }
 ```
