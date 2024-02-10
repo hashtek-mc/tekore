@@ -131,4 +131,6 @@ avec PhpMyAdmin.
 `USER` : Nom d'utilisateur (`root` par défaut)\
 `PASSWORD` : Mot de passe (rien par défaut)
 
+`⚠️` Vous devez créer le `.env` à la racine du serveur.
+
 ## Fait avec 💜 par [Lysandre B.](https://github.com/Shuvlyy) ・ [![wakatime](https://wakatime.com/badge/user/2f50fe6c-0368-4bef-aa01-3a67193b63f8/project/018d5ee2-0b76-40e6-85c7-41444ac26120.svg)](https://wakatime.com/badge/user/2f50fe6c-0368-4bef-aa01-3a67193b63f8/project/018d5ee2-0b76-40e6-85c7-41444ac26120)
