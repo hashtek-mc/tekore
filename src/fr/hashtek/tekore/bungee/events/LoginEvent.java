@@ -15,8 +15,8 @@ import net.md_5.bungee.event.EventHandler;
 
 public class LoginEvent implements Listener, HashLoggable {
 	
-	private Tekord cord;
-	private HashLogger logger;
+	private final Tekord cord;
+	private final HashLogger logger;
 	
 	
 	/**

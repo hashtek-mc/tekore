@@ -8,7 +8,7 @@ import fr.hashtek.tekore.common.player.PlayerData;
 
 public class AccountCreator {
 	
-	private Connection sqlConnection;
+	private final Connection sqlConnection;
 	
 	
 	/**

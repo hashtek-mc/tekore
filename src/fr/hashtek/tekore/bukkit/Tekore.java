@@ -1,8 +1,11 @@
 package fr.hashtek.tekore.bukkit;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import fr.hashtek.common.hashconfig.manager.HashConfig;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,6 +18,7 @@ import fr.hashtek.tekore.bukkit.events.QuitEvent;
 import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.sql.SQLManager;
 import fr.hashtek.tekore.common.sql.account.AccountManager;
+import org.simpleyaml.configuration.file.YamlFile;
 
 public class Tekore extends JavaPlugin implements HashLoggable {
 	
@@ -24,8 +28,10 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	
 	private PluginManager pluginManager;
 	private AccountManager accountManager;
+
+	private HashConfig hashConfig;
 	
-	private HashMap<Player, PlayerData> playerDatas = new HashMap<Player, PlayerData>();
+	private final HashMap<Player, PlayerData> playersData = new HashMap<Player, PlayerData>();
 
 	
 	/**
@@ -35,22 +41,15 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	public void onEnable()
 	{
 		instance = this;
+
+		this.setupConfig();
 		this.setupHashLogger();
 		
 		this.logger.info(this, "Starting Tekore...");
-		
-		try {
-			this.sql = new SQLManager(this.logger, "hashtekdb", "127.0.0.1", "root", "");
-			this.sql.connect();
-		} catch (SQLException exception) {
-			this.logger.fatal(this, "Failed to connect to the SQL database. Shutting down server.");
-			this.getServer().shutdown();
-			return;
-		}
-		
+
 		this.setupManagers();
-		this.setupListeners();
-		this.setupCommands();
+		this.registerListeners();
+		this.registerCommands();
 	
 		this.logger.info(this, "Tekore loaded.");
 	}
@@ -74,16 +73,39 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 		
 		this.logger.info(this, "Tekore disabled.");
 	}
-	
+
+	/**
+	 * Creates a new instance of HashConfig, to read configuration files.
+	 * This function doesn't use HashLogger because it is called before the
+	 * initialization of HashLogger. System.err.println is used instead.
+	 */
+	private void setupConfig()
+	{
+		String configFilename = "config.yml";
+
+		try {
+			this.hashConfig = new HashConfig(
+				configFilename,
+				this.getDataFolder().getPath() + "/" + configFilename,
+				true
+			);
+		} catch (IOException exception) {
+			System.err.println("Failed to read config file.");
+			System.err.println(exception.getMessage());
+			this.getServer().shutdown();
+		}
+	}
+
 	/**
 	 * Creates an instance of HashLogger.
 	 * This HashLogger instance will be used server-wide, in every plugin that uses Tekore.
-	 * 
-	 * TODO: Read log level from the configuration file.
 	 */
 	private void setupHashLogger()
 	{
-		this.logger = new HashLogger(this, LogLevel.DEBUG);
+		YamlFile config = this.hashConfig.getYaml();
+		LogLevel logLevel = LogLevel.valueOf(config.getString("logger-level"));
+
+		this.logger = new HashLogger(this, logLevel);
 	}
 	
 	/**
@@ -92,7 +114,25 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	private void setupManagers()
 	{
 		this.logger.info(this, "Setting up managers...");
-		
+
+		Dotenv sqlEnv = this.hashConfig.getEnv();
+
+		try {
+			this.sql = new SQLManager(
+				this.logger,
+				sqlEnv.get("DATABASE"),
+				sqlEnv.get("HOST"),
+				sqlEnv.get("USER"),
+				sqlEnv.get("PASSWORD")
+			);
+
+			this.sql.connect();
+		} catch (SQLException exception) {
+			this.logger.fatal(this, "Failed to connect to the SQL database. Shutting down server.");
+			this.getServer().shutdown();
+			return;
+		}
+
 		this.pluginManager = this.getServer().getPluginManager();
 		this.accountManager = new AccountManager(this.sql.getConnection());
 		
@@ -102,7 +142,7 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	/**
 	 * Registers all event listeners.
 	 */
-	private void setupListeners()
+	private void registerListeners()
 	{
 		this.logger.info(this, "Registering listeners...");
 		
@@ -115,7 +155,7 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	/**
 	 * Registers all command listeners.
 	 */
-	private void setupCommands()
+	private void registerCommands()
 	{
 		this.logger.info(this, "Registering commands...");
 		
@@ -133,7 +173,7 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	public void addPlayerData(Player player, PlayerData playerData)
 	{
 		this.removePlayerData(player);
-		this.playerDatas.put(player, playerData);
+		this.playersData.put(player, playerData);
 	}
 	
 	/**
@@ -143,8 +183,7 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	 */
 	public void removePlayerData(Player player)
 	{
-		if (this.playerDatas.containsKey(player))
-			this.playerDatas.remove(player);
+        this.playersData.remove(player);
 	}
 	
 	
@@ -187,6 +226,16 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	{
 		return this.accountManager;
 	}
+
+	/**
+	 * Returns the configuration manager
+	 *
+	 * @return	Configuration manager
+	 */
+	public HashConfig getHashConfig()
+	{
+		return this.hashConfig;
+	}
 	
 	/**
 	 * Returns the PlayerData linked to a Player.
@@ -196,7 +245,7 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	 */
 	public PlayerData getPlayerData(Player player)
 	{
-		return this.playerDatas.get(player);
+		return this.playersData.get(player);
 	}
 	
 }

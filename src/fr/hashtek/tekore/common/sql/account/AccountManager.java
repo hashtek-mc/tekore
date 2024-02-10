@@ -6,12 +6,10 @@ import java.sql.SQLException;
 import fr.hashtek.tekore.common.player.PlayerData;
 
 public class AccountManager {
-	
-	private Connection sqlConnection;
-	
-	private AccountCreator accountCreator;
-	private AccountGetter accountGetter;
-	private AccountUpdater accountUpdater;
+
+    private final AccountCreator accountCreator;
+	private final AccountGetter accountGetter;
+	private final AccountUpdater accountUpdater;
 	
 	
 	/**
@@ -21,11 +19,9 @@ public class AccountManager {
 	 */
 	public AccountManager(Connection sqlConnection)
 	{
-		this.sqlConnection = sqlConnection;
-		
-		this.accountCreator = new AccountCreator(this.sqlConnection);
-		this.accountGetter = new AccountGetter(this.sqlConnection);
-		this.accountUpdater = new AccountUpdater(this.sqlConnection);
+        this.accountCreator = new AccountCreator(sqlConnection);
+		this.accountGetter = new AccountGetter(sqlConnection);
+		this.accountUpdater = new AccountUpdater(sqlConnection);
 	}
 	
 	

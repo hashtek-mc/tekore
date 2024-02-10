@@ -9,7 +9,7 @@ import fr.hashtek.tekore.common.player.PlayerData;
 
 public class AccountUpdater {
 
-	private Connection sqlConnection;
+	private final Connection sqlConnection;
 	
 	
 	/**

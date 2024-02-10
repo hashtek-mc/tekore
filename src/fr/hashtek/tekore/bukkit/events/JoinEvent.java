@@ -15,8 +15,8 @@ import fr.hashtek.tekore.common.sql.account.AccountManager;
 
 public class JoinEvent implements Listener, HashLoggable {
 
-	private Tekore core;
-	private HashLogger logger;
+	private final Tekore core;
+	private final HashLogger logger;
 	
 	
 	/**

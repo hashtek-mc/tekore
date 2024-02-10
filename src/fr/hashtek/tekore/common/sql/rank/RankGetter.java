@@ -9,7 +9,7 @@ import fr.hashtek.tekore.common.Rank;
 
 public class RankGetter {
 
-	private Connection sqlConnection;
+	private final Connection sqlConnection;
 	
 	
 	/**
@@ -80,12 +80,9 @@ public class RankGetter {
 			throw new NoSuchFieldException("Could not find a rank with " + type + " \"" + typeValue + "\".");
 		
 		rank = getRankFromResultSet(resultSet);
-		
-		if (resultSet != null)
-			resultSet.close();
-		
-		if (statement != null)
-			statement.close();
+
+		resultSet.close();
+		statement.close();
 		
 		return rank;
 	}
@@ -106,7 +103,7 @@ public class RankGetter {
 	/**
 	 * Gets a rank from the SQL database by its name.
 	 * 
-	 * @param	uuid					Rank's name
+	 * @param	name					Rank's name
 	 * @return	Fetched rank
 	 * @throws	SQLException			SQL failure
 	 * @throws	NoSuchFieldException	No rank found

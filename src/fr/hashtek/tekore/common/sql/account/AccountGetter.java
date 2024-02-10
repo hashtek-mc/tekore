@@ -11,7 +11,7 @@ import fr.hashtek.tekore.common.sql.rank.RankGetter;
 
 public class AccountGetter {
 	
-	private Connection sqlConnection;
+	private final Connection sqlConnection;
 	
 	
 	/**
@@ -56,13 +56,13 @@ public class AccountGetter {
 	/**
 	 * Gets a player's data from the SQL database and
 	 * fills up a PlayerData with the fetched data.
-	 * 
+	 *
 	 * @param	playerData				Player's data
 	 * @param	fillAllData				Should fetch UUID and username from the database too ?
 	 * @throws	SQLException			SQL failure
 	 * @throws	NoSuchFieldException	No account found
 	 */
-	public PlayerData getPlayerAccount(PlayerData playerData, boolean fillAllData)
+	public void getPlayerAccount(PlayerData playerData, boolean fillAllData)
 		throws SQLException, NoSuchFieldException
 	{
 		PreparedStatement statement = null;
@@ -85,14 +85,9 @@ public class AccountGetter {
 			throw new NoSuchFieldException();
 		
 		this.fillPlayerData(playerData, resultSet, fillAllData);
-		
-		if (resultSet != null)
-			resultSet.close();
-		
-		if (statement != null)
-			statement.close();
-		
-		return playerData;
+
+		resultSet.close();
+		statement.close();
 	}
 
 }

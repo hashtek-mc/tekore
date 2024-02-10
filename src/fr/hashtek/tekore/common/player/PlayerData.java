@@ -68,8 +68,7 @@ public class PlayerData {
 	private void setBukkitPlayer() throws NoClassDefFoundError
 	{
 		if (player instanceof org.bukkit.entity.Player) {
-			this.player = (org.bukkit.entity.Player) player;
-			this.uuid = ((org.bukkit.entity.Player) player).getUniqueId().toString();
+            this.uuid = ((org.bukkit.entity.Player) player).getUniqueId().toString();
 			this.username = ((org.bukkit.entity.Player) player).getName();
 			this.sql = Tekore.getInstance().getSQLManager();
 		} else 
@@ -82,8 +81,7 @@ public class PlayerData {
 	private void setBungeePlayer() throws NoClassDefFoundError
 	{
 		if (player instanceof net.md_5.bungee.api.connection.ProxiedPlayer) {
-			this.player = (net.md_5.bungee.api.connection.ProxiedPlayer) player;
-			this.uuid = ((net.md_5.bungee.api.connection.ProxiedPlayer) player).getUniqueId().toString();
+            this.uuid = ((net.md_5.bungee.api.connection.ProxiedPlayer) player).getUniqueId().toString();
 			this.username = ((net.md_5.bungee.api.connection.ProxiedPlayer) player).getName();
 			this.sql = Tekord.getInstance().getSQLManager();
 		} else

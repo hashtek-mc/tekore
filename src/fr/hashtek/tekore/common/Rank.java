@@ -2,11 +2,11 @@ package fr.hashtek.tekore.common;
 
 public class Rank {
 	
-	private String uuid;
-	private String name;
-	private int power;
-	private String chatPrefix;
-	private String tabPrefix;
+	private final String uuid;
+	private final String name;
+	private final int power;
+	private final String chatPrefix;
+	private final String tabPrefix;
 	
 
 	/**

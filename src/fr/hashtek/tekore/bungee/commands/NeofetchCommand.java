@@ -74,14 +74,14 @@ public class NeofetchCommand extends Command implements HashLoggable {
 		
 		String nameField = targetRank.getColor() + targetPlayerData.getUsername() + "@" + targetRank.getName();
 		
-		StringBuffer separator = new StringBuffer();
+		StringBuilder separator = new StringBuilder();
 		for (int k = 0; k < nameField.length() + targetServer.length(); k++)
 			separator.append("-");
 			
 		sender.sendMessage(new TextComponent(
 			"\n" +
 			(isConnected ? ChatColor.GREEN : ChatColor.RED) + "● " + nameField + targetServer + "\n" +
-			ChatColor.WHITE + "" + ChatColor.STRIKETHROUGH + separator + "\n" +
+			ChatColor.WHITE + ChatColor.STRIKETHROUGH + separator + "\n" +
 			ChatColor.DARK_AQUA + "UUID: " + ChatColor.WHITE + targetPlayerData.getUniqueId() + "\n" +
 			ChatColor.DARK_AQUA + "First login: " + ChatColor.WHITE + targetPlayerData.getCreatedAt() + "\n" +
 			ChatColor.DARK_AQUA + "Last seen: " + ChatColor.WHITE + targetPlayerData.getLastUpdate() +
@@ -98,6 +98,9 @@ public class NeofetchCommand extends Command implements HashLoggable {
 	@Override
 	public void execute(CommandSender sender, String[] args)
 	{
+		if (!(sender instanceof ProxiedPlayer))
+			return;
+
 		this.cord = Tekord.getInstance();
 		this.logger = cord.getHashLogger();
 		AccountManager accountManager = cord.getAccountManager();

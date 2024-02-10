@@ -9,14 +9,14 @@ import fr.hashtek.hashlogger.HashLogger;
 
 public class SQLManager implements HashLoggable {
 
-	private HashLogger logger;
+	private final HashLogger logger;
 	
 	private Connection connection;
 	
-	private String database;
-	private String host;
-	private String user;
-	private String password;
+	private final String database;
+	private final String host;
+	private final String user;
+	private final String password;
 	
 	
 	/**
