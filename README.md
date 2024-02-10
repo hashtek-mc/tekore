@@ -119,13 +119,13 @@ avec PhpMyAdmin.
 
 ### HashLogger
 
-`logLevel` : Niveau de log (voir [HashLogger](https://github.com/hashtek-mc/hashlogger/blob/main/README.md))
+`logger-level` : Niveau de log (voir [HashLogger](https://github.com/hashtek-mc/hashlogger/blob/main/README.md))
 
 ### Base de données (`.env`)
 
-`database` : Nom de la base de données (`hashtekdb`)\
-`host` : IP de la base de données (`127.0.0.1` pour du local)\
-`user` : Nom d'utilisateur (`root` par défaut)\
-`password` : Mot de passe (rien par défaut)
+`DATABASE` : Nom de la base de données (`hashtekdb`)\
+`HOST` : IP de la base de données (`127.0.0.1` pour du local)\
+`USER` : Nom d'utilisateur (`root` par défaut)\
+`PASSWORD` : Mot de passe (rien par défaut)
 
 ## Fait avec 💜 par [Lysandre B.](https://github.com/Shuvlyy) ・ [![wakatime](https://wakatime.com/badge/user/2f50fe6c-0368-4bef-aa01-3a67193b63f8/project/018d5ee2-0b76-40e6-85c7-41444ac26120.svg)](https://wakatime.com/badge/user/2f50fe6c-0368-4bef-aa01-3a67193b63f8/project/018d5ee2-0b76-40e6-85c7-41444ac26120)
