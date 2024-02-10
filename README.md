@@ -40,7 +40,7 @@ des logs), vous devez utiliser l'instance de HashLogger présente dans le Tekore
 
 Il s'obtient avec la fonction `Tekore#getHashLogger()`.
 
-Voir l'exemple ci-dessous (dans [PlayerData#Utilisation](#utilisation-1)).
+Voir [l'exemple ci-dessous](#utilisation-1).
 
 ## PlayerData
 
