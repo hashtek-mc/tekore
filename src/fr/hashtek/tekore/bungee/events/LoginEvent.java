@@ -42,7 +42,7 @@ public class LoginEvent implements Listener, HashLoggable {
 		AccountManager accountManager = this.cord.getAccountManager();
 		
 		ProxiedPlayer player = event.getPlayer();
-		PlayerData playerData = null;
+		PlayerData playerData;
 		
 		this.logger.info(this, "\"" + player.getName() + "\" logged in, launching login sequence...");
 		

@@ -16,8 +16,7 @@ import net.md_5.bungee.api.plugin.Command;
 
 public class NeofetchCommand extends Command implements HashLoggable {
 
-	private Tekord cord;
-	private HashLogger logger;
+    private HashLogger logger;
 	
 	
 	/**
@@ -98,10 +97,12 @@ public class NeofetchCommand extends Command implements HashLoggable {
 	@Override
 	public void execute(CommandSender sender, String[] args)
 	{
-		if (!(sender instanceof ProxiedPlayer))
+		if (!(sender instanceof ProxiedPlayer)) {
+			sender.sendMessage(new TextComponent("You must be a player to execute this command."));
 			return;
+		}
 
-		this.cord = Tekord.getInstance();
+        Tekord cord = Tekord.getInstance();
 		this.logger = cord.getHashLogger();
 		AccountManager accountManager = cord.getAccountManager();
 		
@@ -114,16 +115,12 @@ public class NeofetchCommand extends Command implements HashLoggable {
 		
 		ProxiedPlayer target = BungeeCord.getInstance().getPlayer(args[0]);
 		PlayerData targetPlayerData = new PlayerData(args[0]);
-		
-		logger.info(this, "Targeted player: " + targetPlayerData.getUsername());
-		
+
 		try {
 			accountManager.getFullPlayerAccount(targetPlayerData);
 		} catch (Exception exception) {
 			logger.info(this, targetPlayerData.getUsername() + " is not a valid player.");
-			sender.sendMessage(new TextComponent(
-				ChatColor.RED + targetPlayerData.getUsername() + " n'existe pas ou ne s'est jamais connecté à ce serveur."
-			));
+			sender.sendMessage(new TextComponent(ChatColor.RED + targetPlayerData.getUsername() + " n'existe pas ou ne s'est jamais connecté à ce serveur."));
 			return;
 		}
 		
