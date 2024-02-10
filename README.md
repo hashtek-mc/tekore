@@ -8,6 +8,9 @@ entre-eux.
 
 `⚠️` Tous les plugins de Hashtek doivent impérativement utiliser Tekore.
 
+`ℹ️` Vous devez impérativement mettre le .jar dans le dossier `plugins`
+de votre serveur.
+
 ## Utilisation
 
 Pour utiliser Tekore, vous devez stocker une instance de ce dernier à la racine
