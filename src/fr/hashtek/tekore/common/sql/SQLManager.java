@@ -108,9 +108,7 @@ public class SQLManager implements HashLoggable {
 	
 	
 	/**
-	 * Returns the active connection to the SQL database.
-	 * 
-	 * @return	SQL connection
+	 * @return	Active connection to the SQL database
 	 */
 	public Connection getConnection()
 	{

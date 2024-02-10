@@ -188,8 +188,6 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	
 	
 	/**
-	 * Returns the instance of Tekore.
-	 * 
 	 * @return	Tekore instance
 	 */
 	public static Tekore getInstance()
@@ -198,8 +196,6 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	}
 	
 	/**
-	 * Returns the SQL manager.
-	 * 
 	 * @return	SQL manager
 	 */
 	public SQLManager getSQLManager()
@@ -208,8 +204,6 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	}
 	
 	/**
-	 * Returns the logger
-	 * 
 	 * @return	Logger
 	 */
 	public HashLogger getHashLogger()
@@ -218,8 +212,6 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	}
 	
 	/**
-	 * Returns the account manager
-	 * 
 	 * @return	Account manager
 	 */
 	public AccountManager getAccountManager()
@@ -228,8 +220,6 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	}
 
 	/**
-	 * Returns the configuration manager
-	 *
 	 * @return	Configuration manager
 	 */
 	public HashConfig getHashConfig()

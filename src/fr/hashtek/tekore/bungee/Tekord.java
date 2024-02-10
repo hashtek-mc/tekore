@@ -186,8 +186,6 @@ public class Tekord extends Plugin implements HashLoggable {
 	
 	
 	/**
-	 * Returns the instance of Tekore.
-	 * 
 	 * @return	Tekore instance
 	 */
 	public static Tekord getInstance()
@@ -196,8 +194,6 @@ public class Tekord extends Plugin implements HashLoggable {
 	}
 	
 	/**
-	 * Returns the SQL manager.
-	 * 
 	 * @return	SQL manager
 	 */
 	public SQLManager getSQLManager()
@@ -206,8 +202,6 @@ public class Tekord extends Plugin implements HashLoggable {
 	}
 	
 	/**
-	 * Returns the logger
-	 * 
 	 * @return	Logger
 	 */
 	public HashLogger getHashLogger()
@@ -216,8 +210,6 @@ public class Tekord extends Plugin implements HashLoggable {
 	}
 	
 	/**
-	 * Returns the account manager
-	 * 
 	 * @return	Account manager
 	 */
 	public AccountManager getAccountManager()
@@ -226,8 +218,6 @@ public class Tekord extends Plugin implements HashLoggable {
 	}
 
 	/**
-	 * Returns the configuration manager
-	 *
 	 * @return	Configuration manager
 	 */
 	public HashConfig getHashConfig()
