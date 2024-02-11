@@ -83,6 +83,7 @@ public class Tekord extends Plugin implements HashLoggable {
 		
 		try {
 			this.hashConfig = new HashConfig(
+				this.getClass(),
 				configFilename,
 				this.getDataFolder().getPath() + "/" + configFilename,
 				true
