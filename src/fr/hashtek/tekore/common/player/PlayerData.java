@@ -56,13 +56,14 @@ public class PlayerData {
 	
 	/**
 	 * Creates an empty instance of PlayerData based on a username.
-	 * Mainly used for neofetch command.
+	 * Mainly used for Neofetch command.
 	 * 
 	 * @param	username	Player's username
 	 */
 	public PlayerData(String username)
 	{
 		this.username = username;
+		this.playerSettings = new PlayerSettings();
 	}
 	
 	

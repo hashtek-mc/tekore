@@ -67,8 +67,8 @@ public class NeofetchCommand extends Command implements HashLoggable, TabExecuto
 	private void displayPlayerData(ProxiedPlayer target, PlayerData targetPlayerData, ProxiedPlayer sender)
 	{
 		boolean isConnected = target != null && target.isConnected();
+
 		String targetServer = "";
-		
 		if (isConnected) {
 			ServerInfo server = target.getServer().getInfo();
 			targetServer = ChatColor.GRAY + " " + ChatColor.ITALIC + "(" + server.getName() + ")";
@@ -81,6 +81,10 @@ public class NeofetchCommand extends Command implements HashLoggable, TabExecuto
 		StringBuilder separator = new StringBuilder();
 		for (int k = 0; k < nameField.length() + targetServer.length(); k++)
 			separator.append("-");
+
+		String targetPing = "";
+		if (isConnected)
+			targetPing = ChatColor.DARK_AQUA + "Ping: " + ChatColor.WHITE + target.getPing() + " ms";
 			
 		sender.sendMessage(new TextComponent(
 			"\n" +
@@ -88,7 +92,8 @@ public class NeofetchCommand extends Command implements HashLoggable, TabExecuto
 			ChatColor.WHITE + ChatColor.STRIKETHROUGH + separator + "\n" +
 			ChatColor.DARK_AQUA + "UUID: " + ChatColor.WHITE + targetPlayerData.getUniqueId() + "\n" +
 			ChatColor.DARK_AQUA + "First login: " + ChatColor.WHITE + targetPlayerData.getCreatedAt() + "\n" +
-			ChatColor.DARK_AQUA + "Last seen: " + ChatColor.WHITE + targetPlayerData.getLastUpdate() +
+			ChatColor.DARK_AQUA + "Last seen: " + ChatColor.WHITE + targetPlayerData.getLastUpdate() + "\n" +
+			targetPing +
 			"\n"
 		));
 	}
@@ -124,7 +129,7 @@ public class NeofetchCommand extends Command implements HashLoggable, TabExecuto
 		try {
 			accountManager.getFullPlayerAccount(targetPlayerData);
 		} catch (Exception exception) {
-			logger.info(this, targetPlayerData.getUsername() + " is not a valid player.");
+			logger.error(this, targetPlayerData.getUsername() + " is not a valid player.", exception);
 			sender.sendMessage(new TextComponent(ChatColor.RED + targetPlayerData.getUsername() + " n'existe pas ou ne s'est jamais connecté à ce serveur."));
 			return;
 		}

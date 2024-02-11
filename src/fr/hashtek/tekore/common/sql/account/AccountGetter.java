@@ -93,9 +93,7 @@ public class AccountGetter {
 		
 		statement = sqlConnection.prepareStatement(query);
 		
-		statement.setString(1, fillAllData
-			? playerData.getUsername()
-			: playerData.getUniqueId());
+		statement.setString(1, fillAllData ? playerData.getUsername() : playerData.getUniqueId());
 		
 		resultSet = statement.executeQuery();
 		
