@@ -25,7 +25,13 @@ public class Test extends JavaPlugin {
     @Override
     public void onEnable()
     {
-        this.core = Tekore.getInstance();
+        try { // Important !
+            this.core = Tekore.getInstance();
+        } catch (NullPointerException exception) {
+            System.err.println("Tekore failed to load. Stopping.");
+            this.getServer().shutdown();
+            return;
+        }
     }
     
     public Tekore getCore()
@@ -35,6 +41,9 @@ public class Test extends JavaPlugin {
     
 }
 ```
+
+`⚠️` Initialisez toujours Tekore avec un bloc `try/catch` as cas-où Tekore ne se charge pas correctement
+(mauvaise configuration par exemple).
 
 ## HashLogger
 
