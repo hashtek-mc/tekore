@@ -100,11 +100,26 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	/**
 	 * Creates an instance of HashLogger.
 	 * This HashLogger instance will be used server-wide, in every plugin that uses Tekore.
+	 * This function doesn't use HashLogger because it is called before the
+	 * initialization of HashLogger. System.err.println is used instead.
 	 */
 	private void setupHashLogger()
 	{
 		YamlFile config = this.hashConfig.getYaml();
-		LogLevel logLevel = LogLevel.valueOf(config.getString("logger-level"));
+		String loggerLevel = config.getString("logger-level");
+		LogLevel logLevel;
+
+		try {
+			logLevel = LogLevel.valueOf(loggerLevel);
+		} catch (IllegalArgumentException | NullPointerException exception) {
+			System.err.println(exception instanceof NullPointerException ?
+				"Field \"logger-level\" not found." :
+				"\"" + loggerLevel + "\" is not a valid log level."
+			);
+			System.err.println("Can't initialize HashLogger. Stopping.");
+			this.getServer().shutdown();
+			return;
+		}
 
 		this.logger = new HashLogger(this, logLevel);
 	}
