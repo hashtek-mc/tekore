@@ -24,6 +24,8 @@ public class PlayerData {
 	
 	private Rank rank;
 
+	private PlayerSettings playerSettings;
+
 	private SQLManager sql;
 	
 	
@@ -48,6 +50,8 @@ public class PlayerData {
 		}
 		
 		this.setUniqueId(this.uuid);
+
+		this.playerSettings = new PlayerSettings();
 	}
 	
 	/**
@@ -137,6 +141,16 @@ public class PlayerData {
 	public Rank getRank()
 	{
 		return this.rank;
+	}
+
+	/**
+	 * Returns player's settings.
+	 *
+	 * @return	Player's settings
+	 */
+	public PlayerSettings getPlayerSettings()
+	{
+		return this.playerSettings;
 	}
 	
 	/**

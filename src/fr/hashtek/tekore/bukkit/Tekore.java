@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-import fr.hashtek.common.hashconfig.manager.HashConfig;
+import fr.hashtek.hashconfig.HashConfig;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;

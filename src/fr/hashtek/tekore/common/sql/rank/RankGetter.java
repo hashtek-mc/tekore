@@ -65,9 +65,9 @@ public class RankGetter {
 	 */
 	private Rank getRank(String type, String typeValue) throws SQLException, NoSuchFieldException
 	{
-		Rank rank = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
+		Rank rank;
+		PreparedStatement statement;
+		ResultSet resultSet;
 		String query = "SELECT * FROM ranks WHERE " + type + " = ?;";
 		
 		statement = this.sqlConnection.prepareStatement(query);

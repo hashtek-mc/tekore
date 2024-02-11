@@ -30,12 +30,29 @@ public class AccountCreator {
 	 */
 	private void queryPlayers(PlayerData playerData) throws SQLException
 	{
-		PreparedStatement statement = null;
+		PreparedStatement statement;
 		String query = "INSERT INTO players (uuid, username) VALUES (?, ?);";
 
 		statement = this.sqlConnection.prepareStatement(query);
 		statement.setString(1, playerData.getUniqueId());
 		statement.setString(2, playerData.getUsername());
+		statement.executeUpdate();
+		statement.close();
+	}
+
+	/**
+	 * Inserts into `players` table.
+	 *
+	 * @param	playerData		Player's data
+	 * @throws	SQLException	SQL failure
+	 */
+	private void querySettings(PlayerData playerData) throws SQLException
+	{
+		PreparedStatement statement;
+		String query = "INSERT INTO settings (uuid) VALUES (?);";
+
+		statement = this.sqlConnection.prepareStatement(query);
+		statement.setString(1, playerData.getUniqueId());
 		statement.executeUpdate();
 		statement.close();
 	}
@@ -49,6 +66,7 @@ public class AccountCreator {
 	public void createPlayerAccount(PlayerData playerData) throws SQLException
 	{
 		this.queryPlayers(playerData);
+		this.querySettings(playerData);
 		
 		this.sqlConnection.commit();
 	}

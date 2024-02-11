@@ -1,5 +1,6 @@
 package fr.hashtek.tekore.bungee.commands;
 
+import com.google.common.collect.ImmutableSet;
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
 import fr.hashtek.tekore.bungee.Tekord;
@@ -13,8 +14,12 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.api.plugin.TabExecutor;
 
-public class NeofetchCommand extends Command implements HashLoggable {
+import java.util.HashSet;
+import java.util.Set;
+
+public class NeofetchCommand extends Command implements HashLoggable, TabExecutor {
 
     private HashLogger logger;
 	
@@ -102,7 +107,7 @@ public class NeofetchCommand extends Command implements HashLoggable {
 			return;
 		}
 
-        Tekord cord = Tekord.getInstance();
+		Tekord cord = Tekord.getInstance();
 		this.logger = cord.getHashLogger();
 		AccountManager accountManager = cord.getAccountManager();
 		
@@ -127,6 +132,23 @@ public class NeofetchCommand extends Command implements HashLoggable {
 		this.displayPlayerData(target, targetPlayerData, player);
 		
 		logger.info(this, "Command executed successfully.");
+	}
+
+	@Override
+	public Iterable<String> onTabComplete(CommandSender sender, String[] args)
+	{
+		if (args.length != 1)
+			return ImmutableSet.of();
+
+		Tekord cord = Tekord.getInstance();
+		Set<String> matches = new HashSet<String>();
+		String search = args[0].toLowerCase();
+
+		for (ProxiedPlayer player : cord.getProxy().getPlayers())
+			if (player.getName().toLowerCase().startsWith(search))
+				matches.add(player.getName());
+
+		return matches;
 	}
 	
 }

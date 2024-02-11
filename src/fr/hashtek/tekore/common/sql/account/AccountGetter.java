@@ -7,6 +7,9 @@ import java.sql.SQLException;
 
 import fr.hashtek.tekore.common.Rank;
 import fr.hashtek.tekore.common.player.PlayerData;
+import fr.hashtek.tekore.common.player.PlayerSettings;
+import fr.hashtek.tekore.common.player.settings.FriendRequestsSetting;
+import fr.hashtek.tekore.common.player.settings.PrivateMessagesSetting;
 import fr.hashtek.tekore.common.sql.rank.RankGetter;
 
 public class AccountGetter {
@@ -25,6 +28,27 @@ public class AccountGetter {
 	}
 	
 	
+	private void setPlayerRank(PlayerData playerData, ResultSet resultSet)
+		throws SQLException
+	{
+		Rank rank;
+		RankGetter rankGetter = new RankGetter(this.sqlConnection);
+
+		rank = rankGetter.getRankFromResultSet(resultSet, "ranks.");
+
+		playerData.setRank(rank);
+	}
+
+	private void setPlayerSettings(PlayerData playerData, ResultSet resultSet)
+		throws SQLException, IllegalArgumentException
+	{
+		PlayerSettings playerSettings = playerData.getPlayerSettings();
+
+		playerSettings.setLobbyPlayersSetting(resultSet.getBoolean("settings.showLobbyPlayers"));
+		playerSettings.setFriendRequestsSetting(FriendRequestsSetting.valueOf(resultSet.getString("settings.friendRequests")));
+		playerSettings.setPrivateMessagesSetting(PrivateMessagesSetting.valueOf(resultSet.getString("settings.privateMessages")));
+	}
+
 	/**
 	 * Fills up a PlayerData using a ResultSet results.
 	 * 
@@ -32,10 +56,9 @@ public class AccountGetter {
 	 * @param	resultSet				ResultSet results
 	 * @param	fillAllData				Should fetch UUID and username from the database too ?
 	 * @throws	SQLException			SQL failure
-	 * @throws	NoSuchFieldException	No account found
 	 */
 	private void fillPlayerData(PlayerData playerData, ResultSet resultSet, boolean fillAllData)
-		throws SQLException, NoSuchFieldException
+		throws SQLException, IllegalArgumentException
 	{
 		if (fillAllData) {
 			playerData.setUniqueId(resultSet.getString("uuid"));
@@ -45,12 +68,8 @@ public class AccountGetter {
 		playerData.setCreatedAt(resultSet.getTimestamp("createdAt"));
 		playerData.setLastUpdate(resultSet.getTimestamp("lastUpdate"));
 	
-		Rank rank = null;
-		RankGetter rankGetter = new RankGetter(this.sqlConnection);
-		
-		rank = rankGetter.getRankFromResultSet(resultSet, "ranks.");
-		
-		playerData.setRank(rank);
+		this.setPlayerRank(playerData, resultSet);
+		this.setPlayerSettings(playerData, resultSet);
 	}
 	
 	/**
@@ -63,12 +82,13 @@ public class AccountGetter {
 	 * @throws	NoSuchFieldException	No account found
 	 */
 	public void getPlayerAccount(PlayerData playerData, boolean fillAllData)
-		throws SQLException, NoSuchFieldException
+		throws SQLException, NoSuchFieldException, IllegalArgumentException
 	{
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
+		PreparedStatement statement;
+		ResultSet resultSet;
 		String query = "SELECT * FROM players " +
 			"JOIN ranks ON ranks.uuid = players.rankUuid " +
+			"JOIN settings ON settings.uuid = players.uuid " +
 			"WHERE players." + (fillAllData ? "username" : "uuid") + " = ?;";
 		
 		statement = sqlConnection.prepareStatement(query);

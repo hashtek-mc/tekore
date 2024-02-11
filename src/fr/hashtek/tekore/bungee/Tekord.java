@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import fr.hashtek.hashconfig.HashConfig;
 import org.simpleyaml.configuration.file.YamlFile;
 
-import fr.hashtek.common.hashconfig.manager.HashConfig;
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
 import fr.hashtek.hashlogger.LogLevel;
