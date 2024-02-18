@@ -7,8 +7,7 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
 public class DisconnectEvent implements Listener, HashLoggable {
-	
-	@SuppressWarnings("unused")
+
 	private Tekord cord;
 	
 	

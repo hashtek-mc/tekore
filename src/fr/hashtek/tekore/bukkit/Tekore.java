@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import fr.hashtek.hashconfig.HashConfig;
 import io.github.cdimascio.dotenv.Dotenv;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -200,6 +201,42 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	public void removePlayerData(Player player)
 	{
         this.playersData.remove(player);
+	}
+
+	/**
+	 * Saves a player's data to the database (updates it).
+	 * This function must be only used in static methods.
+	 * Prefer using {@link Tekore#updatePlayerData(Player, HashLoggable)}
+	 *
+	 * @param	player	Player
+	 * @param	author	Author's filename
+	 */
+	public void updatePlayerData(Player player, String author)
+	{
+		PlayerData playerData = this.getPlayerData(player);
+
+        try {
+            this.getAccountManager().updatePlayerAccount(playerData);
+        } catch (SQLException exception) {
+			this.getHashLogger().critical(
+				this,
+				"Could not update PlayerData for \"" + playerData.getUsername() + "\"." +
+				"Initiated by \"" + author + ".java\"",
+				exception
+			);
+			player.sendMessage(ChatColor.RED + "Erreur: Sauvegarde du compte échouée. Veuillez réessayer. " + ChatColor.DARK_RED + ChatColor.ITALIC + "(0x01 DB_UPDATE_FAIL)");
+        }
+    }
+
+	/**
+	 * Saves a player's data to the database (updates it).
+	 *
+	 * @param	player	Player
+	 * @param	author	Author's filename
+	 */
+	public void updatePlayerData(Player player, HashLoggable author)
+	{
+		this.updatePlayerData(player, author.getClass().getSimpleName());
 	}
 	
 	

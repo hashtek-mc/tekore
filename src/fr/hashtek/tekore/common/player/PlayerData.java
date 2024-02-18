@@ -24,7 +24,7 @@ public class PlayerData {
 	
 	private Rank rank;
 
-	private PlayerSettings playerSettings;
+	private final PlayerSettings playerSettings;
 
 	private SQLManager sql;
 	

@@ -42,7 +42,7 @@ public class JoinEvent implements Listener, HashLoggable {
 		AccountManager accountManager = this.core.getAccountManager();
 		
 		Player player = event.getPlayer();
-		PlayerData playerData = null;
+		PlayerData playerData;
 		
 		this.logger.info(this, "\"" + player.getName() + "\" logged in, launching login sequence...");
 		
