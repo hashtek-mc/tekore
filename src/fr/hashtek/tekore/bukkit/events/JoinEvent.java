@@ -2,6 +2,7 @@ package fr.hashtek.tekore.bukkit.events;
 
 import java.sql.SQLException;
 
+import fr.hashtek.hasherror.HashError;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -49,8 +50,9 @@ public class JoinEvent implements Listener, HashLoggable {
 		try {
 			playerData = new PlayerData(player);
 		} catch (Exception exception) {
-			this.logger.critical(this, "Failed to create a PlayerData for \"" + player.getName() + "\".", exception);
-			player.kickPlayer("I am a poor dev that can't do his work properly.");
+			HashError.PD_UNKNOWN_ENTITY
+				.log(this.logger, this, exception, player.getName())
+				.kickPlayer(player, player.getName());
 			return;
 		}
 		

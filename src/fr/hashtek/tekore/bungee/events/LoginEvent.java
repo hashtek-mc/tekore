@@ -2,6 +2,7 @@ package fr.hashtek.tekore.bungee.events;
 
 import java.sql.SQLException;
 
+import fr.hashtek.hasherror.HashError;
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
 import fr.hashtek.tekore.bungee.Tekord;
@@ -56,17 +57,26 @@ public class LoginEvent implements Listener, HashLoggable {
 
 		try {
 			accountManager.getPlayerAccount(playerData);
+			HashError.PD_ACCOUNT_FETCH_FAIL
+				.log(this.cord.getHashLogger(), this, playerData.getUniqueId())
+				.kickPlayer(player);
 		} catch (NoSuchFieldException unused) {
 			try {
-				accountManager.createPlayerAccount(playerData);				
+				accountManager.createPlayerAccount(playerData);
 			} catch (SQLException exception) {
-				this.logger.critical(this,"Failed to create an account for \"" + playerData.getUniqueId() + "\".", exception);
-				player.disconnect(new TextComponent("I am a poor dev that can't do his work properly."));
+				HashError.PD_ACCOUNT_CREATION_FAIL
+					.log(this.cord.getHashLogger(), this, exception, playerData.getUniqueId())
+					.kickPlayer(player);
+				// this.logger.critical(this,"Failed to create an account for \"" + playerData.getUniqueId() + "\".", exception);
+				// player.disconnect(new TextComponent("I am a poor dev that can't do his work properly."));
 				return;
 			}
 		} catch (SQLException exception) {
-			this.logger.critical(this, "Failed to get \"" + playerData.getUsername() + "\"'s account.", exception);
-			player.disconnect(new TextComponent("I am a poor dev that can't do his work properly."));
+			HashError.PD_ACCOUNT_FETCH_FAIL
+				.log(this.cord.getHashLogger(), this, exception, playerData.getUniqueId())
+				.kickPlayer(player);
+			// this.logger.critical(this, "Failed to get \"" + playerData.getUsername() + "\"'s account.", exception);
+			// player.disconnect(new TextComponent("I am a poor dev that can't do his work properly."));
 			return;
 		}
 		
