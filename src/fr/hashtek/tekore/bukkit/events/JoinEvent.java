@@ -59,12 +59,14 @@ public class JoinEvent implements Listener, HashLoggable {
 		try {
 			accountManager.getPlayerAccount(playerData);
 		} catch (NoSuchFieldException unused) {
-			this.logger.critical(this, "Account does not exist. Can't create one, that's Tekord job.");
-			player.kickPlayer("I am a poor dev that can't do his work properly.");
+			HashError.PD_CANNOT_CREATE_ACCOUNT
+				.log(this.logger, this, playerData.getUniqueId())
+				.kickPlayer(player);
 			return;
 		} catch (SQLException exception) {
-			this.logger.critical(this, "Failed to get \"" + playerData.getUsername() + "\"'s account.", exception);
-			player.kickPlayer("I am a poor dev that can't do his work properly.");
+			HashError.PD_ACCOUNT_FETCH_FAIL
+				.log(this.logger, this, playerData.getUniqueId())
+				.kickPlayer(player);
 			return;
 		}
 		

@@ -8,7 +8,6 @@ import fr.hashtek.hashlogger.HashLogger;
 import fr.hashtek.tekore.bungee.Tekord;
 import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.sql.account.AccountManager;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -50,16 +49,14 @@ public class LoginEvent implements Listener, HashLoggable {
 		try {
 			playerData = new PlayerData(player);
 		} catch (Exception exception) {
-			this.logger.critical(this, "Failed to create a PlayerData for \"" + player.getName() + "\".", exception);
-			player.disconnect(new TextComponent("I am a poor dev that can't do his work properly."));
+			HashError.PD_UNKNOWN_ENTITY
+				.log(this.cord.getHashLogger(), this, exception, player.getName())
+				.kickPlayer(player);
 			return;
 		}
 
 		try {
 			accountManager.getPlayerAccount(playerData);
-			HashError.PD_ACCOUNT_FETCH_FAIL
-				.log(this.cord.getHashLogger(), this, playerData.getUniqueId())
-				.kickPlayer(player);
 		} catch (NoSuchFieldException unused) {
 			try {
 				accountManager.createPlayerAccount(playerData);
@@ -67,16 +64,12 @@ public class LoginEvent implements Listener, HashLoggable {
 				HashError.PD_ACCOUNT_CREATION_FAIL
 					.log(this.cord.getHashLogger(), this, exception, playerData.getUniqueId())
 					.kickPlayer(player);
-				// this.logger.critical(this,"Failed to create an account for \"" + playerData.getUniqueId() + "\".", exception);
-				// player.disconnect(new TextComponent("I am a poor dev that can't do his work properly."));
 				return;
 			}
 		} catch (SQLException exception) {
 			HashError.PD_ACCOUNT_FETCH_FAIL
 				.log(this.cord.getHashLogger(), this, exception, playerData.getUniqueId())
 				.kickPlayer(player);
-			// this.logger.critical(this, "Failed to get \"" + playerData.getUsername() + "\"'s account.", exception);
-			// player.disconnect(new TextComponent("I am a poor dev that can't do his work properly."));
 			return;
 		}
 		

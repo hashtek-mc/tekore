@@ -5,8 +5,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 import fr.hashtek.hashconfig.HashConfig;
+import fr.hashtek.hasherror.HashError;
 import io.github.cdimascio.dotenv.Dotenv;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -218,13 +218,9 @@ public class Tekore extends JavaPlugin implements HashLoggable {
         try {
             this.getAccountManager().updatePlayerAccount(playerData);
         } catch (SQLException exception) {
-			this.getHashLogger().critical(
-				this,
-				"Could not update PlayerData for \"" + playerData.getUsername() + "\"." +
-				"Initiated by \"" + author + ".java\"",
-				exception
-			);
-			player.sendMessage(ChatColor.RED + "Erreur: Sauvegarde du compte échouée. Veuillez réessayer. " + ChatColor.DARK_RED + ChatColor.ITALIC + "(0x01 DB_UPDATE_FAIL)");
+			HashError.PD_UPDATE_FAIL
+				.log(this.logger, this, exception, playerData.getUniqueId(), author)
+				.sendToPlayer(player);
         }
     }
 

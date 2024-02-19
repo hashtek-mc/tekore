@@ -44,8 +44,8 @@ public class PlayerData {
 		} catch (NoClassDefFoundError unused) {
 			try {
 				this.setBungeePlayer();
-			} catch (NoClassDefFoundError ex) {
-				throw new NoClassDefFoundError("Player type is not BukkitPlayer or BungeePlayer.");
+			} catch (NoClassDefFoundError unused1) {
+				throw new NoClassDefFoundError("Neither Bukkit nor Bungee.");
 			}
 		}
 		
@@ -77,7 +77,7 @@ public class PlayerData {
 			this.username = ((org.bukkit.entity.Player) player).getName();
 			this.sql = Tekore.getInstance().getSQLManager();
 		} else 
-			throw new NoClassDefFoundError();
+			throw new NoClassDefFoundError("Not Bukkit.");
 	}
 	
 	/**
@@ -90,7 +90,7 @@ public class PlayerData {
 			this.username = ((net.md_5.bungee.api.connection.ProxiedPlayer) player).getName();
 			this.sql = Tekord.getInstance().getSQLManager();
 		} else
-			throw new NoClassDefFoundError();
+			throw new NoClassDefFoundError("Not Bungee.");
 	}
 	
 	
