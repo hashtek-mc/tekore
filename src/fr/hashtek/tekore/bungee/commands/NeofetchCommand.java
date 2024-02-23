@@ -1,6 +1,8 @@
 package fr.hashtek.tekore.bungee.commands;
 
 import com.google.common.collect.ImmutableSet;
+import fr.hashtek.hashdate.HashDate;
+import fr.hashtek.hashdate.HashDateType;
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
 import fr.hashtek.tekore.bungee.Tekord;
@@ -16,7 +18,9 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
 
+import java.text.SimpleDateFormat;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 public class NeofetchCommand extends Command implements HashLoggable, TabExecutor {
@@ -85,14 +89,14 @@ public class NeofetchCommand extends Command implements HashLoggable, TabExecuto
 		String targetPing = "";
 		if (isConnected)
 			targetPing = ChatColor.DARK_AQUA + "Ping: " + ChatColor.WHITE + target.getPing() + " ms";
-			
+
 		sender.sendMessage(new TextComponent(
 			"\n" +
 			(isConnected ? ChatColor.GREEN : ChatColor.RED) + "● " + nameField + targetServer + "\n" +
 			ChatColor.WHITE + ChatColor.STRIKETHROUGH + separator + "\n" +
 			ChatColor.DARK_AQUA + "UUID: " + ChatColor.WHITE + targetPlayerData.getUniqueId() + "\n" +
-			ChatColor.DARK_AQUA + "First login: " + ChatColor.WHITE + targetPlayerData.getCreatedAt() + "\n" +
-			ChatColor.DARK_AQUA + "Last seen: " + ChatColor.WHITE + targetPlayerData.getLastUpdate() + "\n" +
+			ChatColor.DARK_AQUA + "First login: " + ChatColor.WHITE + HashDate.format(HashDateType.FANCY, targetPlayerData.getCreatedAt()) + "\n" +
+			ChatColor.DARK_AQUA + "Last seen: " + ChatColor.WHITE + HashDate.format(HashDateType.FANCY, targetPlayerData.getLastUpdate()) + "\n" +
 			targetPing +
 			"\n"
 		));
