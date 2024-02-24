@@ -18,9 +18,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
 
-import java.text.SimpleDateFormat;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 public class NeofetchCommand extends Command implements HashLoggable, TabExecutor {
