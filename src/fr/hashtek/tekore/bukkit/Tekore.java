@@ -174,7 +174,7 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 
 		try {
 			this.ranks = rankGetter.getRanks();
-			ranks.sort(Comparator.comparingInt(Rank::getPower));
+			ranks.sort((Rank rank1, Rank rank2) -> rank2.getPower() - rank1.getPower());
 		} catch (SQLException exception) {
 			HashError.DB_NO_RANK_FOUND.log(this.logger, this, exception);
 			this.getServer().shutdown();
