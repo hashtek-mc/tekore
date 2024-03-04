@@ -1,5 +1,6 @@
 package fr.hashtek.tekore.bukkit.commands;
 
+import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.tekore.bukkit.Tekore;
 import fr.hashtek.tekore.common.Rank;
 import fr.hashtek.tekore.common.player.PlayerData;
@@ -8,7 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class WhoAmICommand implements CommandExecutor {
+public class WhoAmICommand implements CommandExecutor, HashLoggable {
 
     private final Tekore core;
 
@@ -16,6 +17,7 @@ public class WhoAmICommand implements CommandExecutor {
     public WhoAmICommand(Tekore core)
     {
         this.core = core;
+        this.core.getHashLogger().info(this, "Command loaded.");
     }
 
 
