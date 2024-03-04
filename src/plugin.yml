@@ -2,3 +2,6 @@ name: Tekore
 author: Lysandre B.
 version: 0.0.2
 main: fr.hashtek.tekore.bukkit.Tekore
+commands:
+  whoami:
+    description: "man whoami"
