@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import fr.hashtek.tekore.common.Rank;
 
@@ -111,6 +112,33 @@ public class RankGetter {
 	public Rank getRankByName(String name) throws SQLException, NoSuchFieldException
 	{
 		return this.getRank("name", name);
+	}
+
+	/**
+	 * Fetches all existing ranks from the database.
+	 *
+	 * @return	All existing ranks in the database.
+	 * @throws	SQLException	SQL failure
+	 */
+	public ArrayList<Rank> getRanks() throws SQLException
+	{
+		ArrayList<Rank> ranks = new ArrayList<Rank>();
+		PreparedStatement statement;
+		ResultSet resultSet;
+		String query = "SELECT * FROM ranks;";
+
+		statement = this.sqlConnection.prepareStatement(query);
+		resultSet = statement.executeQuery();
+
+		this.sqlConnection.commit();
+
+		while (resultSet.next())
+			ranks.add(getRankFromResultSet(resultSet));
+
+		resultSet.close();
+		statement.close();
+
+		return ranks;
 	}
 	
 }

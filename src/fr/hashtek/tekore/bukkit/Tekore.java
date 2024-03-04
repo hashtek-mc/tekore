@@ -2,10 +2,14 @@ package fr.hashtek.tekore.bukkit;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import fr.hashtek.hashconfig.HashConfig;
 import fr.hashtek.hasherror.HashError;
+import fr.hashtek.tekore.common.Rank;
+import fr.hashtek.tekore.common.sql.rank.RankGetter;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -34,6 +38,8 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	
 	private final HashMap<Player, PlayerData> playersData = new HashMap<Player, PlayerData>();
 
+	private ArrayList<Rank> ranks;
+
 	
 	/**
 	 * Called on server start.
@@ -49,6 +55,7 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 		this.logger.info(this, "Starting Tekore...");
 
 		this.setupManagers();
+		this.fetchRanks();
 		this.registerListeners();
 		this.registerCommands();
 	
@@ -155,6 +162,27 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 		
 		this.logger.info(this, "Managers set up!");
 	}
+
+	/**
+	 * Fetches all the ranks from the database and stores them in {@link Tekore#ranks}.
+	 */
+	private void fetchRanks()
+	{
+		this.logger.info(this, "Fetching ranks from the database...");
+
+		RankGetter rankGetter = new RankGetter(this.sql.getConnection());
+
+		try {
+			this.ranks = rankGetter.getRanks();
+			ranks.sort(Comparator.comparingInt(Rank::getPower));
+		} catch (SQLException exception) {
+			HashError.DB_NO_RANK_FOUND.log(this.logger, this, exception);
+			this.getServer().shutdown();
+			return;
+		}
+
+		this.logger.info(this, this.ranks.size() + " ranks fetched from the database.");
+	}
 	
 	/**
 	 * Registers all event listeners.
@@ -233,6 +261,14 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 	public void updatePlayerData(Player player, HashLoggable author)
 	{
 		this.updatePlayerData(player, author.getClass().getSimpleName());
+	}
+
+	/**
+	 * @return	All existing ranks
+	 */
+	public ArrayList<Rank> getRanks()
+	{
+		return this.ranks;
 	}
 	
 	
