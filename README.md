@@ -45,6 +45,10 @@ public class Test extends JavaPlugin {
 `⚠️` Initialisez toujours Tekore avec un bloc `try/catch` as cas-où Tekore ne se charge pas correctement
 (mauvaise configuration par exemple).
 
+### Fonctionnalités
+
+* `Tekore#getRanks()` : Renvoie tous les ranks existants
+
 ## HashLogger
 
 Afin de centraliser les logs (et peut-être dans le futur faire un historique
