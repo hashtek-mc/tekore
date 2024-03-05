@@ -104,7 +104,7 @@ public class JoinEvent implements Listener, HashLoggable {
 ```
 
 `⚠️` Il est fortement recommandé de faire passer l'instance de Tekore dans le
-constructeur de la classe, et non pas de rendre l'instance publique à la
+constructeur de la classe, et non pas de rendre l'instance statique à la
 racine du plugin.
 
 `ℹ️` Lorsqu'un joueur se déconnecte, ses données sont automatiquement mises à jour
