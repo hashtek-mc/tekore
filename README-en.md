@@ -9,6 +9,8 @@ It ensures that servers work properly between them.
 
 `ℹ️` You must put the .jar file in the `plugins` folder in your server.
 
+[🇫🇷 Egalement disponible en Français !](https://github.com/hashtek-mc/tekore/blob/main/README.md)
+
 ## Usage
 
 To use Tekore, you have to store an instance at the root of your plugin.

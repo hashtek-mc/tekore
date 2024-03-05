@@ -11,6 +11,8 @@ entre-eux.
 `ℹ️` Vous devez impérativement mettre le .jar dans le dossier `plugins`
 de votre serveur.
 
+[🇬🇧 Also available in English!](https://github.com/hashtek-mc/tekore/blob/main/README-en.md)
+
 ## Utilisation
 
 Pour utiliser Tekore, vous devez stocker une instance de ce dernier à la racine
