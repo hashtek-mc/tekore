@@ -4,7 +4,7 @@
 
 Ce plugin s'occupe de toute la synchronisation entre les données des joueurs
 et la base de données SQL. Il s'assure du bon fonctionnement des serveurs
-entre-eux.
+entre eux.
 
 `⚠️` Tous les plugins de Hashtek doivent impérativement utiliser Tekore.
 
