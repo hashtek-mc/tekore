@@ -1,4 +1,4 @@
-package fr.hashtek.tekore.bukkit.commands;
+package fr.hashtek.tekore.bukkit.command;
 
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.tekore.bukkit.Tekore;

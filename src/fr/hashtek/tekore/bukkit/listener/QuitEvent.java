@@ -1,4 +1,4 @@
-package fr.hashtek.tekore.bukkit.events;
+package fr.hashtek.tekore.bukkit.listener;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

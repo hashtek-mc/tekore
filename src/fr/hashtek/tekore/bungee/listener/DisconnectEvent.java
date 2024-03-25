@@ -1,4 +1,4 @@
-package fr.hashtek.tekore.bungee.events;
+package fr.hashtek.tekore.bungee.listener;
 
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.tekore.bungee.Tekord;

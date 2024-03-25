@@ -1,4 +1,4 @@
-package fr.hashtek.tekore.bungee.commands;
+package fr.hashtek.tekore.bungee.command;
 
 import com.google.common.collect.ImmutableSet;
 import fr.hashtek.hashdate.HashDate;

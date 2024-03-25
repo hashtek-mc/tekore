@@ -1,4 +1,4 @@
-package fr.hashtek.tekore.bungee.events;
+package fr.hashtek.tekore.bungee.listener;
 
 import java.sql.SQLException;
 
