@@ -8,8 +8,8 @@ import java.sql.SQLException;
 import fr.hashtek.tekore.common.Rank;
 import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.player.PlayerSettings;
-import fr.hashtek.tekore.common.player.settings.FriendRequestsSetting;
-import fr.hashtek.tekore.common.player.settings.PrivateMessagesSetting;
+import fr.hashtek.tekore.common.player.settings.SettingsFriendRequests;
+import fr.hashtek.tekore.common.player.settings.SettingsPrivateMessages;
 import fr.hashtek.tekore.common.sql.rank.RankGetter;
 
 public class AccountGetter
@@ -46,8 +46,8 @@ public class AccountGetter
 		PlayerSettings playerSettings = playerData.getPlayerSettings();
 
 		playerSettings.setLobbyPlayersSetting(resultSet.getBoolean("settings.showLobbyPlayers"));
-		playerSettings.setFriendRequestsSetting(FriendRequestsSetting.valueOf(resultSet.getString("settings.friendRequests")));
-		playerSettings.setPrivateMessagesSetting(PrivateMessagesSetting.valueOf(resultSet.getString("settings.privateMessages")));
+		playerSettings.setFriendRequestsSetting(SettingsFriendRequests.valueOf(resultSet.getString("settings.friendRequests")));
+		playerSettings.setPrivateMessagesSetting(SettingsPrivateMessages.valueOf(resultSet.getString("settings.privateMessages")));
 	}
 
 	/**

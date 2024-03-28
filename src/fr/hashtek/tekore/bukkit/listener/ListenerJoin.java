@@ -14,7 +14,7 @@ import fr.hashtek.tekore.bukkit.Tekore;
 import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.sql.account.AccountManager;
 
-public class JoinEvent implements Listener, HashLoggable
+public class ListenerJoin implements Listener, HashLoggable
 {
 
 	private final Tekore core;
@@ -26,7 +26,7 @@ public class JoinEvent implements Listener, HashLoggable
 	 * 
 	 * @param	core	Tekore instance
 	 */
-	public JoinEvent(Tekore core)
+	public ListenerJoin(Tekore core)
 	{
 		this.core = core;
 		this.logger = core.getHashLogger();

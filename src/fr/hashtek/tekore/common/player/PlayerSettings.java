@@ -1,14 +1,14 @@
 package fr.hashtek.tekore.common.player;
 
-import fr.hashtek.tekore.common.player.settings.FriendRequestsSetting;
-import fr.hashtek.tekore.common.player.settings.PrivateMessagesSetting;
+import fr.hashtek.tekore.common.player.settings.SettingsFriendRequests;
+import fr.hashtek.tekore.common.player.settings.SettingsPrivateMessages;
 
 public class PlayerSettings
 {
 
     private boolean showLobbyPlayers;
-    private FriendRequestsSetting friendRequestsSetting;
-    private PrivateMessagesSetting privateMessagesSetting;
+    private SettingsFriendRequests friendRequestsSetting;
+    private SettingsPrivateMessages privateMessagesSetting;
 
 
     /**
@@ -32,7 +32,7 @@ public class PlayerSettings
      *
      * @return  Friend requests setting
      */
-    public FriendRequestsSetting getFriendRequestsSetting()
+    public SettingsFriendRequests getFriendRequestsSetting()
     {
         return friendRequestsSetting;
     }
@@ -42,7 +42,7 @@ public class PlayerSettings
      *
      * @return  Private messages setting
      */
-    public PrivateMessagesSetting getPrivateMessagesSetting()
+    public SettingsPrivateMessages getPrivateMessagesSetting()
     {
         return privateMessagesSetting;
     }
@@ -62,7 +62,7 @@ public class PlayerSettings
      *
      * @param   friendRequestsSetting   Friend requests setting
      */
-    public void setFriendRequestsSetting(FriendRequestsSetting friendRequestsSetting)
+    public void setFriendRequestsSetting(SettingsFriendRequests friendRequestsSetting)
     {
         this.friendRequestsSetting = friendRequestsSetting;
     }
@@ -72,7 +72,7 @@ public class PlayerSettings
      *
      * @param   privateMessagesSetting  Private messages setting
       */
-    public void setPrivateMessagesSetting(PrivateMessagesSetting privateMessagesSetting)
+    public void setPrivateMessagesSetting(SettingsPrivateMessages privateMessagesSetting)
     {
         this.privateMessagesSetting = privateMessagesSetting;
     }

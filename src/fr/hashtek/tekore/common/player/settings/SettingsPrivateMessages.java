@@ -1,10 +1,10 @@
 package fr.hashtek.tekore.common.player.settings;
 
-public enum FriendRequestsSetting
+public enum SettingsPrivateMessages
 {
 
     ALL(),
-    FRIENDS_OF_FRIENDS(),
+    FRIENDS(),
     NOBODY()
 
 }

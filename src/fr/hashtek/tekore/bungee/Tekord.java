@@ -10,9 +10,9 @@ import org.simpleyaml.configuration.file.YamlFile;
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
 import fr.hashtek.hashlogger.LogLevel;
-import fr.hashtek.tekore.bungee.command.NeofetchCommand;
-import fr.hashtek.tekore.bungee.listener.DisconnectEvent;
-import fr.hashtek.tekore.bungee.listener.LoginEvent;
+import fr.hashtek.tekore.bungee.command.CommandNeofetch;
+import fr.hashtek.tekore.bungee.listener.ListenerDisconnect;
+import fr.hashtek.tekore.bungee.listener.ListenerLogin;
 import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.sql.SQLManager;
 import fr.hashtek.tekore.common.sql.account.AccountManager;
@@ -162,8 +162,8 @@ public class Tekord extends Plugin implements HashLoggable
 	{
 		this.logger.info(this, "Registering listeners...");
 		
-		this.pluginManager.registerListener(this, new LoginEvent(this));
-		this.pluginManager.registerListener(this, new DisconnectEvent(this));
+		this.pluginManager.registerListener(this, new ListenerLogin(this));
+		this.pluginManager.registerListener(this, new ListenerDisconnect(this));
 	
 		this.logger.info(this, "Listeners loaded!");
 	}
@@ -175,7 +175,7 @@ public class Tekord extends Plugin implements HashLoggable
 	{
 		this.logger.info(this, "Registering commands...");
 		
-		this.pluginManager.registerCommand(this, new NeofetchCommand());
+		this.pluginManager.registerCommand(this, new CommandNeofetch());
 	
 		this.logger.info(this, "Commands registered!");
 	}

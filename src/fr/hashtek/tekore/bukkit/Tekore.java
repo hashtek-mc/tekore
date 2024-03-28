@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 import fr.hashtek.hashconfig.HashConfig;
 import fr.hashtek.hasherror.HashError;
-import fr.hashtek.tekore.bukkit.command.WhoAmICommand;
+import fr.hashtek.tekore.bukkit.command.CommandWhoAmI;
 import fr.hashtek.tekore.common.Rank;
 import fr.hashtek.tekore.common.sql.rank.RankGetter;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -18,8 +18,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
 import fr.hashtek.hashlogger.LogLevel;
-import fr.hashtek.tekore.bukkit.listener.JoinEvent;
-import fr.hashtek.tekore.bukkit.listener.QuitEvent;
+import fr.hashtek.tekore.bukkit.listener.ListenerJoin;
+import fr.hashtek.tekore.bukkit.listener.ListenerQuit;
 import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.sql.SQLManager;
 import fr.hashtek.tekore.common.sql.account.AccountManager;
@@ -193,8 +193,8 @@ public class Tekore extends JavaPlugin implements HashLoggable
 	{
 		this.logger.info(this, "Registering listeners...");
 		
-		this.pluginManager.registerEvents(new JoinEvent(this), this);
-		this.pluginManager.registerEvents(new QuitEvent(this), this);
+		this.pluginManager.registerEvents(new ListenerJoin(this), this);
+		this.pluginManager.registerEvents(new ListenerQuit(this), this);
 		
 		this.logger.info(this, "Listeners loaded!");
 	}
@@ -206,7 +206,7 @@ public class Tekore extends JavaPlugin implements HashLoggable
 	{
 		this.logger.info(this, "Registering commands...");
 
-		getCommand("whoami").setExecutor(new WhoAmICommand(this));
+		getCommand("whoami").setExecutor(new CommandWhoAmI(this));
 
 		this.logger.info(this, "Commands registered!");
 	}

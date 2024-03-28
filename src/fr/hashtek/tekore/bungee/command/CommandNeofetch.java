@@ -21,7 +21,7 @@ import net.md_5.bungee.api.plugin.TabExecutor;
 import java.util.HashSet;
 import java.util.Set;
 
-public class NeofetchCommand extends Command implements HashLoggable, TabExecutor
+public class CommandNeofetch extends Command implements HashLoggable, TabExecutor
 {
 
     private HashLogger logger;
@@ -31,7 +31,7 @@ public class NeofetchCommand extends Command implements HashLoggable, TabExecuto
 	 * Creates a new instance of NeofetchCommand.
 	 * Used to register the command.
 	 */
-	public NeofetchCommand()
+	public CommandNeofetch()
 	{
 		super("neofetch");
 	}
