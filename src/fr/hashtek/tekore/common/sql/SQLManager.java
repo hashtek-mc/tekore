@@ -7,7 +7,8 @@ import java.sql.SQLException;
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
 
-public class SQLManager implements HashLoggable {
+public class SQLManager implements HashLoggable
+{
 
 	private final HashLogger logger;
 	
@@ -15,6 +16,7 @@ public class SQLManager implements HashLoggable {
 	
 	private final String database;
 	private final String host;
+	private final String port;
 	private final String user;
 	private final String password;
 	
@@ -25,6 +27,7 @@ public class SQLManager implements HashLoggable {
 	 * @param	logger		Logger
 	 * @param	database	Database name
 	 * @param	host		Host
+	 * @param	port		Port
 	 * @param	user		Username
 	 * @param	password	Password
 	 */
@@ -32,6 +35,7 @@ public class SQLManager implements HashLoggable {
 		HashLogger logger,
 		String database,
 		String host,
+		String port,
 		String user,
 		String password
 	)
@@ -39,6 +43,7 @@ public class SQLManager implements HashLoggable {
 		this.logger = logger;
 		this.database = database;
 		this.host = host;
+		this.port = port;
 		this.user = user;
 		this.password = password;
 	}
@@ -60,8 +65,8 @@ public class SQLManager implements HashLoggable {
 	public void connect() throws SQLException
 	{
 		final String connectionString = String.format(
-			"jdbc:mysql://%s/%s?autoReconnect=true",
-			this.host, this.database
+			"jdbc:mysql://%s:%s/%s?autoReconnect=true",
+			this.host, this.port, this.database
 		);
 		
 		this.logger.info(this, "Connecting to the database...");

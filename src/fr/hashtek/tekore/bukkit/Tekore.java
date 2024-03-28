@@ -25,7 +25,8 @@ import fr.hashtek.tekore.common.sql.SQLManager;
 import fr.hashtek.tekore.common.sql.account.AccountManager;
 import org.simpleyaml.configuration.file.YamlFile;
 
-public class Tekore extends JavaPlugin implements HashLoggable {
+public class Tekore extends JavaPlugin implements HashLoggable
+{
 	
 	private static Tekore instance;
 	private SQLManager sql;
@@ -146,6 +147,7 @@ public class Tekore extends JavaPlugin implements HashLoggable {
 				this.logger,
 				sqlEnv.get("DATABASE"),
 				sqlEnv.get("HOST"),
+				sqlEnv.get("PORT"),
 				sqlEnv.get("USER"),
 				sqlEnv.get("PASSWORD")
 			);

@@ -21,7 +21,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 
-public class Tekord extends Plugin implements HashLoggable {
+public class Tekord extends Plugin implements HashLoggable
+{
 	
 	private static Tekord instance;
 	private SQLManager sql;
@@ -136,6 +137,7 @@ public class Tekord extends Plugin implements HashLoggable {
 				this.logger,
 				sqlEnv.get("DATABASE"),
 				sqlEnv.get("HOST"),
+				sqlEnv.get("PORT"),
 				sqlEnv.get("USER"),
 				sqlEnv.get("PASSWORD")
 			);
