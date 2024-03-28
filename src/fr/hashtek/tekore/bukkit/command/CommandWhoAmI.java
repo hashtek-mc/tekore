@@ -18,7 +18,7 @@ public class CommandWhoAmI implements CommandExecutor, HashLoggable
     /**
      * Creates a new instance of CommandWhoAmI
      *
-     * @param core
+     * @param   core    Tekore instance
      */
     public CommandWhoAmI(Tekore core)
     {
@@ -27,6 +27,14 @@ public class CommandWhoAmI implements CommandExecutor, HashLoggable
     }
 
 
+    /**
+     * Called when command is executed.
+     *
+     * @param	sender	    Player who executed the command
+     * @param   command     Command
+     * @param   label       Command
+     * @param	args	    Arguments passed
+     */
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player))
