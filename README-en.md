@@ -132,6 +132,7 @@ database with PhpMyAdmin.
 
 `DATABASE` : Database name (`hashtekdb`)\
 `HOST` : Database's IP (`127.0.0.1`)\
+`PORT` : Port to use (`3306` by default)\
 `USER` : Username (`root` by default)\
 `PASSWORD` : Password (nothing by default)
 

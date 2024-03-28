@@ -143,6 +143,7 @@ avec PhpMyAdmin.
 
 `DATABASE` : Nom de la base de données (`hashtekdb`)\
 `HOST` : IP de la base de données (`127.0.0.1` pour du local)\
+`PORT` : Port à utiliser (par défaut `3306`)\
 `USER` : Nom d'utilisateur (`root` par défaut)\
 `PASSWORD` : Mot de passe (rien par défaut)
 
