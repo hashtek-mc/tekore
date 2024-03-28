@@ -1,6 +1,7 @@
 package fr.hashtek.tekore.common.player.settings;
 
-public enum PrivateMessagesSetting {
+public enum PrivateMessagesSetting
+{
 
     ALL(),
     FRIENDS(),

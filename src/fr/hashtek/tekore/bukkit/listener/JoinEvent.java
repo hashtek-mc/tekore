@@ -14,7 +14,8 @@ import fr.hashtek.tekore.bukkit.Tekore;
 import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.sql.account.AccountManager;
 
-public class JoinEvent implements Listener, HashLoggable {
+public class JoinEvent implements Listener, HashLoggable
+{
 
 	private final Tekore core;
 	private final HashLogger logger;
@@ -34,8 +35,6 @@ public class JoinEvent implements Listener, HashLoggable {
 	
 	/**
 	 * Called when a player logs into the server.
-	 * 
-	 * TODO: Change Player#kickPlayer messages.
 	 */
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event)

@@ -9,7 +9,8 @@ import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
 import fr.hashtek.tekore.bukkit.Tekore;
 
-public class QuitEvent implements Listener, HashLoggable {
+public class QuitEvent implements Listener, HashLoggable
+{
 
 	private final Tekore core;
 	private final HashLogger logger;

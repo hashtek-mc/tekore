@@ -8,7 +8,8 @@ import java.util.ArrayList;
 
 import fr.hashtek.tekore.common.Rank;
 
-public class RankGetter {
+public class RankGetter
+{
 
 	private final Connection sqlConnection;
 	

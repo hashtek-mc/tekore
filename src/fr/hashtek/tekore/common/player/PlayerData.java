@@ -12,7 +12,8 @@ import fr.hashtek.tekore.common.sql.SQLManager;
  * Some will go to the database, some others won't because it's useless.
  * This class is the main reason we decided to create a core.
  */
-public class PlayerData {
+public class PlayerData
+{
 	
 	private Object player;
 

@@ -6,7 +6,8 @@ import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-public class DisconnectEvent implements Listener, HashLoggable {
+public class DisconnectEvent implements Listener, HashLoggable
+{
 
 	private Tekord cord;
 	

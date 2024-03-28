@@ -3,7 +3,8 @@ package fr.hashtek.tekore.common.player;
 import fr.hashtek.tekore.common.player.settings.FriendRequestsSetting;
 import fr.hashtek.tekore.common.player.settings.PrivateMessagesSetting;
 
-public class PlayerSettings {
+public class PlayerSettings
+{
 
     private boolean showLobbyPlayers;
     private FriendRequestsSetting friendRequestsSetting;

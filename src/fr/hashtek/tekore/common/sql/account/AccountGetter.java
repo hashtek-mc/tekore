@@ -12,7 +12,8 @@ import fr.hashtek.tekore.common.player.settings.FriendRequestsSetting;
 import fr.hashtek.tekore.common.player.settings.PrivateMessagesSetting;
 import fr.hashtek.tekore.common.sql.rank.RankGetter;
 
-public class AccountGetter {
+public class AccountGetter
+{
 	
 	private final Connection sqlConnection;
 	

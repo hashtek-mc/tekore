@@ -8,7 +8,8 @@ import java.sql.Timestamp;
 import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.player.PlayerSettings;
 
-public class AccountUpdater {
+public class AccountUpdater
+{
 
 	private final Connection sqlConnection;
 	

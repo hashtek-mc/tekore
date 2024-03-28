@@ -5,7 +5,8 @@ import java.sql.SQLException;
 
 import fr.hashtek.tekore.common.player.PlayerData;
 
-public class AccountManager {
+public class AccountManager
+{
 
     private final AccountCreator accountCreator;
 	private final AccountGetter accountGetter;

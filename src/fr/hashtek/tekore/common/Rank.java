@@ -1,6 +1,7 @@
 package fr.hashtek.tekore.common;
 
-public class Rank {
+public class Rank
+{
 	
 	private final String uuid;
 	private final String name;
