@@ -94,8 +94,8 @@ public class NeofetchCommand extends Command implements HashLoggable, TabExecuto
 			(isConnected ? ChatColor.GREEN : ChatColor.RED) + "● " + nameField + targetServer + "\n" +
 			ChatColor.WHITE + ChatColor.STRIKETHROUGH + separator + "\n" +
 			ChatColor.DARK_AQUA + "UUID: " + ChatColor.WHITE + targetPlayerData.getUniqueId() + "\n" +
-			ChatColor.DARK_AQUA + "First login: " + ChatColor.WHITE + HashDate.format(HashDateType.FANCY, targetPlayerData.getCreatedAt()) + "\n" +
-			ChatColor.DARK_AQUA + "Last seen: " + ChatColor.WHITE + HashDate.format(HashDateType.FANCY, targetPlayerData.getLastUpdate()) + "\n" +
+			ChatColor.DARK_AQUA + "First login: " + ChatColor.WHITE + HashDate.format(HashDateType.FANCY_DATE_TIME, targetPlayerData.getCreatedAt()) + "\n" +
+			ChatColor.DARK_AQUA + "Last seen: " + ChatColor.WHITE + HashDate.format(HashDateType.FANCY_DATE_TIME, targetPlayerData.getLastUpdate()) + "\n" +
 			targetPing +
 			"\n"
 		));
