@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 import fr.hashtek.hashconfig.HashConfig;
+import fr.hashtek.hasherror.HashError;
 import org.simpleyaml.configuration.file.YamlFile;
 
 import fr.hashtek.hashlogger.HashLoggable;
@@ -27,6 +28,8 @@ public class Tekord extends Plugin implements HashLoggable
 	private static Tekord instance;
 	private SQLManager sql;
 	private HashLogger logger;
+
+	private String serverVersion;
 	
 	private PluginManager pluginManager;
 	private AccountManager accountManager;
@@ -105,14 +108,14 @@ public class Tekord extends Plugin implements HashLoggable
 	private void setupHashLogger()
 	{
 		YamlFile config = this.hashConfig.getYaml();
-		String loggerLevel = config.getString("logger-level");
+		String loggerLevel = config.getString("loggerLevel");
 		LogLevel logLevel;
 
 		try {
 			logLevel = LogLevel.valueOf(loggerLevel);
 		} catch (IllegalArgumentException | NullPointerException exception) {
 			System.err.println(exception instanceof NullPointerException ?
-				"Field \"logger-level\" not found." :
+				"Field \"loggerLevel\" not found." :
 				"\"" + loggerLevel + "\" is not a valid log level."
 			);
 			System.err.println("Can't initialize HashLogger. Stopping.");
@@ -122,7 +125,23 @@ public class Tekord extends Plugin implements HashLoggable
 
 		this.logger = new HashLogger(this, logLevel);
 	}
-	
+
+	/*
+	 * Loads config content.
+	 */
+	private void loadConfigContent()
+	{
+		YamlFile config = this.hashConfig.getYaml();
+		String serverVersion = config.getString("serverVersion");
+
+		if (serverVersion == null) {
+			HashError.CFG_KEY_NOT_FOUND
+					.log(this.getHashLogger(), this, "serverVersion");
+			serverVersion = "0.1-ALPHA";
+		}
+		this.serverVersion = serverVersion;
+	}
+
 	/**
 	 * Setups all managers.
 	 */
@@ -225,6 +244,14 @@ public class Tekord extends Plugin implements HashLoggable
 	public HashLogger getHashLogger()
 	{
 		return this.logger;
+	}
+
+	/**
+	 * @return	Server version
+	 */
+	public String getServerVersion()
+	{
+		return this.serverVersion;
 	}
 	
 	/**

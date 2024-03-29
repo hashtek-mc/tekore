@@ -1,1 +1,2 @@
-logger-level: DEBUG
+loggerLevel: DEBUG
+serverVersion: 0.1-ALPHA
