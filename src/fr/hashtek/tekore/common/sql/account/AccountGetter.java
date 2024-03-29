@@ -68,7 +68,10 @@ public class AccountGetter
 		
 		playerData.setCreatedAt(resultSet.getTimestamp("createdAt"));
 		playerData.setLastUpdate(resultSet.getTimestamp("lastUpdate"));
-	
+
+		playerData.setCoins(resultSet.getInt("coins"));
+		playerData.setHashCoins(resultSet.getInt("hashCoins"));
+
 		this.setPlayerRank(playerData, resultSet);
 		this.setPlayerSettings(playerData, resultSet);
 	}

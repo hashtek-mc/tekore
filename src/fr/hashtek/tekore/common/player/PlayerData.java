@@ -25,6 +25,9 @@ public class PlayerData
 	
 	private Rank rank;
 
+	private int coins;
+	private int hashCoins;
+
 	private final PlayerSettings playerSettings;
 
 	private SQLManager sql;
@@ -137,12 +140,32 @@ public class PlayerData
 	
 	/**
 	 * Returns player's rank.
-	 * 
+	 *
 	 * @return	Player's rank.
 	 */
 	public Rank getRank()
 	{
 		return this.rank;
+	}
+
+	/**
+	 * Returns player's coins.
+	 *
+	 * @return	Player's coins.
+	 */
+	public int getCoins()
+	{
+		return this.coins;
+	}
+
+	/**
+	 * Returns player's HashCoins.
+	 *
+	 * @return	Player's HashCoins.
+	 */
+	public int getHashCoins()
+	{
+		return this.hashCoins;
 	}
 
 	/**
@@ -214,6 +237,26 @@ public class PlayerData
 	public void setRank(Rank rank)
 	{
 		this.rank = rank;
+	}
+
+	/**
+	 * Sets player's coins.
+	 *
+	 * @param	coins	Coins
+	 */
+	public void setCoins(int coins)
+	{
+		this.coins = coins;
+	}
+
+	/**
+	 * Sets player's HashCoins.
+	 *
+	 * @param	hashCoins	HashCoins
+	 */
+	public void setHashCoins(int hashCoins)
+	{
+		this.hashCoins = hashCoins;
 	}
 
 }

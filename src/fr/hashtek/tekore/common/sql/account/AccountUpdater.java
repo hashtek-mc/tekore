@@ -46,6 +46,8 @@ public class AccountUpdater
 			"players.username = ?, " +
 			"players.lastUpdate = ?, " +
 			"players.rankUuid = ?, " +
+			"players.coins = ?, " +
+			"players.hashCoins = ?, " +
 
 			"settings.showLobbyPlayers = ?, " +
 			"settings.friendRequests = ?, " +
@@ -58,12 +60,14 @@ public class AccountUpdater
 		statement.setString(1, playerData.getUsername());
 		statement.setTimestamp(2, now);
 		statement.setString(3, playerData.getRank().getUuid());
+		statement.setInt(4, playerData.getCoins());
+		statement.setInt(5, playerData.getHashCoins());
 
-		statement.setBoolean(4, playerSettings.getLobbyPlayersSetting());
-		statement.setString(5, playerSettings.getFriendRequestsSetting().name());
-		statement.setString(6, playerSettings.getPrivateMessagesSetting().name());
+		statement.setBoolean(6, playerSettings.getLobbyPlayersSetting());
+		statement.setString(7, playerSettings.getFriendRequestsSetting().name());
+		statement.setString(8, playerSettings.getPrivateMessagesSetting().name());
 
-		statement.setString(7, playerData.getUniqueId());
+		statement.setString(9, playerData.getUniqueId());
 		
 		statement.executeUpdate();
 		
