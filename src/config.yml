@@ -1,2 +1,5 @@
 loggerLevel: DEBUG
-serverVersion: 0.1-ALPHA
+
+serverInfo:
+  version: 0.1-ALPHA
+  ip: mc.hashtek.fr
