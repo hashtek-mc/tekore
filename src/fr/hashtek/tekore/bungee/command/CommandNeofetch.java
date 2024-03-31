@@ -24,11 +24,12 @@ import java.util.Set;
 public class CommandNeofetch extends Command implements HashLoggable, TabExecutor
 {
 
+	private Tekord cord;
     private HashLogger logger;
 	
 	
 	/**
-	 * Creates a new instance of NeofetchCommand.
+	 * Creates a new instance of CommandNeofetch.
 	 * Used to register the command.
 	 */
 	public CommandNeofetch()
@@ -115,7 +116,7 @@ public class CommandNeofetch extends Command implements HashLoggable, TabExecuto
 			return;
 		}
 
-		Tekord cord = Tekord.getInstance();
+		this.cord = Tekord.getInstance();
 		this.logger = cord.getHashLogger();
 		AccountManager accountManager = cord.getAccountManager();
 		
@@ -148,11 +149,10 @@ public class CommandNeofetch extends Command implements HashLoggable, TabExecuto
 		if (args.length != 1)
 			return ImmutableSet.of();
 
-		Tekord cord = Tekord.getInstance();
 		Set<String> matches = new HashSet<String>();
 		String search = args[0].toLowerCase();
 
-		for (ProxiedPlayer player : cord.getProxy().getPlayers())
+		for (ProxiedPlayer player : this.cord.getProxy().getPlayers())
 			if (player.getName().toLowerCase().startsWith(search))
 				matches.add(player.getName());
 
