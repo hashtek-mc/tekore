@@ -6,8 +6,8 @@ public class Rank
 	private final String uuid;
 	private final String name;
 	private final int power;
-	private final String chatPrefix;
-	private final String tabPrefix;
+	private final String fullName;
+	private final String shortName;
 	
 
 	/**
@@ -16,22 +16,22 @@ public class Rank
 	 * @param	uuid		Rank's UUID
 	 * @param	name		Rank's raw name
 	 * @param	power		Rank's power
-	 * @param	chatPrefix	Prefix used for chat
-	 * @param	tabPrefix	Prefix used only for tablist
+	 * @param	fullName	Prefix used for chat
+	 * @param	shortName	Prefix used only for tablist
 	 */
 	public Rank(
 		String uuid,
 		String name,
 		int power,
-		String chatPrefix,
-		String tabPrefix
+		String fullName,
+		String shortName
 	)
 	{
 		this.uuid = uuid;
 		this.name = name;
 		this.power = power;
-		this.chatPrefix = chatPrefix;
-		this.tabPrefix = tabPrefix;
+		this.fullName = fullName;
+		this.shortName = shortName;
 	}
 	
 	
@@ -70,9 +70,9 @@ public class Rank
 	 * 
 	 * @return	Rank's chat prefix
 	 */
-	public String getChatPrefix()
+	public String getFullName()
 	{
-		return this.chatPrefix;
+		return this.fullName;
 	}
 	
 	/**
@@ -80,9 +80,9 @@ public class Rank
 	 * 
 	 * @return	Rank's tablist prefix
 	 */
-	public String getTabPrefix()
+	public String getShortName()
 	{
-		return this.tabPrefix;
+		return this.shortName;
 	}
 	
 	/**
@@ -92,9 +92,9 @@ public class Rank
 	 */
 	public String getColor()
 	{
-		if (this.chatPrefix.charAt(0) != '§')
+		if (this.fullName.charAt(0) != '§')
 			return "";
-		return this.chatPrefix.substring(0, 2);
+		return this.fullName.substring(0, 2);
 	}
 
 }

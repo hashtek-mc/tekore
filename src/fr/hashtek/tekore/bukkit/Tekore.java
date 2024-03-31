@@ -33,6 +33,7 @@ public class Tekore extends JavaPlugin implements HashLoggable
 	private HashLogger logger;
 
 	private String serverVersion;
+	private String serverIp;
 	
 	private PluginManager pluginManager;
 	private AccountManager accountManager;
@@ -142,14 +143,24 @@ public class Tekore extends JavaPlugin implements HashLoggable
 	private void loadConfigContent()
 	{
 		YamlFile config = this.hashConfig.getYaml();
-		String serverVersion = config.getString("serverVersion");
+
+		String serverVersion = config.getString("serverInfo.version");
+		String serverIp = config.getString("serverInfo.ip");
 
 		if (serverVersion == null) {
 			HashError.CFG_KEY_NOT_FOUND
-				.log(this.getHashLogger(), this, "serverVersion");
+				.log(this.getHashLogger(), this, "serverInfo.version");
 			serverVersion = "0.1-ALPHA";
 		}
+
+		if (serverIp == null) {
+			HashError.CFG_KEY_NOT_FOUND
+				.log(this.getHashLogger(), this, "serverInfo.ip");
+			serverVersion = "mc.hashtek.fr";
+		}
+
 		this.serverVersion = serverVersion;
+		this.serverIp = serverIp;
 	}
 
 	/**
@@ -323,6 +334,14 @@ public class Tekore extends JavaPlugin implements HashLoggable
 	public String getServerVersion()
 	{
 		return this.serverVersion;
+	}
+
+	/**
+	 * @return	Server IP
+	 */
+	public String getServerIp()
+	{
+		return this.serverIp;
 	}
 	
 	/**
