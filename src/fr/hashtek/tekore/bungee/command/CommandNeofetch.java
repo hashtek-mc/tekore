@@ -48,13 +48,13 @@ public class CommandNeofetch extends Command implements HashLoggable, TabExecuto
 	{
 		if (args.length != 1) {
 			logger.info(this, "Invalid usage.");
-			sender.sendMessage(new TextComponent("§cSyntaxe: /neofetch <joueur>"));
+			sender.sendMessage(new TextComponent(ChatColor.RED + "Syntaxe: /neofetch <joueur>"));
 			return false;
 		}
 		
 		if (args[0].length() > 16) {
 			logger.info(this, "Invalid username.");
-			sender.sendMessage(new TextComponent("§cUn pseudo ne peut pas contenir plus de 16 caractères."));
+			sender.sendMessage(new TextComponent(ChatColor.RED + "Un pseudo ne peut pas contenir plus de 16 caractères."));
 			return false;
 		}
 		
@@ -65,7 +65,7 @@ public class CommandNeofetch extends Command implements HashLoggable, TabExecuto
 	 * Sends a full dump of the targeted player's data to the command sender.
 	 * 
 	 * @param	target				Targeted player
-	 * @param	targetPlayerData	Targed player's data
+	 * @param	targetPlayerData	Targeted player's data
 	 * @param	sender				Player who executed the command
 	 */
 	private void displayPlayerData(ProxiedPlayer target, PlayerData targetPlayerData, ProxiedPlayer sender)
