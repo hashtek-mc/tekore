@@ -156,7 +156,7 @@ public class Tekore extends JavaPlugin implements HashLoggable
 		if (serverIp == null) {
 			HashError.CFG_KEY_NOT_FOUND
 				.log(this.getHashLogger(), this, "serverInfo.ip");
-			serverVersion = "mc.hashtek.fr";
+			serverIp = "mc.hashtek.fr";
 		}
 
 		this.serverVersion = serverVersion;
