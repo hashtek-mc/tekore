@@ -122,7 +122,7 @@ public class CommandNeofetch extends Command implements HashLoggable, TabExecuto
 		
 		ProxiedPlayer player = (ProxiedPlayer) sender;
 		
-		logger.info(this, "Executed by " + player.getName() + " (" + player.getUniqueId() + ")");;
+		logger.info(this, "Executed by " + player.getName() + " (" + player.getUniqueId() + ")");
 		
 		if (!parseInput(player, args))
 			return;
