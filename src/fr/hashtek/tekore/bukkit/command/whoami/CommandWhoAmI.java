@@ -1,4 +1,4 @@
-package fr.hashtek.tekore.bukkit.command;
+package fr.hashtek.tekore.bukkit.command.whoami;
 
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.tekore.bukkit.Tekore;
@@ -36,7 +36,8 @@ public class CommandWhoAmI implements CommandExecutor, HashLoggable
      * @param	args	    Arguments passed
      */
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+    {
         if (!(sender instanceof Player))
             return true;
 

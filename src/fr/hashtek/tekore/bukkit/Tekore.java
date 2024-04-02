@@ -7,7 +7,8 @@ import java.util.HashMap;
 
 import fr.hashtek.hashconfig.HashConfig;
 import fr.hashtek.hasherror.HashError;
-import fr.hashtek.tekore.bukkit.command.CommandWhoAmI;
+import fr.hashtek.tekore.bukkit.command.logs.CommandLogs;
+import fr.hashtek.tekore.bukkit.command.whoami.CommandWhoAmI;
 import fr.hashtek.tekore.common.Rank;
 import fr.hashtek.tekore.common.sql.rank.RankGetter;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -237,6 +238,7 @@ public class Tekore extends JavaPlugin implements HashLoggable
 		this.logger.info(this, "Registering commands...");
 
 		getCommand("whoami").setExecutor(new CommandWhoAmI(this));
+		getCommand("logs").setExecutor(new CommandLogs(this));
 
 		this.logger.info(this, "Commands registered!");
 	}

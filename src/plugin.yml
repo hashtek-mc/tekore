@@ -1,7 +1,11 @@
 name: Tekore
 author: Lysandre B.
-version: 0.0.2
+version: 0.0.3
 main: fr.hashtek.tekore.bukkit.Tekore
 commands:
   whoami:
     description: "man whoami"
+    usage: "/whoami"
+  logs:
+    description: ""
+    usage: "/logs [<category>] [<find>]"
