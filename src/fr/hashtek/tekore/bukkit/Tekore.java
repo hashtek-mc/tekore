@@ -184,7 +184,7 @@ public class Tekore extends JavaPlugin implements HashLoggable
 			);
 
 			this.sql.connect();
-		} catch (SQLException | ClassNotFoundException exception) {
+		} catch (SQLException exception) {
 			this.logger.fatal(this, "Failed to connect to the SQL database. Shutting down server.");
 			this.getServer().shutdown();
 			return;

@@ -1,9 +1,6 @@
 package fr.hashtek.tekore.common.sql.account;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 import fr.hashtek.tekore.common.Rank;
 import fr.hashtek.tekore.common.player.PlayerData;
@@ -33,7 +30,7 @@ public class AccountGetter
 		throws SQLException
 	{
 		RankGetter rankGetter = new RankGetter(this.sqlConnection);
-		Rank rank = rankGetter.getRankFromResultSet(resultSet, "ranks.");;
+		Rank rank = rankGetter.getRankFromResultSet(resultSet, "ranks.");
 
 		playerData.setRank(rank);
 	}
@@ -43,9 +40,9 @@ public class AccountGetter
 	{
 		PlayerSettings playerSettings = playerData.getPlayerSettings();
 
-		playerSettings.setLobbyPlayersSetting(resultSet.getBoolean("settings.show_lobby_players"));
-		playerSettings.setFriendRequestsSetting(SettingsFriendRequests.valueOf(resultSet.getString("settings.friend_requests")));
-		playerSettings.setPrivateMessagesSetting(SettingsPrivateMessages.valueOf(resultSet.getString("settings.private_messages")));
+		playerSettings.setLobbyPlayersSetting(resultSet.getBoolean("settings.showLobbyPlayers"));
+		playerSettings.setFriendRequestsSetting(SettingsFriendRequests.valueOf(resultSet.getString("settings.friendRequests")));
+		playerSettings.setPrivateMessagesSetting(SettingsPrivateMessages.valueOf(resultSet.getString("settings.privateMessages")));
 	}
 
 	/**
@@ -64,11 +61,11 @@ public class AccountGetter
 			playerData.setUsername(resultSet.getString("username"));
 		}
 		
-		playerData.setCreatedAt(resultSet.getTimestamp("created_at"));
-		playerData.setLastUpdate(resultSet.getTimestamp("last_update"));
+		playerData.setCreatedAt(resultSet.getTimestamp("createdAt"));
+		playerData.setLastUpdate(resultSet.getTimestamp("lastUpdate"));
 
 		playerData.setCoins(resultSet.getInt("coins"));
-		playerData.setHashCoins(resultSet.getInt("hash_coins"));
+		playerData.setHashCoins(resultSet.getInt("hashCoins"));
 
 		this.setPlayerRank(playerData, resultSet);
 		this.setPlayerSettings(playerData, resultSet);
@@ -89,14 +86,13 @@ public class AccountGetter
 		PreparedStatement statement;
 		ResultSet resultSet;
 		String query = "SELECT * FROM players " +
-			"JOIN ranks ON ranks.uuid = players.rank_uuid " +
+			"JOIN ranks ON ranks.uuid = players.rankUuid " +
 			"JOIN settings ON settings.uuid = players.uuid " +
-			"WHERE players.? = ?;";
+			"WHERE players." + (fillAllData ? "username" : "uuid") + " = ?;";
 		
 		statement = sqlConnection.prepareStatement(query);
 
-		statement.setString(1, fillAllData ? "username" : "uuid");
-		statement.setString(2, fillAllData ? playerData.getUsername() : playerData.getUniqueId());
+		statement.setString(1, fillAllData ? playerData.getUsername() : playerData.getUniqueId());
 		
 		resultSet = statement.executeQuery();
 		
@@ -104,7 +100,13 @@ public class AccountGetter
 		
 		if (!resultSet.next())
 			throw new NoSuchFieldException();
-		
+
+		ResultSetMetaData md = resultSet.getMetaData();
+
+		for (int k = 1; k < md.getColumnCount(); k++) {
+			System.out.println(md.getTableName(k) + "." + md.getColumnName(k) + " : " + resultSet.getObject(k));
+		}
+
 		this.fillPlayerData(playerData, resultSet, fillAllData);
 
 		resultSet.close();

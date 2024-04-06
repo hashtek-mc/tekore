@@ -39,8 +39,8 @@ public class RankGetter
 			resultSet.getString(prefix + "uuid"),
 			resultSet.getString(prefix + "name"),
 			resultSet.getInt(prefix + "power"),
-			resultSet.getString(prefix + "full_name"),
-			resultSet.getString(prefix + "short_name")
+			resultSet.getString(prefix + "fullName"),
+			resultSet.getString(prefix + "shortName")
 		);
 	}
 	

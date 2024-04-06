@@ -62,10 +62,10 @@ public class SQLManager implements HashLoggable
 	 * 
 	 * @throws	SQLException	SQL failure
 	 */
-	public void connect() throws SQLException, ClassNotFoundException
+	public void connect() throws SQLException
 	{
 		final String connectionString = String.format(
-			"jdbc:postgresql://%s:%s/%s",
+			"jdbc:mysql://%s:%s/%s?autoReconnect=true",
 			this.host, this.port, this.database
 		);
 		
@@ -77,10 +77,9 @@ public class SQLManager implements HashLoggable
 		}
 		
 		try {
-			Class.forName("org.postgresql.Driver");
 			this.connection = DriverManager.getConnection(connectionString, this.user, this.password);
 			this.connection.setAutoCommit(false);
-		} catch (SQLException | ClassNotFoundException exception) {
+		} catch (SQLException exception) {
 			this.logger.fatal(this, "Failed to connect to the database.", exception);
 			throw exception;
 		}

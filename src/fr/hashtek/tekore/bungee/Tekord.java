@@ -163,7 +163,7 @@ public class Tekord extends Plugin implements HashLoggable
 			);
 			
 			this.sql.connect();
-		} catch (SQLException | ClassNotFoundException exception) {
+		} catch (SQLException exception) {
 			this.logger.fatal(this, "Failed to connect to the SQL database. Shutting down proxy.");
 			this.getProxy().stop();
 			return;
