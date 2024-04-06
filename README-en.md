@@ -126,14 +126,14 @@ database with PhpMyAdmin.
 
 ### HashLogger (`/plugins/Tekore`)
 
-`logger-level` : Log level (see [HashLogger](https://github.com/hashtek-mc/hashlogger/blob/main/README.md))
+`loggerLevel` : Log level (see [HashLogger](https://github.com/hashtek-mc/hashlogger/blob/main/README.md))
 
 ### Database (`/.env`)
 
-`DATABASE` : Database name (`hashtekdb`)\
-`HOST` : Database's IP (`127.0.0.1`)\
-`PORT` : Port to use (`3306` by default)\
-`USER` : Username (`root` by default)\
-`PASSWORD` : Password (nothing by default)
+`DB_DATABASE` : Database name (`hashtekdb`)\
+`DB_HOST` : Database's IP (`127.0.0.1`)\
+`DB_PORT` : Port to use (`3306` by default)\
+`DB_USER` : Username (`root` by default)\
+`DB_PASSWORD` : Password (nothing by default)
 
 ## Made with 💜 by [Lysandre B.](https://github.com/Shuvlyy) ・ [![wakatime](https://wakatime.com/badge/user/2f50fe6c-0368-4bef-aa01-3a67193b63f8/project/018d5ee2-0b76-40e6-85c7-41444ac26120.svg)](https://wakatime.com/badge/user/2f50fe6c-0368-4bef-aa01-3a67193b63f8/project/018d5ee2-0b76-40e6-85c7-41444ac26120)

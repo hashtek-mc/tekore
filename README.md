@@ -137,15 +137,15 @@ avec PhpMyAdmin.
 
 ### HashLogger
 
-`logger-level` : Niveau de log (voir [HashLogger](https://github.com/hashtek-mc/hashlogger/blob/main/README.md))
+`loggerLevel` : Niveau de log (voir [HashLogger](https://github.com/hashtek-mc/hashlogger/blob/main/README.md))
 
 ### Base de données (`.env`)
 
-`DATABASE` : Nom de la base de données (`hashtekdb`)\
-`HOST` : IP de la base de données (`127.0.0.1` pour du local)\
-`PORT` : Port à utiliser (par défaut `3306`)\
-`USER` : Nom d'utilisateur (`root` par défaut)\
-`PASSWORD` : Mot de passe (rien par défaut)
+`DB_DATABASE` : Nom de la base de données (`hashtekdb`)\
+`DB_HOST` : IP de la base de données (`127.0.0.1` pour du local)\
+`DB_PORT` : Port à utiliser (par défaut `3306`)\
+`DB_USER` : Nom d'utilisateur (`root` par défaut)\
+`DB_PASSWORD` : Mot de passe (rien par défaut)
 
 `⚠️` Vous devez créer le `.env` à la racine du serveur.
 
