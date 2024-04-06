@@ -39,8 +39,8 @@ public class RankGetter
 			resultSet.getString(prefix + "uuid"),
 			resultSet.getString(prefix + "name"),
 			resultSet.getInt(prefix + "power"),
-			resultSet.getString(prefix + "fullName"),
-			resultSet.getString(prefix + "shortName")
+			resultSet.getString(prefix + "full_name"),
+			resultSet.getString(prefix + "short_name")
 		);
 	}
 	
@@ -70,9 +70,10 @@ public class RankGetter
 		Rank rank;
 		PreparedStatement statement;
 		ResultSet resultSet;
-		String query = "SELECT * FROM ranks WHERE " + type + " = ?;";
+		String query = "SELECT * FROM ranks WHERE ? = ?;";
 		
 		statement = this.sqlConnection.prepareStatement(query);
+		statement.setString(1, type);
 		statement.setString(1, typeValue);
 		resultSet = statement.executeQuery();
 		

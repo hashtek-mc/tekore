@@ -32,10 +32,8 @@ public class AccountGetter
 	private void setPlayerRank(PlayerData playerData, ResultSet resultSet)
 		throws SQLException
 	{
-		Rank rank;
 		RankGetter rankGetter = new RankGetter(this.sqlConnection);
-
-		rank = rankGetter.getRankFromResultSet(resultSet, "ranks.");
+		Rank rank = rankGetter.getRankFromResultSet(resultSet, "ranks.");;
 
 		playerData.setRank(rank);
 	}
@@ -45,9 +43,9 @@ public class AccountGetter
 	{
 		PlayerSettings playerSettings = playerData.getPlayerSettings();
 
-		playerSettings.setLobbyPlayersSetting(resultSet.getBoolean("settings.showLobbyPlayers"));
-		playerSettings.setFriendRequestsSetting(SettingsFriendRequests.valueOf(resultSet.getString("settings.friendRequests")));
-		playerSettings.setPrivateMessagesSetting(SettingsPrivateMessages.valueOf(resultSet.getString("settings.privateMessages")));
+		playerSettings.setLobbyPlayersSetting(resultSet.getBoolean("settings.show_lobby_players"));
+		playerSettings.setFriendRequestsSetting(SettingsFriendRequests.valueOf(resultSet.getString("settings.friend_requests")));
+		playerSettings.setPrivateMessagesSetting(SettingsPrivateMessages.valueOf(resultSet.getString("settings.private_messages")));
 	}
 
 	/**
@@ -66,11 +64,11 @@ public class AccountGetter
 			playerData.setUsername(resultSet.getString("username"));
 		}
 		
-		playerData.setCreatedAt(resultSet.getTimestamp("createdAt"));
-		playerData.setLastUpdate(resultSet.getTimestamp("lastUpdate"));
+		playerData.setCreatedAt(resultSet.getTimestamp("created_at"));
+		playerData.setLastUpdate(resultSet.getTimestamp("last_update"));
 
 		playerData.setCoins(resultSet.getInt("coins"));
-		playerData.setHashCoins(resultSet.getInt("hashCoins"));
+		playerData.setHashCoins(resultSet.getInt("hash_coins"));
 
 		this.setPlayerRank(playerData, resultSet);
 		this.setPlayerSettings(playerData, resultSet);
@@ -91,13 +89,14 @@ public class AccountGetter
 		PreparedStatement statement;
 		ResultSet resultSet;
 		String query = "SELECT * FROM players " +
-			"JOIN ranks ON ranks.uuid = players.rankUuid " +
+			"JOIN ranks ON ranks.uuid = players.rank_uuid " +
 			"JOIN settings ON settings.uuid = players.uuid " +
-			"WHERE players." + (fillAllData ? "username" : "uuid") + " = ?;";
+			"WHERE players.? = ?;";
 		
 		statement = sqlConnection.prepareStatement(query);
-		
-		statement.setString(1, fillAllData ? playerData.getUsername() : playerData.getUniqueId());
+
+		statement.setString(1, fillAllData ? "username" : "uuid");
+		statement.setString(2, fillAllData ? playerData.getUsername() : playerData.getUniqueId());
 		
 		resultSet = statement.executeQuery();
 		

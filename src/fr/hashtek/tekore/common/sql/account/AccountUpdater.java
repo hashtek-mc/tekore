@@ -44,14 +44,14 @@ public class AccountUpdater
 			"SET " +
 
 			"players.username = ?, " +
-			"players.lastUpdate = ?, " +
-			"players.rankUuid = ?, " +
+			"players.last_update = ?, " +
+			"players.rank_uuid = ?, " +
 			"players.coins = ?, " +
-			"players.hashCoins = ?, " +
+			"players.hash_coins = ?, " +
 
-			"settings.showLobbyPlayers = ?, " +
-			"settings.friendRequests = ?, " +
-			"settings.privateMessages = ? " +
+			"settings.show_lobby_players = ?, " +
+			"settings.friend_requests = ?, " +
+			"settings.private_messages = ? " +
 
 			"WHERE players.uuid = ?;";
 
