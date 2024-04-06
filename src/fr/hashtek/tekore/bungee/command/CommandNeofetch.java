@@ -32,9 +32,11 @@ public class CommandNeofetch extends Command implements HashLoggable, TabExecuto
 	 * Creates a new instance of CommandNeofetch.
 	 * Used to register the command.
 	 */
-	public CommandNeofetch()
+	public CommandNeofetch(Tekord cord)
 	{
 		super("neofetch");
+		this.cord = cord;
+		this.logger = this.cord.getHashLogger();
 	}
 	
 	
@@ -116,8 +118,6 @@ public class CommandNeofetch extends Command implements HashLoggable, TabExecuto
 			return;
 		}
 
-		this.cord = Tekord.getInstance();
-		this.logger = cord.getHashLogger();
 		AccountManager accountManager = cord.getAccountManager();
 		
 		ProxiedPlayer player = (ProxiedPlayer) sender;

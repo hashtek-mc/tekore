@@ -195,7 +195,7 @@ public class Tekord extends Plugin implements HashLoggable
 	{
 		this.logger.info(this, "Registering commands...");
 
-		this.pluginManager.registerCommand(this, new CommandNeofetch());
+		this.pluginManager.registerCommand(this, new CommandNeofetch(this));
 		this.pluginManager.registerCommand(this, new CommandPing());
 
 		this.logger.info(this, "Commands registered!");
