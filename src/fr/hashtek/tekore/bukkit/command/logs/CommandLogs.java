@@ -49,6 +49,81 @@ public class CommandLogs implements CommandExecutor, HashLoggable
         return true;
     }
 
+    /**
+     * Dispatches the log history filter.
+     *
+     * @param   logHistory  List of logs
+     * @param   category    Filter category
+     * @param   value       Filter value
+     * @return  Filtered log history
+     */
+    private List<HashLog> dispatchFilter(List<HashLog> logHistory, String category, String value)
+    {
+        final LogLevel logLevel;
+
+        if (category.startsWith("level")) {
+            try {
+                logLevel = LogLevel.valueOf(value.toUpperCase());
+            } catch (IllegalArgumentException exception) {
+                // TODO: Send error.
+                return logHistory;
+            }
+        } else
+            logLevel = LogLevel.INFO;
+
+        switch (category) {
+            case "level":
+                logHistory = new CommandLogsFilter(logHistory,
+                    hashLog -> hashLog.getLogLevel().compareTo(logLevel) == 0
+                ).get();
+                break;
+            case "levelMoreThan":
+                logHistory = new CommandLogsFilter(logHistory,
+                    hashLog -> hashLog.getLogLevel().compareTo(logLevel) < 0
+                ).get();
+                break;
+            case "levelLessThan":
+                logHistory = new CommandLogsFilter(logHistory,
+                    hashLog -> hashLog.getLogLevel().compareTo(logLevel) > 0
+                ).get();
+                break;
+            case "levelMoreEqualThan":
+                logHistory = new CommandLogsFilter(logHistory,
+                    hashLog -> hashLog.getLogLevel().compareTo(logLevel) <= 0
+                ).get();
+                break;
+            case "levelLessEqualThan":
+                logHistory = new CommandLogsFilter(logHistory,
+                    hashLog -> hashLog.getLogLevel().compareTo(logLevel) >= 0
+                ).get();
+                break;
+            case "contains":
+                logHistory = new CommandLogsFilter(logHistory,
+                    hashLog -> hashLog.getLog().contains(value)
+                ).get();
+                break;
+            case "before":
+                break;
+            case "after":
+                break;
+            case "from":
+                logHistory = new CommandLogsFilter(logHistory,
+                    hashLog -> hashLog.getAuthor().getClass().getSimpleName().equalsIgnoreCase(value)
+                ).get();
+                break;
+            default:
+                break;
+        }
+
+        return logHistory;
+    }
+
+    /**
+     * Filters log history.
+     *
+     * @param   args    Passed arguments
+     * @return  Filtered log history
+     */
     private List<HashLog> filterHistory(String[] args)
     {
         List<HashLog> logHistory = new ArrayList<HashLog>(this.logger.getHistory());
@@ -57,37 +132,7 @@ public class CommandLogs implements CommandExecutor, HashLoggable
             String category = args[k];
             String value = args[k + 1];
 
-            switch (category) {
-                case "level":
-                    logHistory = CommandLogsFilterLevel.get(logHistory, value);
-                    break;
-                case "levelMoreThan":
-                    logHistory = CommandLogsFilterLevelMoreThan.get(logHistory, value);
-                    break;
-                case "levelLessThan":
-                    logHistory = CommandLogsFilterLevelLessThan.get(logHistory, value);
-                    break;
-                case "levelMoreEqualThan":
-                    logHistory = CommandLogsFilterLevelMoreEqualThan.get(logHistory, value);
-                    break;
-                case "levelLessEqualThan":
-                    logHistory = CommandLogsFilterLevelLessEqualThan.get(logHistory, value);
-                    break;
-                case "contains":
-                    logHistory = CommandLogsFilterContains.get(logHistory, value);
-                    break;
-                case "before":
-                    logHistory = CommandLogsFilterBefore.get(logHistory, value);
-                    break;
-                case "after":
-                    logHistory = CommandLogsFilterAfter.get(logHistory, value);
-                    break;
-                case "from":
-                    logHistory = CommandLogsFilterFrom.get(logHistory, value);
-                    break;
-                default:
-                    break;
-            }
+            logHistory = this.dispatchFilter(logHistory, category, value);
         }
 
         return logHistory;
@@ -103,7 +148,7 @@ public class CommandLogs implements CommandExecutor, HashLoggable
     {
         for (HashLog log : logs) {
             String line = String.format(
-                "\n&7&o[%s: %s.java] %s\n&r%s<%s>%s %s",
+                "\n&7[%s: %s.java] &8&o%s\n&r%s<%s>%s %s",
                 log.getInstance().getClass().getSimpleName(),
                 log.getAuthor().getClass().getSimpleName(),
                 HashDate.format(HashDateType.SHORT_DATE_TIME, log.getCreatedAt()),
@@ -118,6 +163,22 @@ public class CommandLogs implements CommandExecutor, HashLoggable
     }
 
     /**
+     * Displays the logger status to the sender.
+     *
+     * @param   sender  Player who executed the command
+     */
+    private void displayLoggerStatus(CommandSender sender)
+    {
+        String[] output = {
+            "HashLogger status",
+            "\t- x instances created",
+            ""
+        };
+
+        sender.sendMessage(output);
+    }
+
+    /**
      * Called when command is executed.
      *
      * @param	sender	    Player who executed the command
@@ -128,13 +189,18 @@ public class CommandLogs implements CommandExecutor, HashLoggable
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        if (!parseInput(sender, args))
-            return true;
-
         if (args.length == 0) {
             this.displayLogs(sender, this.logger.getHistory());
             return true;
         }
+
+        if (args.length == 1 && args[0].equalsIgnoreCase("status")) {
+            this.displayLoggerStatus(sender);
+            return true;
+        }
+
+        if (!parseInput(sender, args))
+            return true;
 
         final List<HashLog> filteredLogHistory = this.filterHistory(args);
 
