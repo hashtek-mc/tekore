@@ -99,7 +99,7 @@ public class CommandLogs implements CommandExecutor, HashLoggable
                 break;
             case "contains":
                 logHistory = new CommandLogsFilter(logHistory,
-                    hashLog -> hashLog.getLog().contains(value)
+                    hashLog -> hashLog.getLog().toLowerCase().contains(value.toLowerCase())
                 ).get();
                 break;
             case "before":
