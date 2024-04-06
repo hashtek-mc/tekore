@@ -48,10 +48,10 @@ public class AccountGetter
 	/**
 	 * Fills up a PlayerData using a ResultSet results.
 	 * 
-	 * @param	playerData				Player's data
-	 * @param	resultSet				ResultSet results
-	 * @param	fillAllData				Should fetch UUID and username from the database too ?
-	 * @throws	SQLException			SQL failure
+	 * @param	playerData		Player's data
+	 * @param	resultSet		ResultSet results
+	 * @param	fillAllData		Should fetch UUID and username from the database too ?
+	 * @throws	SQLException	SQL failure
 	 */
 	private void fillPlayerData(PlayerData playerData, ResultSet resultSet, boolean fillAllData)
 		throws SQLException, IllegalArgumentException
@@ -100,12 +100,6 @@ public class AccountGetter
 		
 		if (!resultSet.next())
 			throw new NoSuchFieldException();
-
-		ResultSetMetaData md = resultSet.getMetaData();
-
-		for (int k = 1; k < md.getColumnCount(); k++) {
-			System.out.println(md.getTableName(k) + "." + md.getColumnName(k) + " : " + resultSet.getObject(k));
-		}
 
 		this.fillPlayerData(playerData, resultSet, fillAllData);
 
