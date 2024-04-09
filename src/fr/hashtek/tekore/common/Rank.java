@@ -36,8 +36,6 @@ public class Rank
 	
 	
 	/**
-	 * Returns rank's UUID.
-	 * 
 	 * @return	Rank UUID
 	 */
 	public String getUuid()
@@ -46,8 +44,6 @@ public class Rank
 	}
 	
 	/**
-	 * Returns rank's power.
-	 * 
 	 * @return	Rank's power
 	 */
 	public int getPower()
@@ -56,8 +52,6 @@ public class Rank
 	}
 	
 	/**
-	 * Returns rank's raw name.
-	 * 
 	 * @return	Rank's raw name
 	 */
 	public String getName()
@@ -66,9 +60,7 @@ public class Rank
 	}
 	
 	/**
-	 * Returns rank's chat prefix.
-	 * 
-	 * @return	Rank's chat prefix
+	 * @return	Rank's full name
 	 */
 	public String getFullName()
 	{
@@ -76,9 +68,7 @@ public class Rank
 	}
 	
 	/**
-	 * Returns rank's tablist prefix.
-	 * 
-	 * @return	Rank's tablist prefix
+	 * @return	Rank's short name
 	 */
 	public String getShortName()
 	{
@@ -86,9 +76,7 @@ public class Rank
 	}
 	
 	/**
-	 * Returns rank's color based on its prefix.
-	 * 
-	 * @return	Rank's color
+	 * @return	Rank's color (based on its prefix)
 	 */
 	public String getColor()
 	{

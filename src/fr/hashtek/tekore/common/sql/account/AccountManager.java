@@ -27,8 +27,7 @@ public class AccountManager
 	
 	
 	/**
-	 * Creates an account for a player and fills up its
-	 * PlayerData.
+	 * Creates an account for a player and fills up its PlayerData.
 	 * 
 	 * @param	playerData		Player's data
 	 * @throws	SQLException	SQL failure
@@ -40,8 +39,7 @@ public class AccountManager
 	}
 	
 	/**
-	 * Updates an account for a player according to its
-	 * PlayerData.
+	 * Updates an account for a player according to its PlayerData.
 	 * 
 	 * @param	playerData		Player's data
 	 * @throws	SQLException	SQL failure

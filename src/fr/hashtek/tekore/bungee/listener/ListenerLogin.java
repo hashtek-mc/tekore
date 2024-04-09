@@ -34,8 +34,6 @@ public class ListenerLogin implements Listener, HashLoggable
 	
 	/**
 	 * Called when a player logs into the proxy (post-bungee, pre-bukkit).
-	 * 
-	 * TODO: Change disconnect messages.
 	 */
 	@EventHandler
 	public void onPostLogin(PostLoginEvent event)

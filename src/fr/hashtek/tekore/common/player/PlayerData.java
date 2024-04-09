@@ -99,8 +99,6 @@ public class PlayerData
 	
 	
 	/**
-	 * Returns player's UUID.
-	 * 
 	 * @return	Player's UUID
 	 */
 	public String getUniqueId()
@@ -109,8 +107,6 @@ public class PlayerData
 	}
 	
 	/**
-	 * Returns player's username.
-	 * 
 	 * @return	Player's username
 	 */
 	public String getUsername()
@@ -119,9 +115,7 @@ public class PlayerData
 	}
 	
 	/**
-	 * Returns player's first login.
-	 * 
-	 * @return	Player's first login
+	 * @return	Player's first login timestamp
 	 */
 	public Timestamp getCreatedAt()
 	{
@@ -129,9 +123,7 @@ public class PlayerData
 	}
 	
 	/**
-	 * Returns player's last login.
-	 * 
-	 * @return	Player's last login
+	 * @return	Player's last login timestamp
 	 */
 	public Timestamp getLastUpdate()
 	{
@@ -139,8 +131,6 @@ public class PlayerData
 	}
 	
 	/**
-	 * Returns player's rank.
-	 *
 	 * @return	Player's rank.
 	 */
 	public Rank getRank()
@@ -149,8 +139,6 @@ public class PlayerData
 	}
 
 	/**
-	 * Returns player's coins.
-	 *
 	 * @return	Player's coins.
 	 */
 	public int getCoins()
@@ -159,8 +147,6 @@ public class PlayerData
 	}
 
 	/**
-	 * Returns player's HashCoins.
-	 *
 	 * @return	Player's HashCoins.
 	 */
 	public int getHashCoins()
@@ -169,8 +155,6 @@ public class PlayerData
 	}
 
 	/**
-	 * Returns player's settings.
-	 *
 	 * @return	Player's settings
 	 */
 	public PlayerSettings getPlayerSettings()
@@ -179,8 +163,6 @@ public class PlayerData
 	}
 	
 	/**
-	 * Returns associated SQL manager.
-	 * 
 	 * @return	Associated SQL manager
 	 */
 	public SQLManager getSQLManager()
@@ -190,8 +172,6 @@ public class PlayerData
 	
 	
 	/**
-	 * Sets player's UUID.
-	 * 
 	 * @param	uuid	UUID
 	 */
 	public void setUniqueId(String uuid)
@@ -200,8 +180,6 @@ public class PlayerData
 	}
 	
 	/**
-	 * Sets player's username.
-	 * 
 	 * @param	username	Username
 	 */
 	public void setUsername(String username)
@@ -210,8 +188,6 @@ public class PlayerData
 	}
 	
 	/**
-	 * Sets player's first login.
-	 * 
 	 * @param	createdAt	Timestamp
 	 */
 	public void setCreatedAt(Timestamp createdAt)
@@ -220,8 +196,6 @@ public class PlayerData
 	}
 	
 	/**
-	 * Sets player's last update.
-	 * 
 	 * @param	lastUpdate	Last update
 	 */
 	public void setLastUpdate(Timestamp lastUpdate)
@@ -230,8 +204,6 @@ public class PlayerData
 	}
 	
 	/**
-	 * Sets player's rank.
-	 * 
 	 * @param	rank	Rank
 	 */
 	public void setRank(Rank rank)
@@ -240,8 +212,6 @@ public class PlayerData
 	}
 
 	/**
-	 * Sets player's coins.
-	 *
 	 * @param	coins	Coins
 	 */
 	public void setCoins(int coins)
@@ -250,8 +220,6 @@ public class PlayerData
 	}
 
 	/**
-	 * Sets player's HashCoins.
-	 *
 	 * @param	hashCoins	HashCoins
 	 */
 	public void setHashCoins(int hashCoins)

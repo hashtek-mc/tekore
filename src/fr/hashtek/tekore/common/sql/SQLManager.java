@@ -26,7 +26,7 @@ public class SQLManager implements HashLoggable
 	 * 
 	 * @param	logger		Logger
 	 * @param	database	Database name
-	 * @param	host		Host
+	 * @param	host		Host (IP)
 	 * @param	port		Port
 	 * @param	user		Username
 	 * @param	password	Password

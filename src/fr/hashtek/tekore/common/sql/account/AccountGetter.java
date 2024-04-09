@@ -24,8 +24,13 @@ public class AccountGetter
 	{
 		this.sqlConnection = sqlConnection;
 	}
-	
-	
+
+
+	/**
+	 * @param	playerData		Player's data
+	 * @param	resultSet		SQL ResultSet
+	 * @throws	SQLException	SQL failure
+	 */
 	private void setPlayerRank(PlayerData playerData, ResultSet resultSet)
 		throws SQLException
 	{
@@ -35,6 +40,12 @@ public class AccountGetter
 		playerData.setRank(rank);
 	}
 
+	/**
+	 * @param	playerData					Player's data
+	 * @param	resultSet					SQL ResultSet
+	 * @throws	SQLException				SQL failure
+	 * @throws	IllegalArgumentException	Unknown setting
+	 */
 	private void setPlayerSettings(PlayerData playerData, ResultSet resultSet)
 		throws SQLException, IllegalArgumentException
 	{
@@ -48,10 +59,11 @@ public class AccountGetter
 	/**
 	 * Fills up a PlayerData using a ResultSet results.
 	 * 
-	 * @param	playerData		Player's data
-	 * @param	resultSet		ResultSet results
-	 * @param	fillAllData		Should fetch UUID and username from the database too ?
-	 * @throws	SQLException	SQL failure
+	 * @param	playerData					Player's data
+	 * @param	resultSet					ResultSet results
+	 * @param	fillAllData					Should fetch UUID and username from the database too ?
+	 * @throws	SQLException				SQL failure
+	 * @throws	IllegalArgumentException	Unknown setting
 	 */
 	private void fillPlayerData(PlayerData playerData, ResultSet resultSet, boolean fillAllData)
 		throws SQLException, IllegalArgumentException
@@ -75,10 +87,11 @@ public class AccountGetter
 	 * Gets a player's data from the SQL database and
 	 * fills up a PlayerData with the fetched data.
 	 *
-	 * @param	playerData				Player's data
-	 * @param	fillAllData				Should fetch UUID and username from the database too ?
-	 * @throws	SQLException			SQL failure
-	 * @throws	NoSuchFieldException	No account found
+	 * @param	playerData					Player's data
+	 * @param	fillAllData					Should fetch UUID and username from the database too ?
+	 * @throws	SQLException				SQL failure
+	 * @throws	NoSuchFieldException		No account found
+	 * @throws	IllegalArgumentException	Unknown setting
 	 */
 	public void getPlayerAccount(PlayerData playerData, boolean fillAllData)
 		throws SQLException, NoSuchFieldException, IllegalArgumentException
