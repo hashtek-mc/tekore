@@ -164,10 +164,11 @@ public class CommandLogs implements CommandExecutor, HashLoggable
 
     /**
      * Displays the logger status to the sender.
+     * TODO: To finish.
      *
      * @param   sender  Player who executed the command
      */
-    private void displayLoggerStatus(CommandSender sender)
+    /*private void displayLoggerStatus(CommandSender sender)
     {
         String[] output = {
             "HashLogger status",
@@ -176,7 +177,7 @@ public class CommandLogs implements CommandExecutor, HashLoggable
         };
 
         sender.sendMessage(output);
-    }
+    }*/
 
     /**
      * Called when command is executed.
@@ -194,10 +195,13 @@ public class CommandLogs implements CommandExecutor, HashLoggable
             return true;
         }
 
-        if (args.length == 1 && args[0].equalsIgnoreCase("status")) {
+        /*
+         * TODO: To finish.
+         */
+        /*if (args.length == 1 && args[0].equalsIgnoreCase("status")) {
             this.displayLoggerStatus(sender);
             return true;
-        }
+        }*/
 
         if (!parseInput(sender, args))
             return true;
