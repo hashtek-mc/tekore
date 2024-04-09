@@ -5,9 +5,9 @@
 This plugin handles synchronisation between player's data and the SQL database.
 It ensures that servers work properly between them.
 
-`⚠️` Every Hashtek plugin MUST use Tekore.
-
-`ℹ️` You must put the .jar file in the `plugins` folder in your server.
+> [!IMPORTANT]
+> Every Hashtek plugin MUST use Tekore.\
+> You MUST put the .jar file in the `plugins` folder in your server.
 
 [🇫🇷 Egalement disponible en Français !](https://github.com/hashtek-mc/tekore/blob/main/README.md)
 
@@ -40,7 +40,9 @@ public class Test extends JavaPlugin {
     
 }
 ```
-`⚠️` You must surround Tekore's loading with a `try/catch` block in case Tekore doesn't load properly.
+
+> [!IMPORTANT]
+> You must surround Tekore's loading with a `try/catch` block in case Tekore doesn't load properly.
 (incorrect configuration, for example).
 
 ### Features
@@ -98,16 +100,19 @@ public class JoinEvent implements Listener, HashLoggable {
 }
 ```
 
-`⚠️` It is strongly recommended that you pass the Tekore instance to the class constructor,
+> [!TIP]
+> It is strongly recommended that you pass the Tekore instance to the class constructor,
 and not to make the instance static in the root of the plugin.
 
-`ℹ️` Whenever a player disconnects from the server, its data will be automatically saved to the database.
+> [!NOTE]
+> Whenever a player disconnects from the server, its data will be automatically saved to the database.
 
 ### Features
 
 * `setRank()` : Sets a player's rank
 
-`⚠️` All functions not listed above are not intended to be used by anything other than the Tekore!
+> [!CAUTION]
+> All functions not listed above are not intended to be used by anything other than the Tekore!
 
 ## Database
 
@@ -135,5 +140,8 @@ database with PhpMyAdmin.
 `DB_PORT` : Port to use (`3306` by default)\
 `DB_USER` : Username (`root` by default)\
 `DB_PASSWORD` : Password (nothing by default)
+
+> [!IMPORTANT]
+> You must create the `.env` file at the server's root.
 
 ## Made with 💜 by [Lysandre B.](https://github.com/Shuvlyy) ・ [![wakatime](https://wakatime.com/badge/user/2f50fe6c-0368-4bef-aa01-3a67193b63f8/project/018d5ee2-0b76-40e6-85c7-41444ac26120.svg)](https://wakatime.com/badge/user/2f50fe6c-0368-4bef-aa01-3a67193b63f8/project/018d5ee2-0b76-40e6-85c7-41444ac26120)
