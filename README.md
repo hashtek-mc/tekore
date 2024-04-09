@@ -6,7 +6,8 @@ Ce plugin s'occupe de toute la synchronisation entre les données des joueurs
 et la base de données SQL. Il s'assure du bon fonctionnement des serveurs
 entre eux.
 
-`⚠️` Tous les plugins de Hashtek doivent impérativement utiliser Tekore.
+> [!IMPORTANT]
+> Tous les plugins de Hashtek doivent impérativement utiliser Tekore.
 
 `ℹ️` Vous devez impérativement mettre le .jar dans le dossier `plugins`
 de votre serveur.
