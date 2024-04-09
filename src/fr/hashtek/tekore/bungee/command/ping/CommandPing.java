@@ -1,4 +1,4 @@
-package fr.hashtek.tekore.bungee.command;
+package fr.hashtek.tekore.bungee.command.ping;
 
 import fr.hashtek.hashlogger.HashLoggable;
 import net.md_5.bungee.api.ChatColor;

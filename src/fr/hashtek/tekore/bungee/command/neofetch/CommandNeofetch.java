@@ -1,4 +1,4 @@
-package fr.hashtek.tekore.bungee.command;
+package fr.hashtek.tekore.bungee.command.neofetch;
 
 import com.google.common.collect.ImmutableSet;
 import fr.hashtek.hashdate.HashDate;
@@ -24,8 +24,8 @@ import java.util.Set;
 public class CommandNeofetch extends Command implements HashLoggable, TabExecutor
 {
 
-	private Tekord cord;
-    private HashLogger logger;
+	private final Tekord cord;
+    private final HashLogger logger;
 	
 	
 	/**
@@ -143,6 +143,13 @@ public class CommandNeofetch extends Command implements HashLoggable, TabExecuto
 		logger.info(this, "Command executed successfully.");
 	}
 
+	/**
+	 * Called when player presses the <TAB> key.
+	 *
+	 * @param	sender	Player who executed the command
+	 * @param	args	Arguments passed
+	 * @return	List of predictions
+	 */
 	@Override
 	public Iterable<String> onTabComplete(CommandSender sender, String[] args)
 	{

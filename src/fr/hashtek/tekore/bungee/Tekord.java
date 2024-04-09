@@ -6,13 +6,13 @@ import java.util.HashMap;
 
 import fr.hashtek.hashconfig.HashConfig;
 import fr.hashtek.hasherror.HashError;
-import fr.hashtek.tekore.bungee.command.CommandPing;
+import fr.hashtek.tekore.bungee.command.ping.CommandPing;
 import org.simpleyaml.configuration.file.YamlFile;
 
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
 import fr.hashtek.hashlogger.LogLevel;
-import fr.hashtek.tekore.bungee.command.CommandNeofetch;
+import fr.hashtek.tekore.bungee.command.neofetch.CommandNeofetch;
 import fr.hashtek.tekore.bungee.listener.ListenerDisconnect;
 import fr.hashtek.tekore.bungee.listener.ListenerLogin;
 import fr.hashtek.tekore.common.player.PlayerData;
@@ -52,7 +52,8 @@ public class Tekord extends Plugin implements HashLoggable
 		this.setupHashLogger();
 		
 		logger.info(this, "Starting Tekord...");
-		
+
+		this.loadConfigContent();
 		this.setupManagers();
 		this.setupListeners();
 		this.setupCommands();
@@ -137,7 +138,7 @@ public class Tekord extends Plugin implements HashLoggable
 
 		if (serverVersion == null) {
 			HashError.CFG_KEY_NOT_FOUND
-					.log(this.getHashLogger(), this, "serverVersion");
+				.log(this.getHashLogger(), this, "serverVersion");
 			serverVersion = "0.1-ALPHA";
 		}
 		this.serverVersion = serverVersion;
