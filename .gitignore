@@ -1,6 +1,19 @@
-.settings
-bin
-.classpath
-.idea
-classes
+# .gitignore for Tekore project
+
+# Gradle stuff
+.gradle/
+build/
+
+# Eclipse stuff
+classpath
+.project
+.settings/
+
+# IntelliJ stuff
 *.iml
+*.ipr
+*.iws
+.idea/
+out/
+bin/
+classes/

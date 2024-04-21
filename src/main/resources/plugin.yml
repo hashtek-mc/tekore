@@ -1,6 +1,6 @@
-name: Tekore
+name: '${name}'
 author: Lysandre B.
-version: 0.0.3
+version: '${version}'
 main: fr.hashtek.tekore.bukkit.Tekore
 commands:
   whoami:
