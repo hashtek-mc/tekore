@@ -3,7 +3,9 @@ package fr.hashtek.tekore.bukkit;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import fr.hashtek.hashconfig.HashConfig;
 import fr.hashtek.hasherror.HashError;
@@ -24,9 +26,10 @@ import fr.hashtek.tekore.bukkit.listener.ListenerQuit;
 import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.sql.SQLManager;
 import fr.hashtek.tekore.common.sql.account.AccountManager;
+import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.simpleyaml.configuration.file.YamlFile;
 
-public class Tekore extends JavaPlugin implements HashLoggable
+public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageListener
 {
 	
 	private static Tekore instance;
@@ -45,6 +48,10 @@ public class Tekore extends JavaPlugin implements HashLoggable
 
 	private ArrayList<Rank> ranks;
 
+	private final List<String> channels = Arrays.asList(
+		"BungeeCord"
+	);
+
 	
 	/**
 	 * Called on server start.
@@ -62,6 +69,7 @@ public class Tekore extends JavaPlugin implements HashLoggable
 		this.loadConfigContent();
 		this.setupManagers();
 		this.fetchRanks();
+		this.loadMessenger();
 		this.registerListeners();
 		this.registerCommands();
 	
@@ -78,7 +86,9 @@ public class Tekore extends JavaPlugin implements HashLoggable
 		
 		for (Player player: this.getServer().getOnlinePlayers())
 			player.kickPlayer("Nous revenons dans quelques minutes...");
-		
+
+		this.unloadMessenger();
+
 		try {
 			this.sql.disconnect();
 		} catch (SQLException exception) {
@@ -216,6 +226,35 @@ public class Tekore extends JavaPlugin implements HashLoggable
 
 		this.logger.info(this, this.ranks.size() + " ranks fetched from the database.");
 	}
+
+	/**
+	 * Loads plugin's messenger.
+	 */
+	private void loadMessenger()
+	{
+		this.logger.info(this, "Loading messenger...");
+
+		for (String channel : channels) {
+			this.getServer().getMessenger().registerOutgoingPluginChannel(this, channel);
+			this.getServer().getMessenger().registerIncomingPluginChannel(this, channel, this);
+			this.logger.info(this, "\tChannel \"" + channel + "\" registered!");
+		}
+
+		this.logger.info(this, "Messenger loaded!");
+	}
+
+	/**
+	 * Unloads plugin's messenger.
+	 */
+	private void unloadMessenger()
+	{
+		this.logger.info(this, "Unloading messenger...");
+
+		this.getServer().getMessenger().unregisterOutgoingPluginChannel(this);
+		this.getServer().getMessenger().unregisterIncomingPluginChannel(this);
+
+		this.logger.info(this, "Messenger unloaded.");
+	}
 	
 	/**
 	 * Registers all event listeners.
@@ -237,11 +276,22 @@ public class Tekore extends JavaPlugin implements HashLoggable
 	{
 		this.logger.info(this, "Registering commands...");
 
-		getCommand("whoami").setExecutor(new CommandWhoAmI(this));
-		getCommand("logs").setExecutor(new CommandLogs(this));
+		this.getCommand("whoami").setExecutor(new CommandWhoAmI(this));
+		this.getCommand("logs").setExecutor(new CommandLogs(this));
 
 		this.logger.info(this, "Commands registered!");
 	}
+
+	/**
+	 * Called when Tekore receives a message through messenger.
+	 *
+	 * @param	channel		Channel that the message was sent through.
+	 * @param	player		Source of the message.
+	 * @param	message		The raw message that was sent.
+	 */
+	@Override
+	public void onPluginMessageReceived(String channel, Player player, byte[] message)
+	{}
 	
 	/**
 	 * Adds a player's data to the main HashMap.
@@ -372,5 +422,5 @@ public class Tekore extends JavaPlugin implements HashLoggable
 	{
 		return this.playersData.get(player);
 	}
-	
+
 }

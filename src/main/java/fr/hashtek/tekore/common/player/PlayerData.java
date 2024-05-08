@@ -29,6 +29,7 @@ public class PlayerData
 	private int hashCoins;
 
 	private final PlayerSettings playerSettings;
+	private PlayerManager playerManager;
 
 	private SQLManager sql;
 	
@@ -77,15 +78,18 @@ public class PlayerData
 	private void setBukkitPlayer() throws NoClassDefFoundError
 	{
 		if (player instanceof org.bukkit.entity.Player) {
+			final Tekore core = Tekore.getInstance();
+
             this.uuid = ((org.bukkit.entity.Player) player).getUniqueId().toString();
 			this.username = ((org.bukkit.entity.Player) player).getName();
-			this.sql = Tekore.getInstance().getSQLManager();
-		} else 
+			this.sql = core.getSQLManager();
+			this.playerManager = new PlayerManager(core, (org.bukkit.entity.Player) this.player);
+		} else
 			throw new NoClassDefFoundError("Not Bukkit.");
 	}
 	
 	/**
-	 * Fills up PlayerData using Bungeecord's API (used only if player is Bungee).
+	 * Fills up PlayerData using BungeeCord's API (used only if player is Bungee).
 	 */
 	private void setBungeePlayer() throws NoClassDefFoundError
 	{
@@ -93,6 +97,7 @@ public class PlayerData
             this.uuid = ((net.md_5.bungee.api.connection.ProxiedPlayer) player).getUniqueId().toString();
 			this.username = ((net.md_5.bungee.api.connection.ProxiedPlayer) player).getName();
 			this.sql = Tekord.getInstance().getSQLManager();
+			this.playerManager = null;
 		} else
 			throw new NoClassDefFoundError("Not Bungee.");
 	}
@@ -160,6 +165,14 @@ public class PlayerData
 	public PlayerSettings getPlayerSettings()
 	{
 		return this.playerSettings;
+	}
+
+	/**
+	 * @return	Player's manager
+	 */
+	public PlayerManager getPlayerManager()
+	{
+		return this.playerManager;
 	}
 	
 	/**
