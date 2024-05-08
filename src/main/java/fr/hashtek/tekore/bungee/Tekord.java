@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import fr.hashtek.hashconfig.HashConfig;
 import fr.hashtek.hasherror.HashError;
+import fr.hashtek.tekore.bungee.command.hub.CommandHub;
 import fr.hashtek.tekore.bungee.command.ping.CommandPing;
 import org.simpleyaml.configuration.file.YamlFile;
 
@@ -197,6 +198,7 @@ public class Tekord extends Plugin implements HashLoggable
 		this.logger.info(this, "Registering commands...");
 
 		this.pluginManager.registerCommand(this, new CommandNeofetch(this));
+		this.pluginManager.registerCommand(this, new CommandHub(this));
 		this.pluginManager.registerCommand(this, new CommandPing());
 
 		this.logger.info(this, "Commands registered!");
