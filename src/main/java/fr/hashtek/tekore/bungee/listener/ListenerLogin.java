@@ -8,6 +8,7 @@ import fr.hashtek.hashlogger.HashLogger;
 import fr.hashtek.tekore.bungee.Tekord;
 import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.sql.account.AccountManager;
+import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -73,6 +74,10 @@ public class ListenerLogin implements Listener, HashLoggable
 		}
 		
 		this.cord.addPlayerData(player, playerData);
+
+		final ServerInfo lobbyServer = this.cord.getProxy().getServerInfo("lobby01"); // FIXME: MAGIC VALUE!!
+
+		player.connect(lobbyServer);
 		
 		logger.info(this, "Login sequence successfully executed for \"" + playerData.getUsername() + "\".");
 	}
