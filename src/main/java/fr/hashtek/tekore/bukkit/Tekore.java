@@ -2,10 +2,7 @@ package fr.hashtek.tekore.bukkit;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import fr.hashtek.hashconfig.HashConfig;
 import fr.hashtek.hasherror.HashError;
@@ -421,6 +418,36 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 	public PlayerData getPlayerData(Player player)
 	{
 		return this.playersData.get(player);
+	}
+
+	/* Move the functions below in a dedicated class or something. */
+
+	/**
+	 * @return	Every online player of the current server.
+	 */
+	public Collection<? extends Player> getOnlinePlayers()
+	{
+		return this.getServer().getOnlinePlayers();
+	}
+
+	/**
+	 * @return	Number of players connected to the current server.
+	 */
+	public int getLocalNumberOfPlayers()
+	{
+		return this.getServer().getOnlinePlayers().size();
+	}
+
+	/**
+	 * TODO: Finish this function.
+	 *       (maybe use plugin messaging?)
+	 *
+	 * @return	Number of players connected to the entire proxy.
+	 * @deprecated
+	 */
+	public int getTotalNumberOfPlayers()
+	{
+		return 0;
 	}
 
 }
