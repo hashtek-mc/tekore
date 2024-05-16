@@ -82,6 +82,7 @@ public class Rank
 	{
 		if (this.fullName.charAt(0) != '§')
 			return "";
+
 		return this.fullName.substring(0, 2);
 	}
 

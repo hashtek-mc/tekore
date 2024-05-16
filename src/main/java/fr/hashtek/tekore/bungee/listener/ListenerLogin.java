@@ -76,7 +76,6 @@ public class ListenerLogin implements Listener, HashLoggable
 		this.cord.addPlayerData(player, playerData);
 
 		final ServerInfo lobbyServer = this.cord.getProxy().getServerInfo("lobby01"); // FIXME: MAGIC VALUE!!
-
 		player.connect(lobbyServer);
 		
 		logger.info(this, "Login sequence successfully executed for \"" + playerData.getUsername() + "\".");
