@@ -164,23 +164,12 @@ public class CommandLogs implements CommandExecutor, HashLoggable
 
     /**
      * Displays the logger status to the sender.
+     * TODO: Finish this function.
      *
      * @param   sender  Player who executed the command
      */
     private void displayLoggerStatus(CommandSender sender)
     {
-        /*List<String> output = new ArrayList<String>();
-
-        output.add("HashLogger status");
-        output.add("  ● " + 1 + " instances created");
-        String[] test = {
-            "HashLogger status",
-            String.format("  - %d instances created", 1),
-            "",
-        };
-
-        sender.sendMessage(output.toString());*/
-
         sender.sendMessage(ChatColor.RED + "Soon...");
     }
 
