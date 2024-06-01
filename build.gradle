@@ -6,6 +6,9 @@ plugins {
 group = 'fr.hashtek.spigot'
 version = 'R0.0.3-SNAPSHOT'
 
+def hashrc = 'C:\\Users\\Lysandre\\Documents\\Hashtek\\Plugins\\hashrc'
+def libsFolder = 'libs'
+
 repositories {
     mavenCentral()
     maven {
@@ -25,7 +28,7 @@ configurations {
 dependencies {
     compileOnly 'org.github.paperspigot:paperspigot-api:1.8.8-R0.1-SNAPSHOT'
 
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: libsFolder, include: ['*.jar'])
 }
 
 def targetJavaVersion = 8
@@ -68,13 +71,15 @@ shadowJar {
         exclude(dependency('org.github.paperspigot:paperspigot-api:1.8.8-R0.1-SNAPSHOT'))
     }
 
+    archiveClassifier.set('')
+
     mergeServiceFiles()
     minimize()
 }
 
 tasks.register('make', Copy) {
     from ('build/libs/')
-    into 'C:\\Users\\Shuvly\\Documents\\Hashtek\\Plugins\\hashrc'
+    into hashrc
     include '*.jar'
 }
 
