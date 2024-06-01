@@ -5,7 +5,7 @@ package fr.hashtek.tekore.common.player.settings;
  * This interface contains all the minimal functions that
  * a setting class must have.
  */
-public interface PlayerSetting
+public interface PlayerSettingValue
 {
 
     /**

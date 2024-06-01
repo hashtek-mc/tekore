@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import fr.hashtek.tekore.common.player.PlayerData;
+import fr.hashtek.tekore.common.player.PlayerManager;
 
 public class AccountManager
 {
@@ -39,39 +40,39 @@ public class AccountManager
 	}
 	
 	/**
-	 * Updates an account for a player according to its PlayerData.
+	 * Updates an account for a player according to its PlayerManager.
 	 * 
-	 * @param	playerData		Player's data
+	 * @param	playerManager	Player's manager
 	 * @throws	SQLException	SQL failure
 	 */
-	public void updatePlayerAccount(PlayerData playerData)
+	public void updatePlayerAccount(PlayerManager playerManager)
 		throws SQLException
 	{
-		this.accountUpdater.updatePlayerAccount(playerData);
+		this.accountUpdater.updatePlayerAccount(playerManager);
 	}
 	
 	/**
-	 * Fills up a PlayerData according to SQL fetched data.
+	 * Fills up a PlayerManager according to SQL fetched data.
 	 * 
-	 * @param	playerData		Player's data
+	 * @param	playerManager	Player's manager
 	 * @throws	SQLException	SQL failure
 	 */
-	public void getPlayerAccount(PlayerData playerData)
+	public void getPlayerAccount(PlayerManager playerManager)
 		throws SQLException, NoSuchFieldException
 	{
-		this.accountGetter.getPlayerAccount(playerData, false);
+		this.accountGetter.getPlayerAccount(playerManager, false);
 	}
 	
 	/**
 	 * Entirely fills up a PlayerData according to SQL fetched data.
 	 * 
-	 * @param	playerData		Player's data
+	 * @param	playerManager	Player's manager
 	 * @throws	SQLException	SQL failure
 	 */
-	public void getFullPlayerAccount(PlayerData playerData)
+	public void getFullPlayerAccount(PlayerManager playerManager)
 		throws SQLException, NoSuchFieldException
 	{
-		this.accountGetter.getPlayerAccount(playerData, true);
+		this.accountGetter.getPlayerAccount(playerManager, true);
 	}
 
 }

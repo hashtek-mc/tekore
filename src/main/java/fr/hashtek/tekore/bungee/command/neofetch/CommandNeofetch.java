@@ -8,6 +8,7 @@ import fr.hashtek.hashlogger.HashLogger;
 import fr.hashtek.tekore.bungee.Tekord;
 import fr.hashtek.tekore.common.Rank;
 import fr.hashtek.tekore.common.player.PlayerData;
+import fr.hashtek.tekore.common.player.PlayerManager;
 import fr.hashtek.tekore.common.sql.account.AccountManager;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
@@ -118,20 +119,21 @@ public class CommandNeofetch extends Command implements HashLoggable, TabExecuto
 			return;
 		}
 
-		AccountManager accountManager = cord.getAccountManager();
+		final AccountManager accountManager = cord.getAccountManager();
 		
-		ProxiedPlayer player = (ProxiedPlayer) sender;
-		
+		final ProxiedPlayer player = (ProxiedPlayer) sender;
+
 		logger.info(this, "Executed by " + player.getName() + " (" + player.getUniqueId() + ")");
 		
 		if (!parseInput(player, args))
 			return;
 		
-		ProxiedPlayer target = BungeeCord.getInstance().getPlayer(args[0]);
-		PlayerData targetPlayerData = new PlayerData(args[0]);
+		final ProxiedPlayer target = BungeeCord.getInstance().getPlayer(args[0]);
+		final PlayerManager targetPlayerManager = new PlayerManager(args[0]);
+		final PlayerData targetPlayerData = targetPlayerManager.getData();
 
 		try {
-			accountManager.getFullPlayerAccount(targetPlayerData);
+			accountManager.getFullPlayerAccount(targetPlayerManager);
 		} catch (Exception exception) {
 			logger.error(this, targetPlayerData.getUsername() + " is not a valid player.", exception);
 			sender.sendMessage(new TextComponent(ChatColor.RED + targetPlayerData.getUsername() + " n'existe pas ou ne s'est jamais connecté à ce serveur."));
@@ -156,8 +158,8 @@ public class CommandNeofetch extends Command implements HashLoggable, TabExecuto
 		if (args.length != 1)
 			return ImmutableSet.of();
 
-		Set<String> matches = new HashSet<String>();
-		String search = args[0].toLowerCase();
+		final Set<String> matches = new HashSet<String>();
+		final String search = args[0].toLowerCase();
 
 		for (ProxiedPlayer player : this.cord.getProxy().getPlayers())
 			if (player.getName().toLowerCase().startsWith(search))

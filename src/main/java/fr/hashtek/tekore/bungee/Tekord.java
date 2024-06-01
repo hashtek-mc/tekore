@@ -8,6 +8,7 @@ import fr.hashtek.hashconfig.HashConfig;
 import fr.hashtek.hasherror.HashError;
 import fr.hashtek.tekore.bungee.command.hub.CommandHub;
 import fr.hashtek.tekore.bungee.command.ping.CommandPing;
+import fr.hashtek.tekore.common.player.PlayerManager;
 import org.simpleyaml.configuration.file.YamlFile;
 
 import fr.hashtek.hashlogger.HashLoggable;
@@ -16,7 +17,6 @@ import fr.hashtek.hashlogger.LogLevel;
 import fr.hashtek.tekore.bungee.command.neofetch.CommandNeofetch;
 import fr.hashtek.tekore.bungee.listener.ListenerDisconnect;
 import fr.hashtek.tekore.bungee.listener.ListenerLogin;
-import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.sql.SQLManager;
 import fr.hashtek.tekore.common.sql.account.AccountManager;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -38,7 +38,7 @@ public class Tekord extends Plugin implements HashLoggable
 	
 	private HashConfig hashConfig;
 	
-	private final HashMap<ProxiedPlayer, PlayerData> playersData = new HashMap<ProxiedPlayer, PlayerData>();
+	private final HashMap<ProxiedPlayer, PlayerManager> playersManager = new HashMap<ProxiedPlayer, PlayerManager>();
 	
 	
 	/**
@@ -205,25 +205,25 @@ public class Tekord extends Plugin implements HashLoggable
 	}
 	
 	/**
-	 * Adds a player's data to the main HashMap.
+	 * Adds a player's manager to the main HashMap.
 	 * 
 	 * @param	player		Player
-	 * @param	playerData	Player's data
+	 * @param	playerManager	Player's manager
 	 */
-	public void addPlayerData(ProxiedPlayer player, PlayerData playerData)
+	public void addPlayerManager(ProxiedPlayer player, PlayerManager playerManager)
 	{
-		this.removePlayerData(player);
-		this.playersData.put(player, playerData);
+		this.removePlayerManager(player);
+		this.playersManager.put(player, playerManager);
 	}
 	
 	/**
-	 * Remove a player's data from the main HashMap.
+	 * Remove a player's manager from the main HashMap.
 	 * 
 	 * @param	player	Player
 	 */
-	public void removePlayerData(ProxiedPlayer player)
+	public void removePlayerManager(ProxiedPlayer player)
 	{
-		this.playersData.remove(player);
+		this.playersManager.remove(player);
 	}
 	
 	
@@ -276,14 +276,14 @@ public class Tekord extends Plugin implements HashLoggable
 	}
 	
 	/**
-	 * Returns the PlayerData linked to a Player.
+	 * Returns the PlayerManager linked to a Player.
 	 *
 	 * @param	player	Player
-	 * @return	Player's data
+	 * @return	Player's manager
 	 */
-	public PlayerData getPlayerData(ProxiedPlayer player)
+	public PlayerManager getPlayerManager(ProxiedPlayer player)
 	{
-		return this.playersData.get(player);
+		return this.playersManager.get(player);
 	}
 	
 }

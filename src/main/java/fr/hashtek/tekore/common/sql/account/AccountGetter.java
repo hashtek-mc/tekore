@@ -4,9 +4,11 @@ import java.sql.*;
 
 import fr.hashtek.tekore.common.Rank;
 import fr.hashtek.tekore.common.player.PlayerData;
-import fr.hashtek.tekore.common.player.PlayerSettings;
-import fr.hashtek.tekore.common.player.settings.SettingsFriendRequests;
-import fr.hashtek.tekore.common.player.settings.SettingsPrivateMessages;
+import fr.hashtek.tekore.common.player.PlayerManager;
+import fr.hashtek.tekore.common.player.PlayerSettingsManager;
+import fr.hashtek.tekore.common.player.settings.categories.SettingEFFN;
+import fr.hashtek.tekore.common.player.settings.categories.SettingEFN;
+import fr.hashtek.tekore.common.player.settings.categories.SettingEN;
 import fr.hashtek.tekore.common.sql.rank.RankGetter;
 
 public class AccountGetter
@@ -34,40 +36,44 @@ public class AccountGetter
 	private void setPlayerRank(PlayerData playerData, ResultSet resultSet)
 		throws SQLException
 	{
-		RankGetter rankGetter = new RankGetter(this.sqlConnection);
-		Rank rank = rankGetter.getRankFromResultSet(resultSet, "ranks.");
+		final RankGetter rankGetter = new RankGetter(this.sqlConnection);
+		final Rank rank = rankGetter.getRankFromResultSet(resultSet, "ranks.");
 
 		playerData.setRank(rank);
 	}
 
 	/**
-	 * @param	playerData					Player's data
+	 * @param	playerManager				Player's manager
 	 * @param	resultSet					SQL ResultSet
 	 * @throws	SQLException				SQL failure
 	 * @throws	IllegalArgumentException	Unknown setting
 	 */
-	private void setPlayerSettings(PlayerData playerData, ResultSet resultSet)
+	private void setPlayerSettings(PlayerManager playerManager, ResultSet resultSet)
 		throws SQLException, IllegalArgumentException
 	{
-		PlayerSettings playerSettings = playerData.getPlayerSettings();
+		final PlayerSettingsManager settingsManager = playerManager.getSettingsManager();
 
-		playerSettings.setLobbyPlayersSetting(resultSet.getBoolean("settings.showLobbyPlayers"));
-		playerSettings.setFriendRequestsSetting(SettingsFriendRequests.valueOf(resultSet.getString("settings.friendRequests")));
-		playerSettings.setPrivateMessagesSetting(SettingsPrivateMessages.valueOf(resultSet.getString("settings.privateMessages")));
+		settingsManager.setLobbyPlayersSetting(SettingEN.valueOf(resultSet.getString("settings.showLobbyPlayers")));
+		settingsManager.setPrivateMessagesSetting(SettingEFN.valueOf(resultSet.getString("settings.privateMessages")));
+		settingsManager.setFriendRequestsSetting(SettingEFFN.valueOf(resultSet.getString("settings.friendRequests")));
+		settingsManager.setPartyRequestsSetting(SettingEFFN.valueOf(resultSet.getString("settings.partyRequests")));
+		settingsManager.setGuildRequestsSetting(SettingEFFN.valueOf(resultSet.getString("settings.guildRequests")));
 	}
 
 	/**
 	 * Fills up a PlayerData using a ResultSet results.
 	 * 
-	 * @param	playerData					Player's data
+	 * @param	playerManager				Player's manager
 	 * @param	resultSet					ResultSet results
 	 * @param	fillAllData					Should fetch UUID and username from the database too ?
 	 * @throws	SQLException				SQL failure
 	 * @throws	IllegalArgumentException	Unknown setting
 	 */
-	private void fillPlayerData(PlayerData playerData, ResultSet resultSet, boolean fillAllData)
+	private void fillPlayerData(PlayerManager playerManager, ResultSet resultSet, boolean fillAllData)
 		throws SQLException, IllegalArgumentException
 	{
+		final PlayerData playerData = playerManager.getData();
+
 		if (fillAllData) {
 			playerData.setUniqueId(resultSet.getString("uuid"));
 			playerData.setUsername(resultSet.getString("username"));
@@ -80,25 +86,26 @@ public class AccountGetter
 		playerData.setHashCoins(resultSet.getInt("hashCoins"));
 
 		this.setPlayerRank(playerData, resultSet);
-		this.setPlayerSettings(playerData, resultSet);
+		this.setPlayerSettings(playerManager, resultSet);
 	}
 	
 	/**
 	 * Gets a player's data from the SQL database and
 	 * fills up a PlayerData with the fetched data.
 	 *
-	 * @param	playerData					Player's data
+	 * @param	playerManager				Player's manager
 	 * @param	fillAllData					Should fetch UUID and username from the database too ?
 	 * @throws	SQLException				SQL failure
 	 * @throws	NoSuchFieldException		No account found
 	 * @throws	IllegalArgumentException	Unknown setting
 	 */
-	public void getPlayerAccount(PlayerData playerData, boolean fillAllData)
+	public void getPlayerAccount(PlayerManager playerManager, boolean fillAllData)
 		throws SQLException, NoSuchFieldException, IllegalArgumentException
 	{
-		PreparedStatement statement;
-		ResultSet resultSet;
-		String query = "SELECT * FROM players " +
+		final PlayerData playerData = playerManager.getData();
+		final PreparedStatement statement;
+		final ResultSet resultSet;
+		final String query = "SELECT * FROM players " +
 			"JOIN ranks ON ranks.uuid = players.rankUuid " +
 			"JOIN settings ON settings.uuid = players.uuid " +
 			"WHERE players." + (fillAllData ? "username" : "uuid") + " = ?;";
@@ -114,7 +121,7 @@ public class AccountGetter
 		if (!resultSet.next())
 			throw new NoSuchFieldException();
 
-		this.fillPlayerData(playerData, resultSet, fillAllData);
+		this.fillPlayerData(playerManager, resultSet, fillAllData);
 
 		resultSet.close();
 		statement.close();

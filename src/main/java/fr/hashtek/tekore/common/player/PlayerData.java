@@ -2,10 +2,7 @@ package fr.hashtek.tekore.common.player;
 
 import java.sql.Timestamp;
 
-import fr.hashtek.tekore.bukkit.Tekore;
-import fr.hashtek.tekore.bungee.Tekord;
 import fr.hashtek.tekore.common.Rank;
-import fr.hashtek.tekore.common.sql.SQLManager;
 
 /**
  * PlayerData aims to store some data of a player.
@@ -15,8 +12,6 @@ import fr.hashtek.tekore.common.sql.SQLManager;
 public class PlayerData
 {
 	
-	private Object player;
-
 	private String uuid;
 	private String username;
 	
@@ -28,12 +23,7 @@ public class PlayerData
 	private int coins;
 	private int hashCoins;
 
-	private final PlayerSettings playerSettings;
-	private PlayerManager playerManager;
 
-	private SQLManager sql;
-	
-	
 	/**
 	 * Creates an instance of PlayerData for an unknown-type player.
 	 * Setups SQLManager based on player type (Bungee or Bukkit).
@@ -42,21 +32,17 @@ public class PlayerData
 	 */
 	public PlayerData(Object player) throws NoClassDefFoundError
 	{
-		this.player = player;
-		
 		try {
-			this.setBukkitPlayer();
+			this.setAsBukkitPlayer(player);
 		} catch (NoClassDefFoundError unused) {
 			try {
-				this.setBungeePlayer();
+				this.setAsBungeePlayer(player);
 			} catch (NoClassDefFoundError unused1) {
 				throw new NoClassDefFoundError("Neither Bukkit nor Bungee.");
 			}
 		}
 		
 		this.setUniqueId(this.uuid);
-
-		this.playerSettings = new PlayerSettings();
 	}
 	
 	/**
@@ -68,38 +54,31 @@ public class PlayerData
 	public PlayerData(String username)
 	{
 		this.username = username;
-		this.playerSettings = new PlayerSettings();
 	}
 	
 	
 	/**
 	 * Fills up PlayerData using Bukkit's API (used only if player is Bukkit).
 	 */
-	private void setBukkitPlayer() throws NoClassDefFoundError
+	private void setAsBukkitPlayer(Object player) throws NoClassDefFoundError
 	{
-		if (player instanceof org.bukkit.entity.Player) {
-			final Tekore core = Tekore.getInstance();
-
-            this.uuid = ((org.bukkit.entity.Player) player).getUniqueId().toString();
-			this.username = ((org.bukkit.entity.Player) player).getName();
-			this.sql = core.getSQLManager();
-			this.playerManager = new PlayerManager(core, (org.bukkit.entity.Player) this.player);
-		} else
+		if (!(player instanceof org.bukkit.entity.Player))
 			throw new NoClassDefFoundError("Not Bukkit.");
+
+		this.uuid = ((org.bukkit.entity.Player) player).getUniqueId().toString();
+		this.username = ((org.bukkit.entity.Player) player).getName();
 	}
-	
+
 	/**
 	 * Fills up PlayerData using BungeeCord's API (used only if player is Bungee).
 	 */
-	private void setBungeePlayer() throws NoClassDefFoundError
+	private void setAsBungeePlayer(Object player) throws NoClassDefFoundError
 	{
-		if (player instanceof net.md_5.bungee.api.connection.ProxiedPlayer) {
-            this.uuid = ((net.md_5.bungee.api.connection.ProxiedPlayer) player).getUniqueId().toString();
-			this.username = ((net.md_5.bungee.api.connection.ProxiedPlayer) player).getName();
-			this.sql = Tekord.getInstance().getSQLManager();
-			this.playerManager = null;
-		} else
+		if (!(player instanceof net.md_5.bungee.api.connection.ProxiedPlayer))
 			throw new NoClassDefFoundError("Not Bungee.");
+
+		this.uuid = ((net.md_5.bungee.api.connection.ProxiedPlayer) player).getUniqueId().toString();
+		this.username = ((net.md_5.bungee.api.connection.ProxiedPlayer) player).getName();
 	}
 	
 	
@@ -159,33 +138,9 @@ public class PlayerData
 		return this.hashCoins;
 	}
 
-	/**
-	 * @return	Player's settings
-	 */
-	public PlayerSettings getPlayerSettings()
-	{
-		return this.playerSettings;
-	}
 
 	/**
-	 * @return	Player's manager
-	 */
-	public PlayerManager getPlayerManager()
-	{
-		return this.playerManager;
-	}
-	
-	/**
-	 * @return	Associated SQL manager
-	 */
-	public SQLManager getSQLManager()
-	{
-		return this.sql;
-	}
-	
-	
-	/**
-	 * @param	uuid	UUID
+	 * @param	uuid	Player's new UUID
 	 */
 	public void setUniqueId(String uuid)
 	{
@@ -193,7 +148,7 @@ public class PlayerData
 	}
 	
 	/**
-	 * @param	username	Username
+	 * @param	username	Player's new username
 	 */
 	public void setUsername(String username)
 	{
@@ -201,7 +156,7 @@ public class PlayerData
 	}
 	
 	/**
-	 * @param	createdAt	Timestamp
+	 * @param	createdAt	Player's new account creation timestamp
 	 */
 	public void setCreatedAt(Timestamp createdAt)
 	{
@@ -209,7 +164,7 @@ public class PlayerData
 	}
 	
 	/**
-	 * @param	lastUpdate	Last update
+	 * @param	lastUpdate	Player's new account last update timestamp
 	 */
 	public void setLastUpdate(Timestamp lastUpdate)
 	{
@@ -217,7 +172,7 @@ public class PlayerData
 	}
 	
 	/**
-	 * @param	rank	Rank
+	 * @param	rank	Player's rank
 	 */
 	public void setRank(Rank rank)
 	{
@@ -225,7 +180,7 @@ public class PlayerData
 	}
 
 	/**
-	 * @param	coins	Coins
+	 * @param	coins	Player's new amount of coins
 	 */
 	public void setCoins(int coins)
 	{
@@ -233,7 +188,7 @@ public class PlayerData
 	}
 
 	/**
-	 * @param	hashCoins	HashCoins
+	 * @param	hashCoins	Player's new amount of HashCoins
 	 */
 	public void setHashCoins(int hashCoins)
 	{

@@ -1,5 +1,6 @@
 package fr.hashtek.tekore.bungee.listener;
 
+import java.io.InvalidClassException;
 import java.sql.SQLException;
 
 import fr.hashtek.hasherror.HashError;
@@ -7,6 +8,7 @@ import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
 import fr.hashtek.tekore.bungee.Tekord;
 import fr.hashtek.tekore.common.player.PlayerData;
+import fr.hashtek.tekore.common.player.PlayerManager;
 import fr.hashtek.tekore.common.sql.account.AccountManager;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -39,15 +41,17 @@ public class ListenerLogin implements Listener, HashLoggable
 	@EventHandler
 	public void onPostLogin(PostLoginEvent event)
 	{
-		AccountManager accountManager = this.cord.getAccountManager();
+		final AccountManager accountManager = this.cord.getAccountManager();
 		
-		ProxiedPlayer player = event.getPlayer();
-		PlayerData playerData;
+		final ProxiedPlayer player = event.getPlayer();
+		final PlayerManager playerManager;
+		final PlayerData playerData;
 		
 		this.logger.info(this, "\"" + player.getName() + "\" logged in, launching login sequence...");
 		
 		try {
-			playerData = new PlayerData(player);
+			playerManager = new PlayerManager(player);
+			playerData = playerManager.getData();
 		} catch (Exception exception) {
 			HashError.PD_UNKNOWN_ENTITY
 				.log(this.cord.getHashLogger(), this, exception, player.getName())
@@ -56,7 +60,7 @@ public class ListenerLogin implements Listener, HashLoggable
 		}
 
 		try {
-			accountManager.getPlayerAccount(playerData);
+			accountManager.getPlayerAccount(playerManager);
 		} catch (NoSuchFieldException unused) {
 			try {
 				accountManager.createPlayerAccount(playerData);
@@ -73,11 +77,14 @@ public class ListenerLogin implements Listener, HashLoggable
 			return;
 		}
 		
-		this.cord.addPlayerData(player, playerData);
+		this.cord.addPlayerManager(player, playerManager);
 
-		final ServerInfo lobbyServer = this.cord.getProxy().getServerInfo("lobby01"); // FIXME: MAGIC VALUE!!
-		player.connect(lobbyServer);
-		
+		try {
+			playerManager.sendToServer("lobby01");
+		} catch (InvalidClassException exception) {
+			// TODO: wtf
+		}
+
 		logger.info(this, "Login sequence successfully executed for \"" + playerData.getUsername() + "\".");
 	}
 	

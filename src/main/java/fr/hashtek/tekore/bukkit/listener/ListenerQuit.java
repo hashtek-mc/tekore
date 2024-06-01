@@ -34,12 +34,12 @@ public class ListenerQuit implements Listener, HashLoggable
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event)
 	{
-		Player player = event.getPlayer();
+		final Player player = event.getPlayer();
 		
 		this.logger.info(this, "\"" + player.getName() + "\" logged out, launching logout sequence...");
 
-		this.core.updatePlayerData(player, this);
-		this.core.removePlayerData(player);
+		this.core.updatePlayerAccount(player, this);
+		this.core.removePlayerManager(player);
 		
 		logger.info(this, "Logout sequence successfully executed for \"" + player.getName() + "\".");
 	}

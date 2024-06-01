@@ -52,9 +52,9 @@ public class CommandPing extends Command implements HashLoggable
         if (!(sender instanceof ProxiedPlayer))
             return;
 
-        ProxiedPlayer player = (ProxiedPlayer) sender;
-        int playerPing = player.getPing();
-        ChatColor pingColor = this.getPingColor(playerPing);
+        final ProxiedPlayer player = (ProxiedPlayer) sender;
+        final int playerPing = player.getPing();
+        final ChatColor pingColor = this.getPingColor(playerPing);
 
         player.sendMessage(new TextComponent(ChatColor.AQUA + "Ping: " + pingColor + playerPing + "ms"));
     }

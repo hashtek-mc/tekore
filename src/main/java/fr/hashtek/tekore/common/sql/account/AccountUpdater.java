@@ -6,7 +6,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 
 import fr.hashtek.tekore.common.player.PlayerData;
-import fr.hashtek.tekore.common.player.PlayerSettings;
+import fr.hashtek.tekore.common.player.PlayerManager;
+import fr.hashtek.tekore.common.player.PlayerSettingsManager;
 
 public class AccountUpdater
 {
@@ -28,18 +29,19 @@ public class AccountUpdater
 	/**
 	 * Updates a player's account in the SQL database.
 	 * 
-	 * @param	playerData		Player's data
+	 * @param	playerManager	Player's manager
 	 * @throws	SQLException	SQL failure
 	 */
-	public void updatePlayerAccount(PlayerData playerData)
+	public void updatePlayerAccount(PlayerManager playerManager)
 		throws SQLException
 	{
-		Timestamp now = new Timestamp(System.currentTimeMillis());
+		final PlayerData playerData = playerManager.getData();
+		final Timestamp now = new Timestamp(System.currentTimeMillis());
 
-		PlayerSettings playerSettings = playerData.getPlayerSettings();
+		final PlayerSettingsManager playerSettingsManager = playerManager.getSettingsManager();
 
-		PreparedStatement statement;
-		String query = "UPDATE players " +
+		final PreparedStatement statement;
+		final String query = "UPDATE players " +
 			"JOIN settings ON settings.uuid = players.uuid " +
 			"SET " +
 
@@ -50,8 +52,10 @@ public class AccountUpdater
 			"players.hashCoins = ?, " +
 
 			"settings.showLobbyPlayers = ?, " +
+			"settings.privateMessages = ?, " +
 			"settings.friendRequests = ?, " +
-			"settings.privateMessages = ? " +
+			"settings.partyRequests = ?, " +
+			"settings.guildRequests = ? " +
 
 			"WHERE players.uuid = ?;";
 
@@ -63,11 +67,13 @@ public class AccountUpdater
 		statement.setInt(4, playerData.getCoins());
 		statement.setInt(5, playerData.getHashCoins());
 
-		statement.setBoolean(6, playerSettings.getLobbyPlayersSetting());
-		statement.setString(7, playerSettings.getFriendRequestsSetting().name());
-		statement.setString(8, playerSettings.getPrivateMessagesSetting().name());
+		statement.setString(6, playerSettingsManager.getLobbyPlayersSetting().name());
+		statement.setString(7, playerSettingsManager.getPrivateMessagesSetting().name());
+		statement.setString(8, playerSettingsManager.getFriendRequestsSetting().name());
+		statement.setString(9, playerSettingsManager.getPartyRequestsSetting().name());
+		statement.setString(10, playerSettingsManager.getGuildRequestsSetting().name());
 
-		statement.setString(9, playerData.getUniqueId());
+		statement.setString(11, playerData.getUniqueId());
 		
 		statement.executeUpdate();
 		

@@ -9,6 +9,7 @@ import fr.hashtek.hasherror.HashError;
 import fr.hashtek.tekore.bukkit.command.logs.CommandLogs;
 import fr.hashtek.tekore.bukkit.command.whoami.CommandWhoAmI;
 import fr.hashtek.tekore.common.Rank;
+import fr.hashtek.tekore.common.player.PlayerManager;
 import fr.hashtek.tekore.common.sql.rank.RankGetter;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.bukkit.entity.Player;
@@ -20,7 +21,6 @@ import fr.hashtek.hashlogger.HashLogger;
 import fr.hashtek.hashlogger.LogLevel;
 import fr.hashtek.tekore.bukkit.listener.ListenerJoin;
 import fr.hashtek.tekore.bukkit.listener.ListenerQuit;
-import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.sql.SQLManager;
 import fr.hashtek.tekore.common.sql.account.AccountManager;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -41,11 +41,11 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 
 	private HashConfig hashConfig;
 	
-	private final HashMap<Player, PlayerData> playersData = new HashMap<Player, PlayerData>();
+	private final HashMap<Player, PlayerManager> playersManager = new HashMap<Player, PlayerManager>();
 
 	private ArrayList<Rank> ranks;
 
-	private final List<String> channels = Arrays.asList(
+	private final List<String> messagingChannels = Arrays.asList(
 		"BungeeCord"
 	);
 
@@ -231,7 +231,7 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 	{
 		this.logger.info(this, "Loading messenger...");
 
-		for (String channel : channels) {
+		for (String channel : messagingChannels) {
 			this.getServer().getMessenger().registerOutgoingPluginChannel(this, channel);
 			this.getServer().getMessenger().registerIncomingPluginChannel(this, channel, this);
 			this.logger.info(this, "\tChannel \"" + channel + "\" registered!");
@@ -281,6 +281,7 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 
 	/**
 	 * Called when Tekore receives a message through messenger.
+	 * TODO: Finish this function.
 	 *
 	 * @param	channel		Channel that the message was sent through.
 	 * @param	player		Source of the message.
@@ -288,60 +289,62 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 	 */
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message)
-	{}
-	
-	/**
-	 * Adds a player's data to the main HashMap.
-	 * 
-	 * @param	player		Player
-	 * @param	playerData	Player's data
-	 */
-	public void addPlayerData(Player player, PlayerData playerData)
 	{
-		this.removePlayerData(player);
-		this.playersData.put(player, playerData);
+		// ...
 	}
 	
 	/**
-	 * Remove a player's data from the main HashMap.
+	 * Adds a player's manager to the main HashMap.
+	 * 
+	 * @param	player			Player
+	 * @param	playerManager	Player's manager
+	 */
+	public void addPlayerManager(Player player, PlayerManager playerManager)
+	{
+		this.removePlayerManager(player);
+		this.playersManager.put(player, playerManager);
+	}
+	
+	/**
+	 * Remove a player's manager from the main HashMap.
 	 * 
 	 * @param	player	Player
 	 */
-	public void removePlayerData(Player player)
+	public void removePlayerManager(Player player)
 	{
-        this.playersData.remove(player);
+        this.playersManager.remove(player);
 	}
 
 	/**
-	 * Saves a player's data to the database (updates it).
+	 * Saves a player's manager to the database (updates it).
 	 * This function must be only used in static methods.
-	 * Prefer using {@link Tekore#updatePlayerData(Player, HashLoggable)}
+	 * Prefer using {@link Tekore#updatePlayerAccount(Player, HashLoggable)}
 	 *
 	 * @param	player	Player
 	 * @param	author	Author's filename
 	 */
-	public void updatePlayerData(Player player, String author)
+	public void updatePlayerAccount(Player player, String author)
 	{
-		PlayerData playerData = this.getPlayerData(player);
+		final PlayerManager playerManager = this.getPlayerManager(player);
 
         try {
-            this.getAccountManager().updatePlayerAccount(playerData);
+            this.getAccountManager().updatePlayerAccount(playerManager);
         } catch (SQLException exception) {
 			HashError.PD_UPDATE_FAIL
-				.log(this.logger, this, exception, playerData.getUniqueId(), author)
+				.log(this.logger, this, exception, playerManager.getData().getUniqueId(), author)
 				.sendToPlayer(player);
         }
     }
 
 	/**
-	 * Saves a player's data to the database (updates it).
+	 * Saves a player's manager to the database (updates it).
 	 *
 	 * @param	player	Player
 	 * @param	author	Author's filename
 	 */
-	public void updatePlayerData(Player player, HashLoggable author)
+	public void updatePlayerAccount(Player player, HashLoggable author)
 	{
-		this.updatePlayerData(player, author.getClass().getSimpleName());
+		this.updatePlayerAccount(player, author.getClass().getSimpleName());
 	}
 
 	/**
@@ -410,14 +413,14 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 	}
 	
 	/**
-	 * Returns the PlayerData linked to a Player.
+	 * Returns the PlayerManager linked to a Player.
 	 * 
 	 * @param	player	Player
-	 * @return	Player's data
+	 * @return	Player's manager
 	 */
-	public PlayerData getPlayerData(Player player)
+	public PlayerManager getPlayerManager(Player player)
 	{
-		return this.playersData.get(player);
+		return this.playersManager.get(player);
 	}
 
 	/* Move the functions below in a dedicated class or something. */
