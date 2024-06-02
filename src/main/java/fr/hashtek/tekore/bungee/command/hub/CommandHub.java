@@ -9,22 +9,21 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
-import java.io.InvalidClassException;
-
 public class CommandHub extends Command
 {
 
-    private final Tekord core;
+    private final Tekord cord;
+
 
     /**
      * Creates a new instance of CommandHub.
      * Used to register the command.
      */
-    public CommandHub(Tekord core)
+    public CommandHub(Tekord cord)
     {
         super("hub", null, "lobby", "l");
 
-        this.core = core;
+        this.cord = cord;
     }
 
 
@@ -43,7 +42,7 @@ public class CommandHub extends Command
         }
 
         final ProxiedPlayer player = (ProxiedPlayer) sender;
-        final PlayerManager playerManager = this.core.getPlayerManager(player);
+        final PlayerManager playerManager = this.cord.getPlayerManager(player);
         final ServerInfo playerServer = player.getServer().getInfo();
 
         if (playerServer.getName().startsWith("lobby")) {
@@ -51,10 +50,6 @@ public class CommandHub extends Command
             return;
         }
 
-        try {
-            playerManager.sendToServer("lobby01");
-        } catch (InvalidClassException exception) {
-            // TODO: Log
-        }
+        playerManager.sendToServer("lobby01");
     }
 }
