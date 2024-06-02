@@ -1,6 +1,5 @@
 package fr.hashtek.tekore.bungee.listener;
 
-import java.io.InvalidClassException;
 import java.sql.SQLException;
 
 import fr.hashtek.hasherror.HashError;
@@ -10,7 +9,6 @@ import fr.hashtek.tekore.bungee.Tekord;
 import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.player.PlayerManager;
 import fr.hashtek.tekore.common.sql.account.AccountManager;
-import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -79,11 +77,7 @@ public class ListenerLogin implements Listener, HashLoggable
 		
 		this.cord.addPlayerManager(player, playerManager);
 
-		try {
-			playerManager.sendToServer("lobby01");
-		} catch (InvalidClassException exception) {
-			// TODO: wtf
-		}
+		playerManager.sendToServer("lobby01");
 
 		logger.info(this, "Login sequence successfully executed for \"" + playerData.getUsername() + "\".");
 	}
