@@ -1,12 +1,10 @@
 package fr.hashtek.tekore.common.player;
 
-import fr.hashtek.tekore.bukkit.Tekore;
-import fr.hashtek.tekore.bungee.Tekord;
-
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InvalidClassException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class PlayerManager
 {
@@ -20,7 +18,6 @@ public class PlayerManager
     public PlayerManager(Object player) throws NoClassDefFoundError
     {
         this.player = player;
-
         this.data = new PlayerData(this.player);
         this.settingsManager = new PlayerSettingsManager();
     }
@@ -33,88 +30,59 @@ public class PlayerManager
     }
 
 
-    /**
-     * Sends the player to a server given its name.
-     *
-     * @param   serverName  Server's name
-     */
-    public void sendToServer(String serverName)
-        throws InvalidClassException
+    public void sendToServer(String serverName) throws NoClassDefFoundError
     {
-        assert player != null;
-
-        if (this.isBukkit()) {
-            final Tekore core = Tekore.getInstance();
-
+        try {
+            this.sendToServerBungee(serverName);
+        } catch (NoClassDefFoundError unused) {
             try {
-                final ByteArrayOutputStream b = new ByteArrayOutputStream();
-                final DataOutputStream out = new DataOutputStream(b);
-
-                out.writeUTF("Connect");
-                out.writeUTF(serverName);
-
-                ((org.bukkit.entity.Player) player)
-                    .sendPluginMessage(core, "BungeeCord", b.toByteArray());
-
-                b.close();
-                out.close();
-            } catch (IOException exception) {
-                // Log HashError
+                this.sendToServerBukkit(serverName);
+            } catch (NoClassDefFoundError exception) {
+                throw new NoClassDefFoundError("Player type is unknown, can't send to server.");
             }
-            return;
         }
+    }
 
-        if (this.isBungee()) {
-            final Tekord cord = Tekord.getInstance();
-            final net.md_5.bungee.api.config.ServerInfo server =
-                cord.getProxy().getServerInfo(serverName);
+    private void sendToServerBukkit(String serverName)
+        throws NoClassDefFoundError
+    {
+        if (!(this.player instanceof org.bukkit.entity.Player))
+            throw new NoClassDefFoundError("Not Bukkit.");
 
-            this.getBungeePlayer().connect(server);
-            return;
+        try {
+            final ByteArrayOutputStream b = new ByteArrayOutputStream();
+            final DataOutputStream out = new DataOutputStream(b);
+
+            out.writeUTF("Connect");
+            out.writeUTF(serverName);
+
+            final Class<?> bukkitPlayerClass = this.player.getClass();
+            final Method sendPluginMessageMethod = bukkitPlayerClass.getMethod("sendPluginMessage",
+                Class.forName("org.bukkit.plugin.Plugin"), String.class, byte[].class);
+
+            final Class<?> tekoreClass = Class.forName("fr.hashtek.tekore.bukkit.Tekore");
+            final Method getInstanceMethod = tekoreClass.getMethod("getInstance");
+            final Object tekoreInstance = getInstanceMethod.invoke(null);
+
+            sendPluginMessageMethod.invoke(this.player, tekoreInstance, "BungeeCord", b.toByteArray());
+
+            b.close();
+            out.close();
+        } catch (IOException exception) {
+            // TODO: Log HashError
+        } catch (ClassNotFoundException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+            // TODO: Log HashError
         }
-
-        throw new InvalidClassException("Player type is unknown.");
     }
 
-
-    /**
-     * @return  Linked player as Bukkit.
-     */
-    public org.bukkit.entity.Player getBukkitPlayer()
-        throws InvalidClassException
+    private void sendToServerBungee(String serverName)
+        throws NoClassDefFoundError
     {
-        if (!this.isBukkit())
-            throw new InvalidClassException("Linked player is not Bukkit.");
-        return (org.bukkit.entity.Player) this.player;
-    }
+        if (!(this.player instanceof net.md_5.bungee.api.connection.ProxiedPlayer))
+            throw new NoClassDefFoundError("Not Bungee.");
 
-    /**
-     * @return  Linked player as Bungee.
-     */
-    public net.md_5.bungee.api.connection.ProxiedPlayer getBungeePlayer()
-        throws InvalidClassException
-    {
-        if (this.isBungee())
-            throw new InvalidClassException("Linked player is not Bungee.");
-        return (net.md_5.bungee.api.connection.ProxiedPlayer) this.player;
-    }
-
-    /**
-     * @return  True if linked player is Bukkit.
-     */
-    public boolean isBukkit()
-    {
-        return this.player != null &&
-            this.player instanceof org.bukkit.entity.Player;
-    }
-
-    /**
-     * @return  True if linked player is Bungee.
-     */
-    public boolean isBungee()
-    {
-        return this.player != null &&
-            this.player instanceof net.md_5.bungee.api.connection.ProxiedPlayer;
+        ((net.md_5.bungee.api.connection.ProxiedPlayer) this.player).connect(
+            (fr.hashtek.tekore.bungee.Tekord.getInstance()).getProxy().getServerInfo(serverName));
     }
 
 

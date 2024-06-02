@@ -37,12 +37,10 @@ public class PlayerData
 		} catch (NoClassDefFoundError unused) {
 			try {
 				this.setAsBungeePlayer(player);
-			} catch (NoClassDefFoundError unused1) {
+			} catch (NoClassDefFoundError exception) {
 				throw new NoClassDefFoundError("Neither Bukkit nor Bungee.");
 			}
 		}
-		
-		this.setUniqueId(this.uuid);
 	}
 	
 	/**
@@ -56,11 +54,12 @@ public class PlayerData
 		this.username = username;
 	}
 	
-	
+
 	/**
 	 * Fills up PlayerData using Bukkit's API (used only if player is Bukkit).
 	 */
-	private void setAsBukkitPlayer(Object player) throws NoClassDefFoundError
+	private void setAsBukkitPlayer(Object player)
+		throws NoClassDefFoundError
 	{
 		if (!(player instanceof org.bukkit.entity.Player))
 			throw new NoClassDefFoundError("Not Bukkit.");
@@ -72,7 +71,8 @@ public class PlayerData
 	/**
 	 * Fills up PlayerData using BungeeCord's API (used only if player is Bungee).
 	 */
-	private void setAsBungeePlayer(Object player) throws NoClassDefFoundError
+	private void setAsBungeePlayer(Object player)
+		throws NoClassDefFoundError
 	{
 		if (!(player instanceof net.md_5.bungee.api.connection.ProxiedPlayer))
 			throw new NoClassDefFoundError("Not Bungee.");
@@ -80,8 +80,8 @@ public class PlayerData
 		this.uuid = ((net.md_5.bungee.api.connection.ProxiedPlayer) player).getUniqueId().toString();
 		this.username = ((net.md_5.bungee.api.connection.ProxiedPlayer) player).getName();
 	}
-	
-	
+
+
 	/**
 	 * @return	Player's UUID
 	 */
