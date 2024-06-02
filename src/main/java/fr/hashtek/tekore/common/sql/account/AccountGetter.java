@@ -86,7 +86,8 @@ public class AccountGetter
 		playerData.setHashCoins(resultSet.getInt("hashCoins"));
 
 		this.setPlayerRank(playerData, resultSet);
-		this.setPlayerSettings(playerManager, resultSet);
+		if (playerManager.getSettingsManager() != null)
+			this.setPlayerSettings(playerManager, resultSet);
 	}
 	
 	/**
