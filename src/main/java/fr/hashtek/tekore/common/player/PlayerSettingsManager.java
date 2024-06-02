@@ -1,8 +1,12 @@
 package fr.hashtek.tekore.common.player;
 
+import fr.hashtek.tekore.common.player.settings.PlayerSettingValue;
 import fr.hashtek.tekore.common.player.settings.categories.SettingEFFN;
 import fr.hashtek.tekore.common.player.settings.categories.SettingEFN;
 import fr.hashtek.tekore.common.player.settings.categories.SettingEN;
+
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class PlayerSettingsManager
 {
@@ -10,8 +14,8 @@ public class PlayerSettingsManager
     private SettingEN showLobbyPlayers;
     private SettingEFN privateMessagesSetting;
     private SettingEFFN friendRequestsSetting;
-    private SettingEFFN partyRequestsSetting;
-    private SettingEFFN guildRequestsSetting;
+    private SettingEFN partyRequestsSetting;
+    private SettingEFN guildRequestsSetting;
 
 
     /**
@@ -41,7 +45,7 @@ public class PlayerSettingsManager
     /**
      * @return  Party requests setting
      */
-    public SettingEFFN getPartyRequestsSetting()
+    public SettingEFN getPartyRequestsSetting()
     {
         return partyRequestsSetting;
     }
@@ -49,7 +53,7 @@ public class PlayerSettingsManager
     /**
      * @return  Guild requests setting
      */
-    public SettingEFFN getGuildRequestsSetting()
+    public SettingEFN getGuildRequestsSetting()
     {
         return guildRequestsSetting;
     }
@@ -81,7 +85,7 @@ public class PlayerSettingsManager
     /**
      * @param   partyRequestsSetting   Party requests setting
      */
-    public void setPartyRequestsSetting(SettingEFFN partyRequestsSetting)
+    public void setPartyRequestsSetting(SettingEFN partyRequestsSetting)
     {
         this.partyRequestsSetting = partyRequestsSetting;
     }
@@ -89,7 +93,7 @@ public class PlayerSettingsManager
     /**
      * @param   guildRequestsSetting   Guild requests setting
      */
-    public void setGuildRequestsSetting(SettingEFFN guildRequestsSetting)
+    public void setGuildRequestsSetting(SettingEFN guildRequestsSetting)
     {
         this.guildRequestsSetting = guildRequestsSetting;
     }

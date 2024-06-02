@@ -23,6 +23,12 @@ public enum SettingEFFN implements PlayerSettingValue
     private final String color;
 
 
+    /**
+     * Creates a new EFFN typed Setting.
+     *
+     * @param   name    Setting name
+     * @param   color   Setting color
+     */
     SettingEFFN(String name, String color)
     {
         this.name = name;
@@ -40,6 +46,12 @@ public enum SettingEFFN implements PlayerSettingValue
     public String getColor()
     {
         return this.color;
+    }
+
+    @Override
+    public SettingEFFN next()
+    {
+        return values()[(ordinal() + 1) % values().length];
     }
 
 }

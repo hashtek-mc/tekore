@@ -56,8 +56,8 @@ public class AccountGetter
 		settingsManager.setLobbyPlayersSetting(SettingEN.valueOf(resultSet.getString("settings.showLobbyPlayers")));
 		settingsManager.setPrivateMessagesSetting(SettingEFN.valueOf(resultSet.getString("settings.privateMessages")));
 		settingsManager.setFriendRequestsSetting(SettingEFFN.valueOf(resultSet.getString("settings.friendRequests")));
-		settingsManager.setPartyRequestsSetting(SettingEFFN.valueOf(resultSet.getString("settings.partyRequests")));
-		settingsManager.setGuildRequestsSetting(SettingEFFN.valueOf(resultSet.getString("settings.guildRequests")));
+		settingsManager.setPartyRequestsSetting(SettingEFN.valueOf(resultSet.getString("settings.partyRequests")));
+		settingsManager.setGuildRequestsSetting(SettingEFN.valueOf(resultSet.getString("settings.guildRequests")));
 	}
 
 	/**

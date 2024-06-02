@@ -20,6 +20,12 @@ public enum SettingEN implements PlayerSettingValue
     private final String color;
 
 
+    /**
+     * Creates a new EN typed Setting.
+     *
+     * @param   name    Setting name
+     * @param   color   Setting color
+     */
     SettingEN(String name, String color)
     {
         this.name = name;
@@ -37,6 +43,12 @@ public enum SettingEN implements PlayerSettingValue
     public String getColor()
     {
         return this.color;
+    }
+
+    @Override
+    public SettingEN next()
+    {
+        return values()[(ordinal() + 1) % values().length];
     }
 
 }
