@@ -9,3 +9,7 @@ commands:
   logs:
     description: ""
     usage: "/logs [<category>] [<find>]"
+  friend:
+    aliases: [f]
+    description: "Système d'amis"
+    usage: "/friend [list [<page>]] [gui] [add <name>] [remove/rm <name>]"
