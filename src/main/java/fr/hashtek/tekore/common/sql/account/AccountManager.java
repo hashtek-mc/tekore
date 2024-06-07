@@ -75,4 +75,29 @@ public class AccountManager
 		this.accountGetter.getPlayerAccount(playerManager, true);
 	}
 
+
+	/**
+	 * @return	Account creator
+	 */
+	public AccountCreator getAccountCreator()
+	{
+		return this.accountCreator;
+	}
+
+	/**
+	 * @return	Account getter
+	 */
+	public AccountGetter getAccountGetter()
+	{
+		return this.accountGetter;
+	}
+
+	/**
+	 * @return	Account updater
+	 */
+	public AccountUpdater getAccountUpdater()
+	{
+		return this.accountUpdater;
+	}
+
 }

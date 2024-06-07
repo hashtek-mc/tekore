@@ -60,6 +60,7 @@ public class ListenerJoin implements Listener, HashLoggable
 		
 		try {
 			accountManager.getPlayerAccount(playerManager);
+			accountManager.getAccountGetter().fillPlayerFriends(playerManager, this.core.getFriendLinks());
 		} catch (NoSuchFieldException unused) {
 			HashError.PD_CANNOT_CREATE_ACCOUNT
 				.log(this.logger, this, playerData.getUniqueId())
@@ -71,7 +72,7 @@ public class ListenerJoin implements Listener, HashLoggable
 				.kickPlayer(player);
 			return;
 		}
-		
+
 		this.core.addPlayerManager(player, playerManager);
 		
 		logger.info(this, "Login sequence successfully executed for \"" + playerData.getUsername() + "\".");

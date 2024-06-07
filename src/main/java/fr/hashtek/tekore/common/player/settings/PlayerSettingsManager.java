@@ -1,12 +1,8 @@
-package fr.hashtek.tekore.common.player;
+package fr.hashtek.tekore.common.player.settings;
 
-import fr.hashtek.tekore.common.player.settings.PlayerSettingValue;
 import fr.hashtek.tekore.common.player.settings.categories.SettingEFFN;
 import fr.hashtek.tekore.common.player.settings.categories.SettingEFN;
 import fr.hashtek.tekore.common.player.settings.categories.SettingEN;
-
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class PlayerSettingsManager
 {

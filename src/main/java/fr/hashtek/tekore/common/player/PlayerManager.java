@@ -1,5 +1,8 @@
 package fr.hashtek.tekore.common.player;
 
+import fr.hashtek.tekore.common.player.friend.PlayerFriendManager;
+import fr.hashtek.tekore.common.player.settings.PlayerSettingsManager;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -13,20 +16,25 @@ public class PlayerManager
 
     private final PlayerData data;
     private final PlayerSettingsManager settingsManager;
+    private final PlayerFriendManager friendManager;
 
 
     public PlayerManager(Object player) throws NoClassDefFoundError
     {
         this.player = player;
+
         this.data = new PlayerData(this.player);
         this.settingsManager = new PlayerSettingsManager();
+        this.friendManager = new PlayerFriendManager();
     }
 
     public PlayerManager(String playerName) throws NoClassDefFoundError
     {
         this.player = null;
+
         this.data = new PlayerData(playerName);
         this.settingsManager = null;
+        this.friendManager = null;
     }
 
 
@@ -71,7 +79,7 @@ public class PlayerManager
         } catch (IOException exception) {
             // TODO: Log HashError
         } catch (ClassNotFoundException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-            // TODO: Log HashError
+            // TODO: Log HashError !!
         }
     }
 
@@ -86,14 +94,28 @@ public class PlayerManager
     }
 
 
+    /**
+     * @return  Player's data
+     */
     public PlayerData getData()
     {
         return this.data;
     }
 
+    /**
+     * @return  Settings manager
+     */
     public PlayerSettingsManager getSettingsManager()
     {
         return this.settingsManager;
+    }
+
+    /**
+     * @return	Friend manager
+     */
+    public PlayerFriendManager getFriendManager()
+    {
+        return this.friendManager;
     }
 
 }

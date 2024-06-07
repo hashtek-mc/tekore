@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 
 import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.player.PlayerManager;
-import fr.hashtek.tekore.common.player.PlayerSettingsManager;
+import fr.hashtek.tekore.common.player.settings.PlayerSettingsManager;
 
 public class AccountUpdater
 {

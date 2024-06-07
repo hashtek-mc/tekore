@@ -1,11 +1,13 @@
 package fr.hashtek.tekore.common.sql.account;
 
 import java.sql.*;
+import java.util.List;
 
 import fr.hashtek.tekore.common.Rank;
 import fr.hashtek.tekore.common.player.PlayerData;
 import fr.hashtek.tekore.common.player.PlayerManager;
-import fr.hashtek.tekore.common.player.PlayerSettingsManager;
+import fr.hashtek.tekore.common.player.friend.PlayerFriendLink;
+import fr.hashtek.tekore.common.player.settings.PlayerSettingsManager;
 import fr.hashtek.tekore.common.player.settings.categories.SettingEFFN;
 import fr.hashtek.tekore.common.player.settings.categories.SettingEFN;
 import fr.hashtek.tekore.common.player.settings.categories.SettingEN;
@@ -36,8 +38,8 @@ public class AccountGetter
 	private void setPlayerRank(PlayerData playerData, ResultSet resultSet)
 		throws SQLException
 	{
-		final RankGetter rankGetter = new RankGetter(this.sqlConnection);
-		final Rank rank = rankGetter.getRankFromResultSet(resultSet, "ranks.");
+		final Rank rank = new RankGetter(this.sqlConnection)
+			.getRankFromResultSet(resultSet, "ranks.");
 
 		playerData.setRank(rank);
 	}
@@ -104,16 +106,17 @@ public class AccountGetter
 		throws SQLException, NoSuchFieldException, IllegalArgumentException
 	{
 		final PlayerData playerData = playerManager.getData();
+		final boolean fromUsername = playerManager.getData().getUniqueId() == null;
 		final PreparedStatement statement;
 		final ResultSet resultSet;
 		final String query = "SELECT * FROM players " +
 			"JOIN ranks ON ranks.uuid = players.rankUuid " +
 			"JOIN settings ON settings.uuid = players.uuid " +
-			"WHERE players." + (fillAllData ? "username" : "uuid") + " = ?;";
+			"WHERE players." + (fromUsername ? "username" : "uuid") + " = ?;";
 		
 		statement = sqlConnection.prepareStatement(query);
 
-		statement.setString(1, fillAllData ? playerData.getUsername() : playerData.getUniqueId());
+		statement.setString(1, fromUsername ? playerData.getUsername() : playerData.getUniqueId());
 		
 		resultSet = statement.executeQuery();
 		
@@ -126,6 +129,21 @@ public class AccountGetter
 
 		resultSet.close();
 		statement.close();
+	}
+
+	/**
+	 * Fills up player's friends list.
+	 *
+	 * @param	playerManager	Player's manager
+	 * @param	friendLinks		General list of friend links
+	 */
+	public void fillPlayerFriends(PlayerManager playerManager, List<PlayerFriendLink> friendLinks)
+	{
+		final String playerUuid = playerManager.getData().getUniqueId();
+
+		for (PlayerFriendLink link : friendLinks)
+			if (link.getReceiverUuid().equals(playerUuid) || link.getSenderUuid().equals(playerUuid))
+				playerManager.getFriendManager().addFriendLink(link);
 	}
 
 }

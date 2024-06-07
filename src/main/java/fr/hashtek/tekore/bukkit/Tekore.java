@@ -6,10 +6,13 @@ import java.util.*;
 
 import fr.hashtek.hashconfig.HashConfig;
 import fr.hashtek.hasherror.HashError;
+import fr.hashtek.tekore.bukkit.command.friend.CommandFriend;
 import fr.hashtek.tekore.bukkit.command.logs.CommandLogs;
 import fr.hashtek.tekore.bukkit.command.whoami.CommandWhoAmI;
 import fr.hashtek.tekore.common.Rank;
 import fr.hashtek.tekore.common.player.PlayerManager;
+import fr.hashtek.tekore.common.player.friend.PlayerFriendLink;
+import fr.hashtek.tekore.common.sql.friends.FriendsGetter;
 import fr.hashtek.tekore.common.sql.rank.RankGetter;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.bukkit.entity.Player;
@@ -29,7 +32,7 @@ import org.simpleyaml.configuration.file.YamlFile;
 public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageListener
 {
 	
-	private static Tekore instance;
+	private static Tekore INSTANCE;
 	private SQLManager sql;
 	private HashLogger logger;
 
@@ -42,6 +45,7 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 	private HashConfig hashConfig;
 	
 	private final HashMap<Player, PlayerManager> playersManager = new HashMap<Player, PlayerManager>();
+	private List<PlayerFriendLink> friendLinks;
 
 	private ArrayList<Rank> ranks;
 
@@ -56,7 +60,7 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 	@Override
 	public void onEnable()
 	{
-		instance = this;
+		INSTANCE = this;
 
 		this.setupConfig();
 		this.setupHashLogger();
@@ -67,9 +71,10 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 		this.setupManagers();
 		this.fetchRanks();
 		this.loadMessenger();
+		this.fetchFriendLinks();
 		this.registerListeners();
 		this.registerCommands();
-	
+
 		this.logger.info(this, "Tekore loaded.");
 	}
 	
@@ -126,9 +131,9 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 	 */
 	private void setupHashLogger()
 	{
-		YamlFile config = this.hashConfig.getYaml();
-		String loggerLevel = config.getString("loggerLevel");
-		LogLevel logLevel;
+		final YamlFile config = this.hashConfig.getYaml();
+		final String loggerLevel = config.getString("loggerLevel");
+		final LogLevel logLevel;
 
 		try {
 			logLevel = LogLevel.valueOf(loggerLevel);
@@ -150,7 +155,7 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 	 */
 	private void loadConfigContent()
 	{
-		YamlFile config = this.hashConfig.getYaml();
+		final YamlFile config = this.hashConfig.getYaml();
 
 		String serverVersion = config.getString("serverInfo.version");
 		String serverIp = config.getString("serverInfo.ip");
@@ -178,7 +183,7 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 	{
 		this.logger.info(this, "Setting up managers...");
 
-		Dotenv sqlEnv = this.hashConfig.getEnv();
+		final Dotenv sqlEnv = this.hashConfig.getEnv();
 
 		try {
 			this.sql = new SQLManager(
@@ -204,13 +209,14 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 	}
 
 	/**
-	 * Fetches all the ranks from the database and stores them in {@link Tekore#ranks}.
+	 * Fetches all the ranks from the database and
+	 * stores them in {@link Tekore#ranks}.
 	 */
 	private void fetchRanks()
 	{
 		this.logger.info(this, "Fetching ranks from the database...");
 
-		RankGetter rankGetter = new RankGetter(this.sql.getConnection());
+		final RankGetter rankGetter = new RankGetter(this.sql.getConnection());
 
 		try {
 			this.ranks = rankGetter.getRanks();
@@ -222,6 +228,29 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 		}
 
 		this.logger.info(this, this.ranks.size() + " ranks fetched from the database.");
+	}
+
+	/**
+	 * Fetches all the friend links from the database and
+	 * stores then in {@link Tekore#friendLinks}.
+	 */
+	private void fetchFriendLinks()
+	{
+		this.logger.info(this, "Fetching friend links from the database...");
+
+		final FriendsGetter friendsGetter = new FriendsGetter(this.sql.getConnection());
+
+		try {
+			this.friendLinks = friendsGetter.getFriendsLinks();
+		} catch (SQLException exception) {
+			HashError.DB_SQL_FAIL.log(this.logger, this, exception);
+			return;
+		} catch (IllegalArgumentException exception) {
+			HashError.UNKNOWN.log(this.logger, this, exception);
+			return;
+		}
+
+		this.logger.info(this, this.friendLinks.size() + " friend links fetched from the database.");
 	}
 
 	/**
@@ -275,6 +304,7 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 
 		this.getCommand("whoami").setExecutor(new CommandWhoAmI(this));
 		this.getCommand("logs").setExecutor(new CommandLogs(this));
+		this.getCommand("friend").setExecutor(new CommandFriend(this));
 
 		this.logger.info(this, "Commands registered!");
 	}
@@ -361,7 +391,7 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 	 */
 	public static Tekore getInstance()
 	{
-		return instance;
+		return INSTANCE;
 	}
 	
 	/**
@@ -423,6 +453,14 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 		return this.playersManager.get(player);
 	}
 
+	/**
+	 * @return	Every stored friend link.
+	 */
+	public List<PlayerFriendLink> getFriendLinks()
+	{
+		return this.friendLinks;
+	}
+
 	/* Move the functions below in a dedicated class or something. */
 
 	/**
@@ -438,7 +476,7 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 	 */
 	public int getLocalNumberOfPlayers()
 	{
-		return this.getServer().getOnlinePlayers().size();
+		return this.getOnlinePlayers().size();
 	}
 
 	/**
