@@ -6,7 +6,7 @@ plugins {
 group = 'fr.hashtek.spigot'
 version = 'R0.0.3-SNAPSHOT'
 
-def hashrc = 'C:\\Users\\Lysandre\\Documents\\Hashtek\\Plugins\\hashrc'
+def hashrc = '/home/shuvly/Hashtek/hashrc'
 def libsFolder = 'libs'
 
 repositories {
@@ -26,7 +26,7 @@ configurations {
 }
 
 dependencies {
-    compileOnly 'org.github.paperspigot:paperspigot-api:1.8.8-R0.1-SNAPSHOT'
+    compileOnly 'com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT'
 
     implementation fileTree(dir: libsFolder, include: ['*.jar'])
 }
@@ -68,7 +68,7 @@ shadowJar {
     exclude '**/BungeeCord.jar'
 
     dependencies {
-        exclude(dependency('org.github.paperspigot:paperspigot-api:1.8.8-R0.1-SNAPSHOT'))
+        exclude(dependency('com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT'))
     }
 
     archiveClassifier.set('')
