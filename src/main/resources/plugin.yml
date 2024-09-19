@@ -2,6 +2,7 @@ name: '${name}'
 author: Lysandre B.
 version: '${version}'
 main: fr.hashtek.tekore.bukkit.Tekore
+api-version: '1.16'
 commands:
   whoami:
     description: "man whoami"
