@@ -31,7 +31,7 @@ dependencies {
     implementation fileTree(dir: libsFolder, include: ['*.jar'])
 }
 
-def targetJavaVersion = 8
+def targetJavaVersion = 16
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
