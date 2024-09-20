@@ -7,7 +7,6 @@ import java.util.*;
 import fr.hashtek.hashconfig.HashConfig;
 import fr.hashtek.hasherror.HashError;
 import fr.hashtek.tekore.bukkit.command.friend.CommandFriend;
-import fr.hashtek.tekore.bukkit.command.logs.CommandLogs;
 import fr.hashtek.tekore.bukkit.command.whoami.CommandWhoAmI;
 import fr.hashtek.tekore.common.Rank;
 import fr.hashtek.tekore.common.player.PlayerManager;
@@ -15,13 +14,13 @@ import fr.hashtek.tekore.common.player.friend.PlayerFriendLink;
 import fr.hashtek.tekore.common.sql.friends.FriendsGetter;
 import fr.hashtek.tekore.common.sql.rank.RankGetter;
 import io.github.cdimascio.dotenv.Dotenv;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
-import fr.hashtek.hashlogger.LogLevel;
 import fr.hashtek.tekore.bukkit.listener.ListenerJoin;
 import fr.hashtek.tekore.bukkit.listener.ListenerQuit;
 import fr.hashtek.tekore.common.sql.SQLManager;
@@ -86,8 +85,9 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 	{
 		this.logger.info(this, "Disabling Tekore...");
 		
-		for (Player player: this.getServer().getOnlinePlayers())
-			player.kickPlayer("Nous revenons dans quelques minutes...");
+		for (Player player: this.getServer().getOnlinePlayers()) {
+			player.kick(Component.text("Nous revenons dans quelques minutes..."));
+		}
 
 		this.unloadMessenger();
 
@@ -125,29 +125,17 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 
 	/**
 	 * Creates an instance of HashLogger.
-	 * This HashLogger instance will be used server-wide, in every plugin that uses Tekore.
 	 * This function doesn't use HashLogger because it is called before the
 	 * initialization of HashLogger. System.err.println is used instead.
 	 */
 	private void setupHashLogger()
 	{
-		final YamlFile config = this.hashConfig.getYaml();
-		final String loggerLevel = config.getString("loggerLevel");
-		final LogLevel logLevel;
-
 		try {
-			logLevel = LogLevel.valueOf(loggerLevel);
+			this.logger = HashLogger.fromEnvConfig(this, this.hashConfig.getEnv());
 		} catch (IllegalArgumentException | NullPointerException exception) {
-			System.err.println(exception instanceof NullPointerException ?
-				"Field \"loggerLevel\" not found." :
-				"\"" + loggerLevel + "\" is not a valid log level."
-			);
 			System.err.println("Can't initialize HashLogger. Stopping.");
 			this.getServer().shutdown();
-			return;
 		}
-
-		this.logger = new HashLogger(this, logLevel);
 	}
 
 	/*
@@ -303,7 +291,6 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 		this.logger.info(this, "Registering commands...");
 
 		this.getCommand("whoami").setExecutor(new CommandWhoAmI(this));
-		this.getCommand("logs").setExecutor(new CommandLogs(this));
 		this.getCommand("friend").setExecutor(new CommandFriend(this));
 
 		this.logger.info(this, "Commands registered!");

@@ -13,7 +13,6 @@ import org.simpleyaml.configuration.file.YamlFile;
 
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
-import fr.hashtek.hashlogger.LogLevel;
 import fr.hashtek.tekore.bungee.command.neofetch.CommandNeofetch;
 import fr.hashtek.tekore.bungee.listener.ListenerDisconnect;
 import fr.hashtek.tekore.bungee.listener.ListenerLogin;
@@ -110,23 +109,12 @@ public class Tekord extends Plugin implements HashLoggable
 	 */
 	private void setupHashLogger()
 	{
-		YamlFile config = this.hashConfig.getYaml();
-		String loggerLevel = config.getString("loggerLevel");
-		LogLevel logLevel;
-
 		try {
-			logLevel = LogLevel.valueOf(loggerLevel);
+			this.logger = HashLogger.fromEnvConfig(this, this.hashConfig.getEnv());
 		} catch (IllegalArgumentException | NullPointerException exception) {
-			System.err.println(exception instanceof NullPointerException ?
-				"Field \"loggerLevel\" not found." :
-				"\"" + loggerLevel + "\" is not a valid log level."
-			);
 			System.err.println("Can't initialize HashLogger. Stopping.");
 			this.getProxy().stop();
-			return;
 		}
-
-		this.logger = new HashLogger(this, logLevel);
 	}
 
 	/*
