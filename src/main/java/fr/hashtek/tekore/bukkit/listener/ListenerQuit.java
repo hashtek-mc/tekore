@@ -38,7 +38,7 @@ public class ListenerQuit implements Listener, HashLoggable
 		
 		this.logger.info(this, "\"" + player.getName() + "\" logged out, launching logout sequence...");
 
-		this.core.updatePlayerAccount(player, this);
+		this.core.updatePlayerAccount(player, this.getClass().getSimpleName());
 		this.core.removePlayerManager(player);
 		
 		logger.info(this, "Logout sequence successfully executed for \"" + player.getName() + "\".");

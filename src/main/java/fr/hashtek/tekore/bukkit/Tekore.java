@@ -334,8 +334,6 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 
 	/**
 	 * Saves a player's manager to the database (updates it).
-	 * This function must be only used in static methods.
-	 * Prefer using {@link Tekore#updatePlayerAccount(Player, HashLoggable)}
 	 *
 	 * @param	player	Player
 	 * @param	author	Author's filename
@@ -352,17 +350,6 @@ public class Tekore extends JavaPlugin implements HashLoggable, PluginMessageLis
 				.sendToPlayer(player);
         }
     }
-
-	/**
-	 * Saves a player's manager to the database (updates it).
-	 *
-	 * @param	player	Player
-	 * @param	author	Author's filename
-	 */
-	public void updatePlayerAccount(Player player, HashLoggable author)
-	{
-		this.updatePlayerAccount(player, author.getClass().getSimpleName());
-	}
 
 	/**
 	 * @return	All existing ranks
