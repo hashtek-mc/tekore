@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class CommandWhoAmI implements CommandExecutor, HashLoggable
 {
@@ -37,18 +38,22 @@ public class CommandWhoAmI implements CommandExecutor, HashLoggable
      * @param	args	    Arguments passed
      */
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+    public boolean onCommand(
+        @NotNull CommandSender sender,
+        @NotNull Command command,
+        @NotNull String label,
+        @NotNull String[] args
+    )
     {
-        if (!(sender instanceof Player))
+        if (!(sender instanceof Player player)) {
             return true;
+        }
 
-        final Player player = (Player) sender;
         final PlayerManager playerManager = this.core.getPlayerManager(player);
         final PlayerData playerData = playerManager.getData();
         final Rank playerRank = playerData.getRank();
 
         player.sendMessage(playerRank.getColor() + playerData.getUsername() + "@" + playerRank.getName());
-
         return true;
     }
 

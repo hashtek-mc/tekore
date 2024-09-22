@@ -12,8 +12,8 @@ import fr.hashtek.tekore.common.player.settings.PlayerSettingValue;
 public enum SettingEN implements PlayerSettingValue
 {
 
-    EVERYONE ("Tout le monde", "§b"),
-    NOBODY ("Personne", "§c");
+    EVERYONE    ("Tout le monde",   "§b"),
+    NOBODY      ("Personne",        "§c");
 
 
     private final String name;
@@ -21,7 +21,7 @@ public enum SettingEN implements PlayerSettingValue
 
 
     /**
-     * Creates a new EN typed Setting.
+     * Creates a new EN-typed setting.
      *
      * @param   name    Setting name
      * @param   color   Setting color

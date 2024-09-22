@@ -14,9 +14,9 @@ import fr.hashtek.tekore.common.player.settings.PlayerSettingValue;
 public enum SettingEFFN implements PlayerSettingValue
 {
 
-    EVERYONE ("Tout le monde", "§b"),
-    FRIENDS_OF_FRIENDS_ONLY ("Amis d'amis uniquement", "§2"),
-    NOBODY ("Personne", "§c");
+    EVERYONE                ("Tout le monde",           "§b"),
+    FRIENDS_OF_FRIENDS_ONLY ("Amis d'amis uniquement",  "§2"),
+    NOBODY                  ("Personne",                "§c");
 
 
     private final String name;
@@ -24,7 +24,7 @@ public enum SettingEFFN implements PlayerSettingValue
 
 
     /**
-     * Creates a new EFFN typed Setting.
+     * Creates a new EFFN-typed setting.
      *
      * @param   name    Setting name
      * @param   color   Setting color
