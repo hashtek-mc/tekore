@@ -10,16 +10,26 @@ public class PlayerFriendLink
     private final String uuid;
     private final String senderUuid;
     private final String receiverUuid;
-    private final PlayerFriendState state;
+    private final PlayerFriendRequestState state;
     private final Timestamp requestedAt;
     private final Timestamp acceptedAt;
 
 
+    /**
+     * Creates a new friendship link.
+     *
+     * @param   uuid            Link's UUID
+     * @param   senderUuid      Sender's UUID
+     * @param   receiverUuid    Receiver's UUID
+     * @param   state           Link state
+     * @param   requestedAt     Request timestamp
+     * @param   acceptedAt      Acceptation timestamp
+     */
     public PlayerFriendLink(
         String uuid,
         String senderUuid,
         String receiverUuid,
-        PlayerFriendState state,
+        PlayerFriendRequestState state,
         Timestamp requestedAt,
         Timestamp acceptedAt
     )
@@ -32,45 +42,71 @@ public class PlayerFriendLink
         this.acceptedAt = acceptedAt;
     }
 
-
-    public static PlayerFriendLink newFriendship(String senderUuid, String receiverUuid)
+    /**
+     * Creates a new friendship link.
+     *
+     * @param   senderUuid      Sender's UUID
+     * @param   receiverUuid    Receiver's UUID
+     */
+    public PlayerFriendLink(
+        String senderUuid,
+        String receiverUuid
+    )
     {
-        return new PlayerFriendLink(
+        this(
             UUID.randomUUID().toString(),
             senderUuid,
             receiverUuid,
-            PlayerFriendState.PENDING,
+            PlayerFriendRequestState.PENDING,
             new Timestamp(new Date().getTime()),
             null
         );
     }
 
 
+    /**
+     * @return  Link's UUID
+     */
     public String getUuid()
     {
         return this.uuid;
     }
 
+    /**
+     * @return  Sender's UUID
+     */
     public String getSenderUuid()
     {
         return this.senderUuid;
     }
 
+    /**
+     * @return  Receiver's UUID
+     */
     public String getReceiverUuid()
     {
         return this.receiverUuid;
     }
 
-    public PlayerFriendState getState()
+    /**
+     * @return  Link state
+     */
+    public PlayerFriendRequestState getState()
     {
         return this.state;
     }
 
+    /**
+     * @return  Request timestamp
+     */
     public Timestamp getRequestedAt()
     {
         return this.requestedAt;
     }
 
+    /**
+     * @return  Acceptation timestamp
+     */
     public Timestamp getAcceptedAt()
     {
         return this.acceptedAt;
