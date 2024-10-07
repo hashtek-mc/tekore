@@ -1,6 +1,6 @@
 package fr.hashtek.tekore.common.player.friend;
 
-public enum PlayerFriendState
+public enum PlayerFriendRequestState
 {
 
     PENDING,

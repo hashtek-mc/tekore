@@ -11,8 +11,9 @@ public class PlayerFriendManager
 
     public void addFriendLink(PlayerFriendLink friendLink)
     {
-        if (this.friendLinks == null)
+        if (this.friendLinks == null) {
             this.friendLinks = new ArrayList<PlayerFriendLink>();
+        }
         this.friendLinks.add(friendLink);
     }
 
@@ -23,9 +24,11 @@ public class PlayerFriendManager
 
     public PlayerFriendLink getFriendLink(String uuid)
     {
-        for (PlayerFriendLink link : friendLinks)
-            if (link.getUuid().equals(uuid))
+        for (PlayerFriendLink link : friendLinks) {
+            if (link.getUuid().equals(uuid)) {
                 return link;
+            }
+        }
         return null;
     }
 

@@ -1,7 +1,7 @@
 package fr.hashtek.tekore.common.sql.friends;
 
 import fr.hashtek.tekore.common.player.friend.PlayerFriendLink;
-import fr.hashtek.tekore.common.player.friend.PlayerFriendState;
+import fr.hashtek.tekore.common.player.friend.PlayerFriendRequestState;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,7 +38,7 @@ public class FriendsGetter
                 resultSet.getString("uuid"),
                 resultSet.getString("senderUuid"),
                 resultSet.getString("receiverUuid"),
-                PlayerFriendState.valueOf(resultSet.getString("state")),
+                PlayerFriendRequestState.valueOf(resultSet.getString("state")),
                 resultSet.getTimestamp("requestedAt"),
                 resultSet.getTimestamp("acceptedAt")
             ));
