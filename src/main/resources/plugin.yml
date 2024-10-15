@@ -1,7 +1,7 @@
 name: '${name}'
 author: Lysandre B.
 version: '${version}'
-main: fr.hashtek.tekore.bukkit.Tekore
+main: fr.hashtek.tekore.spigot.Tekore
 api-version: '1.16'
 commands:
   whoami:
