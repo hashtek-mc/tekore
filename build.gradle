@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'fr.hashtek.spigot'
-version = 'R0.0.3-SNAPSHOT'
+version = 'R0.1.0-SNAPSHOT'
 
 def hashrc = '/home/shuvly/Hashtek/hashrc'
 def libsFolder = 'libs'
@@ -27,6 +27,14 @@ configurations {
 
 dependencies {
     compileOnly 'com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT'
+
+    // Redis stuff
+    implementation 'org.slf4j:slf4j-log4j12:2.0.13'
+    implementation group: 'org.redisson', name: 'redisson', version: '3.37.0'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.18.0'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.18.0'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.18.0'
+    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.18.0'
 
     implementation fileTree(dir: libsFolder, include: ['*.jar'])
 }
@@ -74,7 +82,9 @@ shadowJar {
     archiveClassifier.set('')
 
     mergeServiceFiles()
-    minimize()
+    minimize() {
+        exclude(dependency('org.redisson:redisson'))
+    }
 }
 
 tasks.register('make', Copy) {
