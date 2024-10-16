@@ -32,9 +32,8 @@ public class AccountProvider
             account = this.getAccountFromRedis(uuid, redisAccess);
         }
         catch (AccountNotFoundException unused) {
-            /* Second step: Try to fetch the account from the API and then push it to the Redis database. */
+            /* Second step: Try to fetch the account from the API. */
             account = this.getAccountFromApi(uuid);
-            new AccountPublisher().sendAccountToRedis(account, redisAccess);
         }
 
         return account;
@@ -80,7 +79,7 @@ public class AccountProvider
         throws AccountNotFoundException
     {
         // TODO: Fetch account from the API, when it is finished.
-        return new Account(uuid);
+        throw new AccountNotFoundException(uuid);
     }
 
 }
