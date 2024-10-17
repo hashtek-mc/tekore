@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import fr.hashtek.tekore.common.account.settings.AccountSettingsManager;
+import fr.hashtek.tekore.common.constants.Constants;
+import fr.hashtek.tekore.common.rank.Rank;
 
 /**
  * Unless you want beef with Redis, NEVER move
@@ -54,7 +56,7 @@ public class Account
         this.setUsername("")
             .setCreatedAt(now)
             .setLastUpdate(now)
-            .setRank("player")
+            .setRank(Constants.DEFAULT_RANK_UUID)
             .setCoins(0)
             .setHashCoins(0);
 

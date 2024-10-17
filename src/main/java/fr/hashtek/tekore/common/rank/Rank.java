@@ -11,7 +11,6 @@ public class Rank
     private final String shortName;
     private final String usernameColor;
     private final List<String> permissions;
-    private final boolean isStaff;
 
 
     /**
@@ -24,7 +23,7 @@ public class Rank
      */
     public Rank(String uuid)
     {
-        this(uuid, "", "", "", "", null, false);
+        this(uuid, "", "", "", "", null);
     }
 
     /**
@@ -36,7 +35,6 @@ public class Rank
      * @param   shortName       Rank's short name (for tablist)
      * @param   usernameColor   Username color
      * @param   permissions     Rank's permissions
-     * @param   isStaff         Is rank a staff?
      */
     public Rank(
         String uuid,
@@ -44,8 +42,7 @@ public class Rank
         String fullName,
         String shortName,
         String usernameColor,
-        List<String> permissions,
-        boolean isStaff
+        List<String> permissions
     )
     {
         this.uuid = uuid;
@@ -54,7 +51,6 @@ public class Rank
         this.shortName = shortName;
         this.usernameColor = usernameColor;
         this.permissions = permissions;
-        this.isStaff = isStaff;
     }
 
     /**
@@ -106,11 +102,12 @@ public class Rank
     }
 
     /**
-     * @return  Is rank a staff?
+     * @param   permission  Permission to check
+     * @return  True if rank has the given permission
      */
-    public boolean isStaff()
+    public boolean hasPermission(String permission)
     {
-        return this.isStaff;
+        return this.permissions.contains(permission);
     }
 
 }
