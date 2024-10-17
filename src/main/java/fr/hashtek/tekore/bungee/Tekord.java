@@ -30,8 +30,6 @@ public class Tekord
     private RedisAccess redisAccess;
     private TekordMessenger messenger;
 
-    private PlayerManagersManager<ProxiedPlayer> playerManagersManager;
-
 
     /**
      * Called on proxy start.
@@ -47,7 +45,6 @@ public class Tekord
         logger.info(this, "Starting up...");
 
         this.initializeRedisAccess();
-        this.initializePlayerManagersManager();
 
         this.loadMessenger();
 
@@ -132,18 +129,6 @@ public class Tekord
     }
 
     /**
-     * Initializes Player managers manager.
-     */
-    private void initializePlayerManagersManager()
-    {
-        logger.info(this, "Initializing PlayerManagersManager...");
-
-        this.playerManagersManager = new PlayerManagersManager<ProxiedPlayer>(this.redisAccess);
-
-        logger.info(this, "PlayerManagersManager successfully initialized.");
-    }
-
-    /**
      * Loads plugin's messenger.
      */
     private void loadMessenger()
@@ -217,14 +202,6 @@ public class Tekord
     public TekordMessenger getMessenger()
     {
         return this.messenger;
-    }
-
-    /**
-     * @return  Player managers manager
-     */
-    public PlayerManagersManager<ProxiedPlayer> getPlayerManagersManager()
-    {
-        return this.playerManagersManager;
     }
 
 }

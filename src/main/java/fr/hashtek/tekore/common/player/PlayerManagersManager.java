@@ -1,21 +1,18 @@
 package fr.hashtek.tekore.common.player;
 
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
-import fr.hashtek.tekore.common.exceptions.InvalidPlayerType;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * TODO: Find a new class name for this, PLEASE.
- * @param   <T> MUST be an instance of either {@link org.bukkit.entity.Player}
- *              or {@link net.md_5.bungee.api.connection.ProxiedPlayer}.
  */
 public class PlayerManagersManager
-    <T>
 {
 
-    private final Map<String, PlayerManager<T>> playerManagers;
+    private final Map<String, PlayerManager> playerManagers;
 
 
     /**
@@ -23,83 +20,16 @@ public class PlayerManagersManager
      */
     public PlayerManagersManager(RedisAccess redisAccess)
     {
-        this.playerManagers = new HashMap<String, PlayerManager<T>>();
-    }
-
-
-    /**
-     * @param   player  Player
-     * @param   <P>     MUST be an instance of either {@link org.bukkit.entity.Player}
-     *                  or {@link net.md_5.bungee.api.connection.ProxiedPlayer}.
-     * @return  Player's UUID
-     * @throws  InvalidPlayerType   If player type is invalid
-     */
-    public static <P> String getUuid(P player)
-        throws InvalidPlayerType
-    {
-        String uuid;
-
-        try {
-            if (!(player instanceof org.bukkit.entity.Player p)) {
-                throw new NoClassDefFoundError();
-            }
-            uuid = p.getUniqueId().toString();
-        }
-        catch (NoClassDefFoundError unused) {
-            try {
-                if (!(player instanceof net.md_5.bungee.api.connection.ProxiedPlayer p)) {
-                    throw new NoClassDefFoundError();
-                }
-                uuid = p.getUniqueId().toString();
-            }
-            catch (NoClassDefFoundError exception) {
-                throw new InvalidPlayerType(player);
-            }
-        }
-
-        return uuid;
-    }
-
-    /**
-     * @param   player  Player
-     * @param   <P>     MUST be an instance of either {@link org.bukkit.entity.Player}
-     *                  or {@link net.md_5.bungee.api.connection.ProxiedPlayer}.
-     * @return  Player's username
-     * @throws  InvalidPlayerType   If player type is invalid
-     */
-    public static <P> String getUsername(P player)
-        throws InvalidPlayerType
-    {
-        String name;
-
-        try {
-            if (!(player instanceof org.bukkit.entity.Player p)) {
-                throw new NoClassDefFoundError();
-            }
-            name = p.getName();
-        }
-        catch (NoClassDefFoundError unused) {
-            try {
-                if (!(player instanceof net.md_5.bungee.api.connection.ProxiedPlayer p)) {
-                    throw new NoClassDefFoundError();
-                }
-                name = p.getName();
-            }
-            catch (NoClassDefFoundError exception) {
-                throw new InvalidPlayerType(player);
-            }
-        }
-
-        return name;
+        this.playerManagers = new HashMap<String, PlayerManager>();
     }
 
 
     /**
      * @param   playerUuid  Player's UUID
      * @return  Associated player manager
-     * @apiNote Prefer using {@link PlayerManagersManager#getPlayerManager(T)}
+     * @apiNote Prefer using {@link PlayerManagersManager#getPlayerManager(Player)}
      */
-    public PlayerManager<T> getPlayerManager(String playerUuid)
+    public PlayerManager getPlayerManager(String playerUuid)
     {
         return this.playerManagers.get(playerUuid);
     }
@@ -108,49 +38,45 @@ public class PlayerManagersManager
      * @param   player  Player
      * @return  Associated player manager
      */
-    public PlayerManager<T> getPlayerManager(T player)
+    public PlayerManager getPlayerManager(Player player)
     {
-        try {
-            return this.getPlayerManager(getUuid(player));
-        } catch (InvalidPlayerType unused) {
-            // Should NEVER fire. But maybe log. You know... just in case ¬‿¬
-        }
-        return null;
+        return this.getPlayerManager(player.getUniqueId().toString());
     }
 
-    public PlayerManager<T> createPlayerManager(
-        T player,
+    /**
+     * Creates a new Player manager for a player.
+     *
+     * @param   player          Player to create the manager for
+     * @param   redisAccess     Redis access
+     * @return  Created Player manager
+     */
+    public PlayerManager createPlayerManager(
+        Player player,
         RedisAccess redisAccess
     )
     {
-        try {
-            final String playerUuid = getUuid(player);
-            final PlayerManager<T> playerManager = new PlayerManager<T>(player, redisAccess);
+        final String playerUuid = player.getUniqueId().toString();
+        final PlayerManager playerManager = new PlayerManager(player, redisAccess);
 
-            /*
-             * If player is already in the map, overwrite the data inside.
-             * Should never happen, but we're preventive ;)
-             */
-            if (!this.playerManagers.containsKey(playerUuid)) {
-                this.removePlayerManager(playerUuid);
-            }
-            this.playerManagers.put(playerUuid, playerManager);
+        /*
+         * If player is already in the map, overwrite the data inside.
+         * Should never happen, but we're preventive ;)
+         */
+        if (!this.playerManagers.containsKey(playerUuid)) {
+            this.removePlayerManager(playerUuid);
+        }
 
-            return playerManager;
-        }
-        catch (InvalidPlayerType unused) {
-            // Should NEVER fire. But maybe log. You know... just in case ¬‿¬
-        }
-        return null;
+        this.playerManagers.put(playerUuid, playerManager);
+        return playerManager;
     }
 
     /**
      * @param   playerUuid  Player's UUID
      * @return  Player manager that has just been deleted.
      */
-    public PlayerManager<T> removePlayerManager(String playerUuid)
+    public PlayerManager removePlayerManager(String playerUuid)
     {
-        final PlayerManager<T> playerManager = this.playerManagers.get(playerUuid);
+        final PlayerManager playerManager = this.playerManagers.get(playerUuid);
 
         /* If player has no manager associated, ignore the rest. */
         if (playerManager == null) {

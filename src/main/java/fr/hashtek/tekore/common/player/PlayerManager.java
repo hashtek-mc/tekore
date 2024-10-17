@@ -1,22 +1,24 @@
 package fr.hashtek.tekore.common.player;
 
 import fr.hashtek.tekore.common.account.Account;
-import fr.hashtek.tekore.common.account.AccountProvider;
-import fr.hashtek.tekore.common.account.AccountPublisher;
+import fr.hashtek.tekore.common.account.io.AccountProvider;
+import fr.hashtek.tekore.common.account.io.AccountPublisher;
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
 import fr.hashtek.tekore.common.exceptions.EntryNotFoundException;
-import fr.hashtek.tekore.common.exceptions.InvalidPlayerType;
+import fr.hashtek.tekore.common.friendship.FriendshipManager;
 import fr.hashtek.tekore.common.rank.Rank;
 import fr.hashtek.tekore.common.rank.RankProvider;
+import org.bukkit.entity.Player;
 
 import java.sql.Timestamp;
 
 public class PlayerManager
-    <T>
 {
 
-    private final T player;
+    private final Player player;
+
     private Account account;
+    private final FriendshipManager friendshipManager;
 
 
     /**
@@ -25,15 +27,14 @@ public class PlayerManager
      * @param   player  Associated player
      */
     public PlayerManager(
-        T player,
+        Player player,
         RedisAccess redisAccess
     )
-        throws InvalidPlayerType
     {
         this.player = player;
+        this.friendshipManager = new FriendshipManager(player);
 
-        this.setPlayerAccount(redisAccess);
-        this.fetchPlayerRank(redisAccess);
+        this.setPlayerAccount(player.getUniqueId().toString(), player.getName(), redisAccess);
     }
 
 
@@ -42,14 +43,13 @@ public class PlayerManager
      * then stores it in this class.
      *
      * @param   redisAccess     Redis access
-     * @throws  InvalidPlayerType   If player type is invalid
      */
-    private void setPlayerAccount(RedisAccess redisAccess)
-        throws InvalidPlayerType
+    private void setPlayerAccount(
+        String playerUuid,
+        String playerName,
+        RedisAccess redisAccess
+    )
     {
-        final String playerUuid = PlayerManagersManager.getUuid(this.player);
-        final String playerName = PlayerManagersManager.getUsername(this.player);
-
         try {
             /* Try to fetch the account from the Redis database or the API. */
             this.account = new AccountProvider(redisAccess)
@@ -62,6 +62,8 @@ public class PlayerManager
 
             this.pushData(redisAccess);
         }
+
+        this.fetchPlayerRank(redisAccess);
     }
 
     /**
@@ -86,35 +88,6 @@ public class PlayerManager
             // TODO: Should NEVER happen but yeah log just in case
         }
     }
-
-
-    /**
-     * @return  Associated player
-     */
-    public T getPlayer()
-    {
-        return this.player;
-    }
-
-    /**
-     * @return  Associated player's account
-     */
-    public Account getAccount()
-    {
-        return this.account;
-    }
-
-
-    /**
-     * @param   account New account
-     * @return  Player manager
-     */
-    public PlayerManager<T> setAccount(Account account)
-    {
-        this.account = account;
-        return this;
-    }
-
 
     /**
      * Fetches the fresh new account data from the
@@ -147,6 +120,41 @@ public class PlayerManager
 
         new AccountPublisher(redisAccess)
             .push(this.account.getUuid(), account);
+    }
+
+
+    /**
+     * @return  Associated player
+     */
+    public Player getPlayer()
+    {
+        return this.player;
+    }
+
+    /**
+     * @return  Associated player's account
+     */
+    public Account getAccount()
+    {
+        return this.account;
+    }
+
+    /**
+     * @return  Associated Friendship manager
+     */
+    public FriendshipManager getFriendshipManager()
+    {
+        return this.friendshipManager;
+    }
+
+    /**
+     * @param   account New account
+     * @return  Player manager
+     */
+    public PlayerManager setAccount(Account account)
+    {
+        this.account = account;
+        return this;
     }
 
 }
