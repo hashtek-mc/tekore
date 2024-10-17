@@ -24,7 +24,7 @@ public class ListenerQuit
         final Player player = event.getPlayer();
         final HashLogger logger = CORE.getHashLogger();
 
-        logger.info(this, "\"" + player.getName() + "\" logged in, launching logout sequence...");
+        logger.info(this, "\"" + player.getName() + "\" logged out, launching logout sequence...");
 
         /* Push RAM-stored data to the Redis database, and then free the RAM. */
         CORE.getPlayerManagersManager()
