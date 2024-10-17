@@ -2,6 +2,7 @@ package fr.hashtek.tekore.common.data.io;
 
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
 import org.redisson.api.RBucket;
+import org.redisson.api.RedissonClient;
 
 public abstract class AbstractPublisher
     <T>
@@ -56,6 +57,23 @@ public abstract class AbstractPublisher
     public void remove(String key)
     {
         this.push(key, null);
+    }
+
+
+    /**
+     * @return  Provider's Redis access
+     */
+    protected RedisAccess getRedisAccess()
+    {
+        return this.redisAccess;
+    }
+
+    /**
+     * @return  Provider's Redisson client
+     */
+    protected RedissonClient getRedissonClient()
+    {
+        return this.redisAccess.getRedissonClient();
     }
 
 }
