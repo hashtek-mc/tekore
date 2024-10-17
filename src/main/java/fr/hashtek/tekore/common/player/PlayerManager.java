@@ -6,6 +6,8 @@ import fr.hashtek.tekore.common.account.AccountPublisher;
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
 import fr.hashtek.tekore.common.exceptions.EntryNotFoundException;
 import fr.hashtek.tekore.common.exceptions.InvalidPlayerType;
+import fr.hashtek.tekore.common.rank.Rank;
+import fr.hashtek.tekore.common.rank.RankProvider;
 
 import java.sql.Timestamp;
 
@@ -30,23 +32,59 @@ public class PlayerManager
     {
         this.player = player;
 
-        Account account;
+        this.setPlayerAccount(redisAccess);
+        this.fetchPlayerRank(redisAccess);
+    }
+
+
+    /**
+     * Fetches the account of the player from the Redis database
+     * then stores it in this class.
+     *
+     * @param   redisAccess     Redis access
+     * @throws  InvalidPlayerType   If player type is invalid
+     */
+    private void setPlayerAccount(RedisAccess redisAccess)
+        throws InvalidPlayerType
+    {
         final String playerUuid = PlayerManagersManager.getUuid(this.player);
         final String playerName = PlayerManagersManager.getUsername(this.player);
 
         try {
             /* Try to fetch the account from the Redis database or the API. */
-            account = new AccountProvider(redisAccess)
+            this.account = new AccountProvider(redisAccess)
                 .get(playerUuid);
         }
         catch (EntryNotFoundException exception) {
             /* If account does not exist, create it. */
-            account = new Account(playerUuid)
+            this.account = new Account(playerUuid)
                 .setUsername(playerName);
-            this.pushData(account, redisAccess);
-        }
 
-        this.account = account;
+            this.pushData(redisAccess);
+        }
+    }
+
+    /**
+     * At the very first state of a Rank, right after its creation,
+     * only its UUID is stored in it.
+     * <p>
+     * What we're doing here is basically fetch the rank from the
+     * Redis database and put it in the account, so that the
+     * entire rank is stored, and we can access everything.
+     *
+     * @param   redisAccess     Redis access
+     */
+    private void fetchPlayerRank(RedisAccess redisAccess)
+    {
+        try {
+            final Rank rank = new RankProvider(redisAccess)
+                .get(this.account.getRank().getUuid());
+
+            this.account.setRank(rank);
+        }
+        catch (EntryNotFoundException exception) {
+            // TODO: Should NEVER happen but yeah log just in case
+        }
     }
 
 
@@ -104,27 +142,11 @@ public class PlayerManager
      */
     public void pushData(RedisAccess redisAccess)
     {
-        this.pushData(this.account, redisAccess);
-    }
-
-    /**
-     * Same as {@link PlayerManager#pushData(RedisAccess)},
-     * but with a specific account.
-     * </br>
-     * Only used in the constructor of this class, because
-     * of design issues.
-     *
-     * @param   account         Account to push
-     * @param   redisAccess     Redis access
-     */
-    private void pushData(Account account, RedisAccess redisAccess)
-    {
         /* Updating account's last update timestamp. */
         account.setLastUpdate(new Timestamp(System.currentTimeMillis()));
 
-        new AccountPublisher(redisAccess).push(account.getUuid(), account);
+        new AccountPublisher(redisAccess)
+            .push(this.account.getUuid(), account);
     }
-
-    // TODO: Same pushData function as above but for the api.
 
 }
