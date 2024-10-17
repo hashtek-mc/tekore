@@ -1,15 +1,15 @@
 package fr.hashtek.tekore.common.exceptions;
 
-public class AccountNotFoundException
+public class EntryNotFoundException
     extends Exception
 {
 
     /**
-     * @param   uuid    Account UUID
+     * @param   key     Key
      */
-    public AccountNotFoundException(String uuid)
+    public EntryNotFoundException(String key)
     {
-        super("Account with uuid \"" + uuid + "\" was not found.");
+        super("Entry with key \"" + key + "\" was not found.");
     }
 
 }

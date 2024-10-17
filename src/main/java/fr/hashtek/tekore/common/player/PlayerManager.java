@@ -4,8 +4,10 @@ import fr.hashtek.tekore.common.account.Account;
 import fr.hashtek.tekore.common.account.AccountProvider;
 import fr.hashtek.tekore.common.account.AccountPublisher;
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
-import fr.hashtek.tekore.common.exceptions.AccountNotFoundException;
+import fr.hashtek.tekore.common.exceptions.EntryNotFoundException;
 import fr.hashtek.tekore.common.exceptions.InvalidPlayerType;
+
+import java.sql.Timestamp;
 
 public class PlayerManager
     <T>
@@ -34,10 +36,10 @@ public class PlayerManager
 
         try {
             /* Try to fetch the account from the Redis database or the API. */
-            account = new AccountProvider()
-                .getAccount(playerUuid, redisAccess);
+            account = new AccountProvider(redisAccess)
+                .get(playerUuid);
         }
-        catch (AccountNotFoundException exception) {
+        catch (EntryNotFoundException exception) {
             /* If account does not exist, create it. */
             account = new Account(playerUuid)
                 .setUsername(playerName);
@@ -85,12 +87,12 @@ public class PlayerManager
     public void refreshData(RedisAccess redisAccess)
     {
         try {
-            final Account fetchedAccount = new AccountProvider()
-                .getAccount(this.account.getUuid(), redisAccess);
+            final Account fetchedAccount = new AccountProvider(redisAccess)
+                .get(this.account.getUuid());
 
             this.setAccount(fetchedAccount);
         }
-        catch (AccountNotFoundException exception) {
+        catch (EntryNotFoundException exception) {
             // TODO: Log?
         }
     }
@@ -117,7 +119,10 @@ public class PlayerManager
      */
     private void pushData(Account account, RedisAccess redisAccess)
     {
-        new AccountPublisher().sendAccountToRedis(account, redisAccess);
+        /* Updating account's last update timestamp. */
+        account.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+
+        new AccountPublisher(redisAccess).push(account.getUuid(), account);
     }
 
     // TODO: Same pushData function as above but for the api.
