@@ -24,7 +24,10 @@ public abstract class AbstractProvider
      *                          For example, in <code>accounts:{uuid}</code>,
      *                          <code>accounts:</code> is the key prefix.
      */
-    public AbstractProvider(RedisAccess redisAccess, String keyPrefix)
+    public AbstractProvider(
+        RedisAccess redisAccess,
+        String keyPrefix
+    )
     {
         this.redisAccess = redisAccess;
         this.keyPrefix = keyPrefix;

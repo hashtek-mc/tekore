@@ -118,7 +118,10 @@ public class PlayerManagersManager
         return null;
     }
 
-    public PlayerManager<T> createPlayerManager(T player, RedisAccess redisAccess)
+    public PlayerManager<T> createPlayerManager(
+        T player,
+        RedisAccess redisAccess
+    )
     {
         try {
             final String playerUuid = getUuid(player);

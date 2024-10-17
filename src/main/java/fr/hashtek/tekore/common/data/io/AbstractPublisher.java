@@ -23,7 +23,10 @@ public abstract class AbstractPublisher
      *                          For example, in <code>accounts:{uuid}</code>,
      *                          <code>accounts:</code> is the key prefix.
      */
-    public AbstractPublisher(RedisAccess redisAccess, String keyPrefix)
+    public AbstractPublisher(
+        RedisAccess redisAccess,
+        String keyPrefix
+    )
     {
         this.redisAccess = redisAccess;
         this.keyPrefix = keyPrefix;
