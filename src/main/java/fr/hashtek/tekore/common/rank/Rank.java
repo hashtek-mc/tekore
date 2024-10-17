@@ -1,4 +1,6 @@
-package fr.hashtek.tekore.common.account;
+package fr.hashtek.tekore.common.rank;
+
+import fr.hashtek.tekore.common.account.Account;
 
 import java.util.List;
 
@@ -12,6 +14,16 @@ public class Rank
     private final String usernameColor;
     private final List<String> permissions;
 
+
+    /**
+     * Creates an empty rank.
+     *
+     * @apiNote Solely used for Redis stuff, not for public use.
+     */
+    public Rank()
+    {
+        this("", "", "", "", "", null);
+    }
 
     /**
      * Creates an empty Rank, just with the UUID.
