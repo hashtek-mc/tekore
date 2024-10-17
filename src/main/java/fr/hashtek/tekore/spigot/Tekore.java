@@ -7,6 +7,10 @@ import fr.hashtek.tekore.common.data.redis.RedisAccess;
 import fr.hashtek.tekore.common.data.redis.RedisConfiguration;
 import fr.hashtek.tekore.common.data.redis.RedisCredentials;
 import fr.hashtek.tekore.common.player.PlayerManagersManager;
+import fr.hashtek.tekore.spigot.commands.CommandManager;
+import fr.hashtek.tekore.spigot.commands.debug.CommandAccountDump;
+import fr.hashtek.tekore.spigot.commands.debug.CommandAccountEdit;
+import fr.hashtek.tekore.spigot.commands.debug.CommandRankPush;
 import fr.hashtek.tekore.spigot.listeners.ListenerJoin;
 import fr.hashtek.tekore.spigot.listeners.ListenerQuit;
 import fr.hashtek.tekore.spigot.messenger.TekoreMessenger;
@@ -31,7 +35,7 @@ public class Tekore
     private RedisAccess redisAccess;
     private TekoreMessenger messenger;
 
-    private PlayerManagersManager<Player> playerManagersManager;
+    private PlayerManagersManager playerManagersManager;
 
 
     /**
@@ -53,6 +57,7 @@ public class Tekore
         this.loadMessenger();
 
         this.registerListeners();
+        new CommandManager(this.getServer().getPluginManager());
 
         logger.info(this, "Successfully loaded.");
     }
@@ -143,7 +148,7 @@ public class Tekore
     {
         logger.info(this, "Initializing PlayerManagersManager...");
 
-        this.playerManagersManager = new PlayerManagersManager<Player>(this.redisAccess);
+        this.playerManagersManager = new PlayerManagersManager(this.redisAccess);
 
         logger.info(this, "PlayerManagersManager successfully initialized.");
     }
@@ -181,12 +186,12 @@ public class Tekore
     {
         final PluginManager pluginManager = this.getServer().getPluginManager();
 
-        this.logger.info(this, "Registering listeners...");
+        logger.info(this, "Registering listeners...");
 
         pluginManager.registerEvents(new ListenerJoin(), this);
         pluginManager.registerEvents(new ListenerQuit(), this);
 
-        this.logger.info(this, "Listeners loaded!");
+        logger.info(this, "Listeners loaded!");
     }
 
 
@@ -234,7 +239,7 @@ public class Tekore
     /**
      * @return  Player managers manager
      */
-    public PlayerManagersManager<Player> getPlayerManagersManager()
+    public PlayerManagersManager getPlayerManagersManager()
     {
         return this.playerManagersManager;
     }
