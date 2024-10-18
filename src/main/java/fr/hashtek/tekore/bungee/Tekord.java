@@ -9,9 +9,7 @@ import fr.hashtek.tekore.bungee.messenger.TekordMessenger;
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
 import fr.hashtek.tekore.common.data.redis.RedisConfiguration;
 import fr.hashtek.tekore.common.data.redis.RedisCredentials;
-import fr.hashtek.tekore.common.player.PlayerManagersManager;
 import io.github.cdimascio.dotenv.Dotenv;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 

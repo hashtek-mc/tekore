@@ -115,4 +115,5 @@ public class Friendship
     {
         return this.acceptedAt;
     }
+
 }
