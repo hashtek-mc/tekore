@@ -19,6 +19,7 @@ public class Friendship
      * <p>
      * See this class as a link between two players, with some
      * metadata about the creation of their friendship.
+     * </p>
      *
      * @param   uuid            Friendship's UUID
      * @param   senderUuid      Sender's UUID

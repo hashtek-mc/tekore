@@ -18,6 +18,7 @@ public abstract class AbstractProvider
      * <p>
      * Basically is a class that retrives a data
      * (of a certain type T) from the Redis database.
+     * </p>
      *
      * @param   redisAccess     Redis access
      * @param   keyPrefix       Key prefix

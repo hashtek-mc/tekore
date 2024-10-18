@@ -17,6 +17,7 @@ public abstract class AbstractPublisher
      * <p>
      * Basically is a class that pushes some data
      * (of a certain type T) to the Redis database.
+     * </p>
      *
      * @param   redisAccess     Redis access
      * @param   keyPrefix       Key prefix

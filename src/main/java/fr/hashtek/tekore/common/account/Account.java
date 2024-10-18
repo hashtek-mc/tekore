@@ -3,6 +3,7 @@ package fr.hashtek.tekore.common.account;
 import java.sql.Timestamp;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import fr.hashtek.tekore.common.account.io.AccountProvider;
 import fr.hashtek.tekore.common.account.settings.AccountSettingsManager;
@@ -44,6 +45,7 @@ public class Account
      * Creates a new Account.
      * <p>
      * To set the values inside, please use the setters.
+     * </p>
      *
      * @param   uuid    Account's UUID
      * @apiNote Should never be instantiated anywhere other than in {@link AccountProvider}.
@@ -76,6 +78,7 @@ public class Account
     /**
      * @return  Account's username
      */
+    @JsonIgnore
     public String getUsername()
     {
         return this.username;

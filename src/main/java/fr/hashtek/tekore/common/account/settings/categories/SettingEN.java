@@ -9,6 +9,7 @@ import fr.hashtek.tekore.common.account.settings.AccountSettingValue;
  * <strong>E</strong><i>veryone</i>
  * <br/>
  * <strong>N</strong><i>obody</i>
+ * </p>
  */
 public enum SettingEN implements AccountSettingValue
 {

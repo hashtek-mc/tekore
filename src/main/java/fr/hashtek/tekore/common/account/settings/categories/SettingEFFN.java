@@ -11,6 +11,7 @@ import fr.hashtek.tekore.common.account.settings.AccountSettingValue;
  * <strong>F</strong><i>riends of </i><strong>F</strong><i>riends only</i>
  * <br/>
  * <strong>N</strong><i>obody</i>
+ * </p>
  */
 public enum SettingEFFN
     implements AccountSettingValue
