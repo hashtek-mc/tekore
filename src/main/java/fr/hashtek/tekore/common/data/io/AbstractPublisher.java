@@ -4,6 +4,8 @@ import fr.hashtek.tekore.common.data.redis.RedisAccess;
 import org.redisson.api.RBucket;
 import org.redisson.api.RedissonClient;
 
+import java.time.Duration;
+
 public abstract class AbstractPublisher
     <T>
 {
@@ -44,10 +46,28 @@ public abstract class AbstractPublisher
         T data
     )
     {
+        this.push(key, data, null);
+    }
+
+    /**
+     * @param   key         Key
+     * @param   data        Data to push
+     * @param   timeout     Time after which the data will be deleted from the Redis database
+     */
+    public void push(
+        String key,
+        T data,
+        Duration timeout
+    )
+    {
         final String redisKey = this.keyPrefix + key;
         final RBucket<T> bucket = redisAccess.getRedissonClient().getBucket(redisKey);
 
-        bucket.set(data);
+        if (timeout == null) {
+            bucket.set(data);
+            return;
+        }
+        bucket.set(data, timeout);
     }
 
     /**
