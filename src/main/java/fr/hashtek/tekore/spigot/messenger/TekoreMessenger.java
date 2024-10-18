@@ -38,7 +38,7 @@ public class TekoreMessenger
 
     public void sendPluginMessage(
         String subchannel,
-        String message
+        String... message
     )
     {
         this.sendPluginMessage(
@@ -51,13 +51,15 @@ public class TekoreMessenger
     public void sendPluginMessage(
         Player player,
         String subchannel,
-        String message
+        String... message
     )
     {
         final ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
         out.writeUTF(subchannel);
-        out.writeUTF(message);
+        for (String str : message) {
+            out.writeUTF(str);
+        }
         player.sendPluginMessage(CORE, BUNGEECORD_CHANNEL, out.toByteArray());
     }
 
