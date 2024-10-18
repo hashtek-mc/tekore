@@ -4,6 +4,7 @@ import fr.hashtek.tekore.common.commands.AbstractCommandManager;
 import fr.hashtek.tekore.spigot.commands.debug.CommandAccountDump;
 import fr.hashtek.tekore.spigot.commands.debug.CommandAccountEdit;
 import fr.hashtek.tekore.spigot.commands.debug.CommandRankPush;
+import fr.hashtek.tekore.spigot.commands.friend.CommandFriend;
 import org.bukkit.plugin.PluginManager;
 
 public class CommandManager
@@ -15,12 +16,15 @@ public class CommandManager
         super(pluginManager);
     }
 
+
     @Override
     protected void registerCommands(PluginManager pluginManager)
     {
         super.registerCommand("accountdump", CommandAccountDump.class);
         super.registerCommand("accountedit", CommandAccountEdit.class);
         super.registerCommand("rankpush", CommandRankPush.class);
+
+        super.registerCommand("friend", CommandFriend.class);
     }
 
 }
