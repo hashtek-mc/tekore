@@ -43,4 +43,27 @@ public class FriendshipPublisher
             .add(friendship.getUuid());
     }
 
+    /**
+     * Disengages a player from a friendship.
+     * <p>
+     * Does NOT delete the friendship, this method simply removes the friendship
+     * from the "involve" Set stored for faster querying.
+     * </p>
+     * <p>
+     * See {@link FriendshipPublisher#involvePlayerIntoFriendship(String, Friendship)}.
+     * </p>
+     *
+     * @param   playerUuid      Player's UUID
+     * @param   friendshipUuid  UUID of friendship to remove
+     */
+    public void disengagePlayerFromFriendship(
+        String playerUuid,
+        String friendshipUuid
+    )
+    {
+        super.getRedissonClient()
+            .getSet(Constants.FRIENDSHIP_PREFIX_KEY + Constants.FRIENDSHIP_INVOLVES_PREFIX_KEY + playerUuid)
+            .remove(friendshipUuid);
+    }
+
 }
