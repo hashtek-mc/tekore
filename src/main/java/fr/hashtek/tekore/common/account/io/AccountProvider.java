@@ -8,6 +8,8 @@ import fr.hashtek.tekore.common.exceptions.EntryNotFoundException;
 import org.redisson.api.RMap;
 import org.redisson.api.options.KeysScanOptions;
 
+import java.util.UUID;
+
 public class AccountProvider
     extends AbstractProvider<Account>
 {
@@ -46,13 +48,13 @@ public class AccountProvider
     }
 
     /**
-     * @param   uuid    UUID to test
-     * @return  True if UUID is found in the database (if there is an account linked to that UUID)
+     * @param   tag     Can be a UUID or a username
+     * @return  True if tag is found in the database (if there is an account linked to that tag)
      */
-    public boolean hasAccount(String uuid)
+    public boolean hasAccount(String tag)
     {
         return super.getRedissonClient().getKeys()
-            .getKeys(KeysScanOptions.defaults().pattern(PREFIX_KEY + uuid))
+            .getKeys(KeysScanOptions.defaults().pattern(PREFIX_KEY + tag))
             .iterator().hasNext();
     }
 
