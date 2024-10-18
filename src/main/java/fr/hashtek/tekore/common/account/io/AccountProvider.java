@@ -5,8 +5,10 @@ import fr.hashtek.tekore.common.constants.Constants;
 import fr.hashtek.tekore.common.data.io.AbstractProvider;
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
 import fr.hashtek.tekore.common.exceptions.EntryNotFoundException;
+import org.redisson.api.RBucket;
 import org.redisson.api.RMap;
 import org.redisson.api.options.KeysScanOptions;
+import org.redisson.api.options.PlainOptions;
 
 import java.util.UUID;
 
@@ -36,10 +38,10 @@ public class AccountProvider
     {
         final String fetchedUuid;
 
-        final RMap<String, String> uuidMap = super.getRedissonClient()
-            .getMap(PREFIX_KEY + username);
+        final RBucket<String> rBucket = super.getRedissonClient()
+            .getBucket(PREFIX_KEY + username.toLowerCase());
 
-        fetchedUuid = uuidMap.get(username);
+        fetchedUuid = rBucket.get();
 
         if (fetchedUuid == null) {
             throw new EntryNotFoundException(username);

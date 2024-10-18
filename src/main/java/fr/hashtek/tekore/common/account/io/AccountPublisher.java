@@ -54,7 +54,7 @@ public class AccountPublisher
     private void pushUsername(String username, String uuid)
     {
         final RBucket<String> rBucket = super.getRedissonClient()
-            .getBucket(PREFIX_KEY + username);
+            .getBucket(PREFIX_KEY + username.toLowerCase());
 
         rBucket.set(uuid);
     }

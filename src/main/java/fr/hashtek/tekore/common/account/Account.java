@@ -78,7 +78,6 @@ public class Account
     /**
      * @return  Account's username
      */
-    @JsonIgnore
     public String getUsername()
     {
         return this.username;
