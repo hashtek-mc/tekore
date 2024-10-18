@@ -4,6 +4,8 @@ import fr.hashtek.tekore.common.account.Account;
 import fr.hashtek.tekore.common.constants.Constants;
 import fr.hashtek.tekore.common.data.io.AbstractProvider;
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
+import fr.hashtek.tekore.common.exceptions.EntryNotFoundException;
+import org.redisson.api.RMap;
 import org.redisson.api.options.KeysScanOptions;
 
 public class AccountProvider
@@ -18,6 +20,30 @@ public class AccountProvider
         super(redisAccess, PREFIX_KEY);
     }
 
+
+    /**
+     * Gets the UUID from the Redis database from a player's
+     * username.
+     *
+     * @param   username    Player's username
+     * @return  Fetched UUID
+     * @throws  EntryNotFoundException  If account does not exist
+     */
+    public String getUuidFromUsername(String username)
+        throws EntryNotFoundException
+    {
+        final String fetchedUuid;
+
+        final RMap<String, String> uuidMap = super.getRedissonClient()
+            .getMap(PREFIX_KEY + username);
+
+        fetchedUuid = uuidMap.get(username);
+
+        if (fetchedUuid == null) {
+            throw new EntryNotFoundException(username);
+        }
+        return fetchedUuid;
+    }
 
     /**
      * @param   uuid    UUID to test
