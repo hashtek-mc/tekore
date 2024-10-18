@@ -4,6 +4,7 @@ import fr.hashtek.tekore.common.account.Account;
 import fr.hashtek.tekore.common.constants.Constants;
 import fr.hashtek.tekore.common.data.io.AbstractPublisher;
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
+import org.redisson.api.RBucket;
 import org.redisson.api.RMap;
 
 public class AccountPublisher
@@ -52,10 +53,10 @@ public class AccountPublisher
      */
     private void pushUsername(String username, String uuid)
     {
-        final RMap<String, String> usernameMap = super.getRedissonClient()
-            .getMap(PREFIX_KEY + username);
+        final RBucket<String> rBucket = super.getRedissonClient()
+            .getBucket(PREFIX_KEY + username);
 
-        usernameMap.put(username, uuid);
+        rBucket.set(uuid);
     }
 
 }
