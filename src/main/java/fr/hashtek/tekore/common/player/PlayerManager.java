@@ -54,6 +54,12 @@ public class PlayerManager
             /* Try to fetch the account from the Redis database or the API. */
             this.account = new AccountProvider(redisAccess)
                 .get(playerUuid);
+
+            /* If player has changed his name, push the new one to the Redis database. */
+            if (!this.account.getUsername().equals(playerName)) {
+                this.account.setUsername(playerName);
+                new AccountPublisher(redisAccess).push(playerName, playerUuid, this.account);
+            }
         }
         catch (EntryNotFoundException exception) {
             /* If account does not exist, create it. */
@@ -73,6 +79,7 @@ public class PlayerManager
      * What we're doing here is basically fetch the rank from the
      * Redis database and put it in the account, so that the
      * entire rank is stored, and we can access everything.
+     * </p>
      *
      * @param   redisAccess     Redis access
      */
@@ -119,7 +126,7 @@ public class PlayerManager
         account.setLastUpdate(new Timestamp(System.currentTimeMillis()));
 
         new AccountPublisher(redisAccess)
-            .push(this.account.getUuid(), account);
+            .push(this.account.getUsername(), this.account.getUuid(), account);
     }
 
 
