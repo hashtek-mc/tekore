@@ -60,6 +60,8 @@ public class CommandFriend
         String[] args
     )
     {
+        playerFriendshipManager.fetchFriendships();
+
         if (playerFriendshipManager.getFriendships().isEmpty()) {
             player.sendMessage(Component.text("You don't have any friendships :("));
             return;

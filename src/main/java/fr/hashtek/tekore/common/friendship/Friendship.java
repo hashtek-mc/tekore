@@ -6,13 +6,20 @@ import java.util.UUID;
 public class Friendship
 {
 
-    private final String uuid;
-    private final String senderUuid;
-    private final String receiverUuid;
-    private final FriendshipRequestState state;
-    private final Timestamp requestedAt;
-    private final Timestamp acceptedAt;
+    private String uuid;
+    private String senderUuid;
+    private String receiverUuid;
+    private FriendshipRequestState state;
+    private Timestamp requestedAt;
+    private Timestamp acceptedAt;
 
+
+    /**
+     * Creates an empty friendship.
+     *
+     * @apiNote Solely used for Redis stuff, not for public use.
+     */
+    public Friendship() {}
 
     /**
      * Creates a new Friendship.
@@ -114,6 +121,54 @@ public class Friendship
     public Timestamp getAcceptedAt()
     {
         return this.acceptedAt;
+    }
+
+    /**
+     * @param   uuid    New UUID
+     */
+    public void setUuid(String uuid)
+    {
+        this.uuid = uuid;
+    }
+
+    /**
+     * @param   senderUuid  New sender's UUID
+     */
+    public void setSenderUuid(String senderUuid)
+    {
+        this.senderUuid = senderUuid;
+    }
+
+    /**
+     * @param   receiverUuid    New receiver's UUID
+     */
+    public void setReceiverUuid(String receiverUuid)
+    {
+        this.receiverUuid = receiverUuid;
+    }
+
+    /**
+     * @param   state   New friendship state
+     */
+    public void setState(FriendshipRequestState state)
+    {
+        this.state = state;
+    }
+
+    /**
+     * @param   requestedAt New request timestamp
+     */
+    public void setRequestedAt(Timestamp requestedAt)
+    {
+        this.requestedAt = requestedAt;
+    }
+
+    /**
+     * @param   acceptedAt  New request acceptation timestamp
+     */
+    public void setAcceptedAt(Timestamp acceptedAt)
+    {
+        this.acceptedAt = acceptedAt;
     }
 
 }

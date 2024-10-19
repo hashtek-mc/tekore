@@ -38,11 +38,12 @@ public class FriendshipManager
      * Fetches every friendship player has from the Redis database
      * and stores it here.
      */
-    private void fetchFriendships()
+    public void fetchFriendships()
     {
         final List<Friendship> playerFriendships = new FriendshipProvider(REDIS_ACCESS)
             .getPlayerFriendships(this.playerUuid);
 
+        this.friendships.clear();
         this.friendships.addAll(playerFriendships);
     }
 
@@ -66,9 +67,10 @@ public class FriendshipManager
 
         /* Create the friendship */
         final Friendship friendship = Friendship.create(this.playerUuid, targetUuid);
-        final FriendshipPublisher publisher = new FriendshipPublisher(CORE.getRedisAccess());
+        final FriendshipPublisher publisher = new FriendshipPublisher(REDIS_ACCESS);
 
         /* Push the friendship */
+        this.friendships.add(friendship);
         publisher.push(friendship);
 
         /* And add the friendship's UUID to player's friendship list. */
@@ -83,9 +85,22 @@ public class FriendshipManager
     public Friendship getFriendship(String friendshipUuid)
     {
         return this.friendships.stream()
-            .filter(friendship -> friendship.getUuid().equals(friendshipUuid))
+            .filter((Friendship friendship) -> friendship.getUuid().equals(friendshipUuid))
             .findFirst()
             .orElse(null);
+    }
+
+    /**
+     * @param   targetUuid  Target's UUID
+     * @return  True if player is involved in a friendship with the target.
+     */
+    public boolean hasFriendshipWith(String targetUuid)
+    {
+        return this.friendships.stream()
+            .anyMatch((Friendship friendship) ->
+                friendship.getSenderUuid().equals(targetUuid) ||
+                friendship.getReceiverUuid().equals(targetUuid)
+            );
     }
 
     /**

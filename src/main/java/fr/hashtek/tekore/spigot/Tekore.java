@@ -148,7 +148,7 @@ public class Tekore
     {
         logger.info(this, "Initializing PlayerManagersManager...");
 
-        this.playerManagersManager = new PlayerManagersManager(this.redisAccess);
+        this.playerManagersManager = new PlayerManagersManager();
 
         logger.info(this, "PlayerManagersManager successfully initialized.");
     }

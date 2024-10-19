@@ -18,7 +18,7 @@ public class PlayerManagersManager
     /**
      * Creates a new PlayerManager manager.
      */
-    public PlayerManagersManager(RedisAccess redisAccess)
+    public PlayerManagersManager()
     {
         this.playerManagers = new HashMap<String, PlayerManager>();
     }
