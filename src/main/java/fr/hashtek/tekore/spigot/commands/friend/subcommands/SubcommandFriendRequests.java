@@ -91,7 +91,7 @@ public class SubcommandFriendRequests
 
         CORE.getMessenger().sendPluginMessage(
             player,
-            Constants.UPDATE_FRIENDS_CHANNEL,
+            Constants.UPDATE_FRIENDS_SUBCHANNEL,
             targetAccount.getUsername()
         );
     }
@@ -138,19 +138,31 @@ public class SubcommandFriendRequests
 
         final Friendship friendship = playerFriendshipManager.getFriendshipBySender(targetAccount.getUuid());
 
-        if (friendship == null) {
-            player.sendMessage(Component.text("This player did not send a friend request to you."));
-            return;
+        try {
+            if (friendship.getState() != FriendshipRequestState.PENDING) {
+                player.sendMessage(Component.text("You are already friend with that player."));
+                return;
+            }
+
+            playerFriendshipManager.destroyFriendship(friendship.getUuid());
+
+            CORE.getMessenger().sendPluginMessage(
+                player,
+                "Message",
+                targetAccount.getUsername(), player.getName() + " denied your friend request."
+            );
+
+            CORE.getMessenger().sendPluginMessage(
+                player,
+                Constants.UPDATE_FRIENDS_SUBCHANNEL,
+                targetAccount.getUsername()
+            );
+
+            player.sendMessage(Component.text("You denied " + ChatColor.AQUA + targetAccount.getUsername() + ChatColor.RESET + "'s friend request."));
         }
-
-        if (friendship.getState() != FriendshipRequestState.PENDING) {
-            player.sendMessage(Component.text("You are already friend with that player."));
-            return;
+        catch (EntryNotFoundException exception) {
+            player.sendMessage(Component.text("That player did not send a friend request to you."));
         }
-
-        // ...
-
-        player.sendMessage(Component.text("You denied " + ChatColor.AQUA + targetAccount.getUsername() + ChatColor.RESET + "'s friend request."));
     }
 
 }
