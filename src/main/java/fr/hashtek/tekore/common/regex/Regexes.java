@@ -5,6 +5,9 @@ import java.util.regex.Pattern;
 public class Regexes
 {
 
+    public static final String USERNAME_REGEX =
+        "^[a-zA-Z0-9_]{1,16}$";
+
     public static final String UUID_REGEX =
         "^[a-fA-F0-9]{8}-([a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12}$";
 
