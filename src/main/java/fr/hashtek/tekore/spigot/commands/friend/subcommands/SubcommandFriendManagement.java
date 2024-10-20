@@ -122,6 +122,11 @@ public class SubcommandFriendManagement
 
         final Friendship friendship = playerFriendshipManager.getFriendshipByUuid(targetAccount.getUuid());
 
+        if (friendship == null) {
+            player.sendMessage(Component.text("You are not friend with that player."));
+            return;
+        }
+
         try {
             playerFriendshipManager.destroyFriendship(friendship.getUuid());
 
