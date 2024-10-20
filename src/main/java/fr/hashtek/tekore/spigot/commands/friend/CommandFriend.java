@@ -1,14 +1,12 @@
 package fr.hashtek.tekore.spigot.commands.friend;
 
-import fr.hashtek.tekore.common.account.Account;
-import fr.hashtek.tekore.common.account.io.AccountProvider;
 import fr.hashtek.tekore.common.commands.AbstractCommand;
-import fr.hashtek.tekore.common.exceptions.EntryNotFoundException;
-import fr.hashtek.tekore.common.friendship.Friendship;
 import fr.hashtek.tekore.common.friendship.FriendshipManager;
 import fr.hashtek.tekore.spigot.Tekore;
+import fr.hashtek.tekore.spigot.commands.friend.subcommands.SubcommandFriendInformations;
+import fr.hashtek.tekore.spigot.commands.friend.subcommands.SubcommandFriendManagement;
+import fr.hashtek.tekore.spigot.commands.friend.subcommands.SubcommandFriendRequests;
 import net.kyori.adventure.text.Component;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -53,85 +51,6 @@ public class CommandFriend
         }
     }
 
-
-    private void list(
-        Player player,
-        FriendshipManager playerFriendshipManager,
-        String[] args
-    )
-    {
-        playerFriendshipManager.fetchFriendships();
-
-        if (playerFriendshipManager.getFriendships().isEmpty()) {
-            player.sendMessage(Component.text("You don't have any friendships :("));
-            return;
-        }
-
-        player.sendMessage(Component.text("Here are all your friendships:\n"));
-
-        for (Friendship friendship : playerFriendshipManager.getFriendships()) {
-            player.sendMessage(Component.text("Friendship " + friendship.getUuid()));
-            player.sendMessage(Component.text("Sender UUID: " + friendship.getSenderUuid()));
-            player.sendMessage(Component.text("Receiver UUID: " + friendship.getReceiverUuid()));
-            player.sendMessage(Component.text("State: " + friendship.getState()));
-            player.sendMessage(Component.text("Requested at: " + friendship.getRequestedAt()));
-            player.sendMessage(Component.text("Accepted at: " + friendship.getAcceptedAt()));
-            player.sendMessage(Component.text("\n"));
-        }
-    }
-
-    private void add(
-        Player player,
-        FriendshipManager playerFriendshipManager,
-        String[] args
-    )
-    {
-        if (args.length != 2) {
-            player.sendMessage(Component.text("Wrong syntax."));
-            return;
-        }
-
-        final AccountProvider accountProvider = new AccountProvider(CORE.getRedisAccess());
-
-        final String targetName = args[1];
-        final Account targetAccount;
-
-        if (targetName.equalsIgnoreCase(player.getName())) {
-            player.sendMessage(Component.text("haha veri funi"));
-            return;
-        }
-
-        try {
-            targetAccount = accountProvider.get(accountProvider.getUuidFromUsername(targetName));
-        }
-        catch (EntryNotFoundException exception) {
-            player.sendMessage(Component.text("Player with name \"" + targetName + "\" doesn't exist or never connected to this server."));
-            return;
-        }
-
-        if (playerFriendshipManager.hasFriendshipWith(targetAccount.getUuid())) {
-            player.sendMessage(Component.text("You already have a friendship with that player."));
-            return;
-        }
-
-        try {
-            playerFriendshipManager.createFriendship(targetAccount.getUuid());
-
-            player.sendMessage(Component.text("You asked " + ChatColor.AQUA + targetAccount.getUsername() + ChatColor.RESET + " for a friendship!"));
-
-            CORE.getMessenger().sendPluginMessage(
-                player,
-                "MessageRaw",
-                targetAccount.getUsername(),
-                "[\"\",{\"text\":\"Shuvly\",\"color\":\"light_purple\"},{\"text\":\" vous a envoyé une demande d'ami.\\n\"},{\"text\":\"[ACCEPTER]\",\"bold\":true,\"color\":\"green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/friend accept Shuvly\"}},{\"text\":\" -\",\"color\":\"dark_gray\"},{\"text\":\" \"},{\"text\":\"[REFUSER]\",\"bold\":true,\"color\":\"red\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/friend deny Shuvly\"}},{\"text\":\" -\",\"color\":\"dark_gray\"},{\"text\":\" \"},{\"text\":\"[BLOQUER]\",\"bold\":true,\"color\":\"gray\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/friend block Shuvly\"}}]"
-            );
-        }
-        catch (EntryNotFoundException exception) {
-            player.sendMessage(exception.getMessage());
-        }
-    }
-
-
     @Override
     public void execute(
         @NotNull Player player,
@@ -152,31 +71,42 @@ public class CommandFriend
 
         /* Dispatch */
         switch (args[0]) {
+            /* Informations ----------------------------------------------------------------- */
             case "help":
                 sendSyntax(player);
                 break;
             case "list":
-                list(player, playerFriendshipManager, args);
+                new SubcommandFriendInformations().list(player, playerFriendshipManager, args);
                 break;
-            case "info":
+            case "info": // TODO: You may want to delete this.
                 // ...
                 break;
+            /* ------------------------------------------------------------------------------ */
+
+            /* Management ------------------------------------------------------------------- */
             case "add":
-                add(player, playerFriendshipManager, args);
+                new SubcommandFriendManagement().add(player, playerFriendshipManager, args);
                 break;
             case "rm":
             case "remove":
-                // ...
+                new SubcommandFriendManagement().remove(player, playerFriendshipManager, args);
                 break;
+            /* ------------------------------------------------------------------------------ */
+
+            /* Requests --------------------------------------------------------------------- */
             case "accept":
-                // ...
+                new SubcommandFriendRequests().accept(player, playerFriendshipManager, args);
                 break;
             case "deny":
-                // ...
+                new SubcommandFriendRequests().deny(player, playerFriendshipManager, args);
                 break;
+            /* ------------------------------------------------------------------------------ */
+
+            /* Unknown flag ----------------------------------------------------------------- */
             default:
-                this.sendSyntax(player);
+                player.sendMessage(Component.text("Wrong syntax. Type /friend help for help."));
                 break;
+            /* ------------------------------------------------------------------------------ */
         }
     }
 
