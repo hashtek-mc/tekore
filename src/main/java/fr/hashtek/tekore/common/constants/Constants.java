@@ -20,10 +20,10 @@ public class Constants
     public static final String DEFAULT_RANK_UUID = "4a20727b-5309-56cf-8145-1e1c24fd2cc5"; // "7cdb430d-491f-5c0e-a0f8-2be1cfc7360e";
     /*                                              ^ Admin rank                               ^ Player rank                       */
 
-    /* Bungeecord channels ----------------------------------------------- */
+    /* Bungeecord (sub)channels ------------------------------------------ */
     public static final String BUNGEECORD_CHANNEL = "BungeeCord";
 
-    public static final String UPDATE_FRIENDS_CHANNEL = "UpdateFriends";
+    public static final String UPDATE_FRIENDS_SUBCHANNEL = "UpdateFriends";
     /* ------------------------------------------------------------------- */
 
 }

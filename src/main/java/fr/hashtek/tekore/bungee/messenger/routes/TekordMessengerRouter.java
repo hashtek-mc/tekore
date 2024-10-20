@@ -36,7 +36,7 @@ public class TekordMessengerRouter
             return;
         }
 
-        messenger.sendPluginMessage(player.getServer(), Constants.UPDATE_FRIENDS_CHANNEL, playerName);
+        messenger.sendPluginMessage(player.getServer(), Constants.UPDATE_FRIENDS_SUBCHANNEL, playerName);
     }
 
 
@@ -46,7 +46,7 @@ public class TekordMessengerRouter
     )
     {
         switch (subchannel) {
-            case Constants.UPDATE_FRIENDS_CHANNEL:
+            case Constants.UPDATE_FRIENDS_SUBCHANNEL:
                 this.updateFriends(in);
                 break;
             default:

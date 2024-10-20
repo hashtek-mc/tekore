@@ -49,7 +49,7 @@ public class TekoreMessengerRouter
     )
     {
         switch (subchannel) {
-            case Constants.UPDATE_FRIENDS_CHANNEL:
+            case Constants.UPDATE_FRIENDS_SUBCHANNEL:
                 this.updateFriends(in);
                 break;
             default:
