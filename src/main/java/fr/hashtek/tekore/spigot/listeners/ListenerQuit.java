@@ -31,9 +31,6 @@ public class ListenerQuit
             .removePlayerManager(player.getUniqueId().toString())
             .pushData(CORE.getRedisAccess());
 
-        /* Basically tell Bungeecord to refresh his RAM-stored data from the Redis database. */
-        CORE.getMessenger().sendPluginMessage(player, "RefreshAccount", player.getUniqueId().toString());
-
         logger.info(this, "Logout sequence successfully executed for \"" + player.getName() + "\".");
     }
 
