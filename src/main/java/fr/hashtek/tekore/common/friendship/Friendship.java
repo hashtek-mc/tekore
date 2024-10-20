@@ -76,6 +76,18 @@ public class Friendship
     }
 
     /**
+     * @param   playerUuid  Player's UUID
+     * @return  Player's friend's UUID
+     */
+    public String getFriendUuid(String playerUuid)
+    {
+        if (playerUuid.equals(this.senderUuid)) {
+            return this.receiverUuid;
+        }
+        return this.senderUuid;
+    }
+
+    /**
      * @return  Friendship's UUID
      */
     public String getUuid()
