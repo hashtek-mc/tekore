@@ -1,9 +1,13 @@
 package fr.hashtek.tekore.bungee.messenger;
 
 import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.tekore.bungee.Tekord;
+import fr.hashtek.tekore.bungee.messenger.routes.TekordMessengerRouter;
+import fr.hashtek.tekore.common.constants.Constants;
+import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -13,7 +17,17 @@ public class TekordMessenger
 {
 
     private static final Tekord CORD = Tekord.getInstance();
-    public static final String BUNGEECORD_CHANNEL = "BungeeCord";
+
+    private final TekordMessengerRouter router;
+
+
+    /**
+     * Creates a new messenger for Tekord.
+     */
+    public TekordMessenger()
+    {
+        this.router = new TekordMessengerRouter(this);
+    }
 
 
     /**
@@ -23,11 +37,10 @@ public class TekordMessenger
      */
     public void load()
     {
-        final String bungeecordChannel = BUNGEECORD_CHANNEL;
+        CORD.getProxy().registerChannel(Constants.BUNGEECORD_CHANNEL);
+        CORD.getProxy().getPluginManager().registerListener(CORD, this);
 
-        CORD.getProxy().registerChannel(bungeecordChannel);
-
-        CORD.getHashLogger().info(this, "Channel \"" + bungeecordChannel + "\" registered!");
+        CORD.getHashLogger().info(this, "Channel \"" + Constants.BUNGEECORD_CHANNEL + "\" registered!");
     }
 
     /**
@@ -35,9 +48,31 @@ public class TekordMessenger
      */
     public void unload()
     {
-        CORD.getProxy().unregisterChannel(BUNGEECORD_CHANNEL);
+        CORD.getProxy().unregisterChannel(Constants.BUNGEECORD_CHANNEL);
     }
 
+
+    /**
+     * Sends a plugin message to a given server.
+     *
+     * @param   server      Server to send the message on
+     * @param   subchannel  Sub-channel
+     * @param   data        Data to send
+     */
+    public void sendPluginMessage(
+        Server server,
+        String subchannel,
+        String... data
+    )
+    {
+        final ByteArrayDataOutput out = ByteStreams.newDataOutput();
+
+        out.writeUTF(subchannel);
+        for (String str : data) {
+            out.writeUTF(str);
+        }
+        server.sendData(Constants.BUNGEECORD_CHANNEL, out.toByteArray());
+    }
 
     /**
      * Called when the proxy receives a message from another plugin.
@@ -45,18 +80,14 @@ public class TekordMessenger
     @EventHandler
     public void onPluginMessageReceived(PluginMessageEvent event)
     {
-        if (!event.getTag().equals(BUNGEECORD_CHANNEL)) {
+        if (!event.getTag().equals(Constants.BUNGEECORD_CHANNEL)) {
             return;
         }
 
         final ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
         final String subchannel = in.readUTF();
 
-        switch (subchannel) {
-            // ...
-            default:
-                return;
-        }
+        this.router.dispatch(subchannel, in);
     }
 
 }
