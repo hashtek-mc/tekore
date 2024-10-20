@@ -79,6 +79,32 @@ public class FriendshipManager
     }
 
     /**
+     * Destroys a friendship.
+     *
+     * @param   friendshipUuid  Friendship's UUID
+     * @throws  EntryNotFoundException  If friendship does not exist
+     */
+    public void destroyFriendship(String friendshipUuid)
+        throws EntryNotFoundException
+    {
+        final Friendship friendshipToRemove = this.getFriendship(friendshipUuid);
+
+        if (friendshipToRemove == null) {
+            throw new EntryNotFoundException(friendshipUuid);
+        }
+
+        final FriendshipPublisher publisher = new FriendshipPublisher(REDIS_ACCESS);
+
+        /* Disengage both players from the friendship */
+        publisher.disengagePlayerFromFriendship(friendshipToRemove.getSenderUuid(), friendshipUuid);
+        publisher.disengagePlayerFromFriendship(friendshipToRemove.getReceiverUuid(), friendshipUuid);
+
+        /* Destroy the friendship */
+        this.friendships.remove(friendshipToRemove);
+        publisher.remove(friendshipUuid);
+    }
+
+    /**
      * @param   friendshipUuid  Friendship's UUID
      * @return  If exists, fetched friendship. Otherwise, null.
      */
@@ -114,17 +140,24 @@ public class FriendshipManager
             .orElse(null);
     }
 
+    public Friendship getFriendshipByUuid(String targetUuid)
+    {
+        return this.friendships.stream()
+            .filter((Friendship friendship) ->
+                friendship.getSenderUuid().equals(targetUuid) ||
+                friendship.getReceiverUuid().equals(targetUuid)
+            )
+            .findFirst()
+            .orElse(null);
+    }
+
     /**
      * @param   targetUuid  Target's UUID
      * @return  True if player is involved in a friendship with the target.
      */
     public boolean hasFriendshipWith(String targetUuid)
     {
-        return this.friendships.stream()
-            .anyMatch((Friendship friendship) ->
-                friendship.getSenderUuid().equals(targetUuid) ||
-                friendship.getReceiverUuid().equals(targetUuid)
-            );
+        return this.getFriendshipByUuid(targetUuid) != null;
     }
 
     /**
