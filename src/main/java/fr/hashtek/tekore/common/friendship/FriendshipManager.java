@@ -91,6 +91,30 @@ public class FriendshipManager
     }
 
     /**
+     * @param   senderUuid  Sender's UUID
+     * @return  Fetched friendship where sender UUID equals to the given one
+     */
+    public Friendship getFriendshipBySender(String senderUuid)
+    {
+        return this.friendships.stream()
+            .filter((Friendship friendship) -> friendship.getSenderUuid().equals(senderUuid))
+            .findFirst()
+            .orElse(null);
+    }
+
+    /**
+     * @param   receiverUuid    Receiver's UUID
+     * @return  Fetched friendship where sender UUID equals to the given one
+     */
+    public Friendship getFriendshipByReceiver(String receiverUuid)
+    {
+        return this.friendships.stream()
+            .filter((Friendship friendship) -> friendship.getReceiverUuid().equals(receiverUuid))
+            .findFirst()
+            .orElse(null);
+    }
+
+    /**
      * @param   targetUuid  Target's UUID
      * @return  True if player is involved in a friendship with the target.
      */
