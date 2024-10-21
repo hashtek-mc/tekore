@@ -8,6 +8,7 @@ import fr.hashtek.tekore.common.exceptions.EntryNotFoundException;
 import fr.hashtek.tekore.common.friendship.FriendshipManager;
 import fr.hashtek.tekore.common.rank.Rank;
 import fr.hashtek.tekore.common.rank.RankProvider;
+import fr.hashtek.tekore.spigot.Tekore;
 import org.bukkit.entity.Player;
 
 import java.sql.Timestamp;
@@ -127,6 +128,16 @@ public class PlayerManager
 
         new AccountPublisher(redisAccess)
             .push(this.account.getUsername(), this.account.getUuid(), account);
+    }
+
+    /**
+     * Sends the player to a given server.
+     *
+     * @param   serverName  Server to connect to's name
+     */
+    public void sendToServer(String serverName)
+    {
+        Tekore.getInstance().getMessenger().sendPluginMessage(this.player, "Connect", serverName);
     }
 
 
