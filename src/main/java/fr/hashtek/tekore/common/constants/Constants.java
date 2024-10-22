@@ -1,11 +1,12 @@
 package fr.hashtek.tekore.common.constants;
 
-import java.sql.Timestamp;
-
 public class Constants
 {
 
-    public static final Timestamp DEFAULT_TIMESTAMP = new Timestamp(0);
+    /* Default values ---------------------------------------------------- */
+    public static final String DEFAULT_RANK_UUID = "4a20727b-5309-56cf-8145-1e1c24fd2cc5"; // "7cdb430d-491f-5c0e-a0f8-2be1cfc7360e";
+    /*                                              ^ Admin rank                               ^ Player rank                       */
+    /* ------------------------------------------------------------------- */
 
     /* Redis prefix keys ------------------------------------------------- */
     public static final String ACCOUNT_PREFIX_KEY = "account:";
@@ -18,13 +19,15 @@ public class Constants
     public static final String FRIENDSHIP_INVOLVES_PREFIX_KEY = "involves:";
     /* ------------------------------------------------------------------- */
 
-    public static final String DEFAULT_RANK_UUID = "4a20727b-5309-56cf-8145-1e1c24fd2cc5"; // "7cdb430d-491f-5c0e-a0f8-2be1cfc7360e";
-    /*                                              ^ Admin rank                               ^ Player rank                       */
-
     /* Bungeecord (sub)channels ------------------------------------------ */
     public static final String BUNGEECORD_CHANNEL = "BungeeCord";
 
     public static final String UPDATE_FRIENDS_SUBCHANNEL = "UpdateFriends";
+    /* ------------------------------------------------------------------- */
+
+    /* Symbols ----------------------------------------------------------- */
+    public static final String COINS_SYMBOL = "⛂";
+    public static final String HASHCOINS_SYMBOL = "⛃";
     /* ------------------------------------------------------------------- */
 
 }
