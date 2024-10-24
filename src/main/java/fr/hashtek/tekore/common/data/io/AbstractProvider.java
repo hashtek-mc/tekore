@@ -5,6 +5,12 @@ import fr.hashtek.tekore.common.exceptions.EntryNotFoundException;
 import org.redisson.api.RBucket;
 import org.redisson.api.RedissonClient;
 
+/**
+ * Basically a class that retrieves some data
+ * (of a certain type T) from the Redis database.
+ *
+ * @param   <T> Type of data to fetch
+ */
 public abstract class AbstractProvider
     <T>
 {
@@ -15,10 +21,6 @@ public abstract class AbstractProvider
 
     /**
      * Creates a new Provider.
-     * <p>
-     * Basically is a class that retrives a data
-     * (of a certain type T) from the Redis database.
-     * </p>
      *
      * @param   redisAccess     Redis access
      * @param   keyPrefix       Key prefix

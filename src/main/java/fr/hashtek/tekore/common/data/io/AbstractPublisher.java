@@ -6,6 +6,12 @@ import org.redisson.api.RedissonClient;
 
 import java.time.Duration;
 
+/**
+ * Basically a class that pushes some data
+ * (of a certain type T) to the Redis database.
+ *
+ * @param   <T> Type of data to push
+ */
 public abstract class AbstractPublisher
     <T>
 {
@@ -16,10 +22,6 @@ public abstract class AbstractPublisher
 
     /**
      * Creates a new Publisher.
-     * <p>
-     * Basically is a class that pushes some data
-     * (of a certain type T) to the Redis database.
-     * </p>
      *
      * @param   redisAccess     Redis access
      * @param   keyPrefix       Key prefix
