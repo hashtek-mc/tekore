@@ -1,11 +1,11 @@
-package fr.hashtek.tekore.spigot.commands.debug;
+package fr.hashtek.tekore.spigot.command.debug;
 
-import fr.hashtek.tekore.common.constants.Constants;
+import fr.hashtek.tekore.common.constant.Constants;
 import fr.hashtek.tekore.common.data.io.AbstractPublisher;
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
 import fr.hashtek.tekore.common.rank.Rank;
 import fr.hashtek.tekore.spigot.Tekore;
-import fr.hashtek.tekore.common.commands.AbstractCommand;
+import fr.hashtek.tekore.common.command.AbstractCommand;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

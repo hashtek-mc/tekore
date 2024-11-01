@@ -1,4 +1,4 @@
-package fr.hashtek.tekore.spigot.commands.friend.subcommands;
+package fr.hashtek.tekore.spigot.command.friend.subcommand;
 
 import fr.hashtek.tekore.common.friendship.Friendship;
 import fr.hashtek.tekore.common.friendship.FriendshipManager;

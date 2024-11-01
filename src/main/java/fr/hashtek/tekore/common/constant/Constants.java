@@ -1,4 +1,4 @@
-package fr.hashtek.tekore.common.constants;
+package fr.hashtek.tekore.common.constant;
 
 public class Constants
 {

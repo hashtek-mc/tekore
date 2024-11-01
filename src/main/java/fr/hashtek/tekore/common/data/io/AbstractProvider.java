@@ -1,7 +1,7 @@
 package fr.hashtek.tekore.common.data.io;
 
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
-import fr.hashtek.tekore.common.exceptions.EntryNotFoundException;
+import fr.hashtek.tekore.common.exception.EntryNotFoundException;
 import org.redisson.api.RBucket;
 import org.redisson.api.RedissonClient;
 

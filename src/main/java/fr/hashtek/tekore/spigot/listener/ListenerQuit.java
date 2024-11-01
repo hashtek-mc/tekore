@@ -1,4 +1,4 @@
-package fr.hashtek.tekore.spigot.listeners;
+package fr.hashtek.tekore.spigot.listener;
 
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;

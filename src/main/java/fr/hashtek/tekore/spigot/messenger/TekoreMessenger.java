@@ -5,7 +5,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import fr.hashtek.hashlogger.HashLoggable;
-import fr.hashtek.tekore.common.constants.Constants;
+import fr.hashtek.tekore.common.constant.Constants;
 import fr.hashtek.tekore.spigot.Tekore;
 import fr.hashtek.tekore.spigot.messenger.routes.TekoreMessengerRouter;
 import org.bukkit.entity.Player;

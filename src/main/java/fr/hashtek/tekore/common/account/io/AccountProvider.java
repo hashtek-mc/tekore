@@ -1,16 +1,12 @@
 package fr.hashtek.tekore.common.account.io;
 
 import fr.hashtek.tekore.common.account.Account;
-import fr.hashtek.tekore.common.constants.Constants;
+import fr.hashtek.tekore.common.constant.Constants;
 import fr.hashtek.tekore.common.data.io.AbstractProvider;
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
-import fr.hashtek.tekore.common.exceptions.EntryNotFoundException;
+import fr.hashtek.tekore.common.exception.EntryNotFoundException;
 import org.redisson.api.RBucket;
-import org.redisson.api.RMap;
 import org.redisson.api.options.KeysScanOptions;
-import org.redisson.api.options.PlainOptions;
-
-import java.util.UUID;
 
 public class AccountProvider
     extends AbstractProvider<Account>

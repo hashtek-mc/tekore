@@ -1,4 +1,4 @@
-package fr.hashtek.tekore.common.exceptions;
+package fr.hashtek.tekore.common.exception;
 
 public class EntryNotFoundException
     extends Exception

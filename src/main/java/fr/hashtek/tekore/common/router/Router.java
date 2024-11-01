@@ -25,6 +25,7 @@ public abstract class Router
      */
     protected abstract void updateFriends(ByteArrayDataInput in);
 
+
     /**
      * Dispatches the routes to custom functions.
      *

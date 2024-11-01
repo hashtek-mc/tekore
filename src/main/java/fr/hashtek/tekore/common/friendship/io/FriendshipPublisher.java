@@ -1,6 +1,6 @@
 package fr.hashtek.tekore.common.friendship.io;
 
-import fr.hashtek.tekore.common.constants.Constants;
+import fr.hashtek.tekore.common.constant.Constants;
 import fr.hashtek.tekore.common.data.io.AbstractPublisher;
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
 import fr.hashtek.tekore.common.friendship.Friendship;

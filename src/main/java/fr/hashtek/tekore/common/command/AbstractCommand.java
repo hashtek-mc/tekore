@@ -1,4 +1,4 @@
-package fr.hashtek.tekore.common.commands;
+package fr.hashtek.tekore.common.command;
 
 import fr.hashtek.tekore.spigot.Tekore;
 import org.bukkit.ChatColor;

@@ -1,9 +1,9 @@
-package fr.hashtek.tekore.spigot.commands.friend.subcommands;
+package fr.hashtek.tekore.spigot.command.friend.subcommand;
 
 import fr.hashtek.tekore.common.account.Account;
 import fr.hashtek.tekore.common.account.io.AccountProvider;
-import fr.hashtek.tekore.common.constants.Constants;
-import fr.hashtek.tekore.common.exceptions.EntryNotFoundException;
+import fr.hashtek.tekore.common.constant.Constants;
+import fr.hashtek.tekore.common.exception.EntryNotFoundException;
 import fr.hashtek.tekore.common.friendship.Friendship;
 import fr.hashtek.tekore.common.friendship.FriendshipManager;
 import fr.hashtek.tekore.common.friendship.FriendshipRequestState;

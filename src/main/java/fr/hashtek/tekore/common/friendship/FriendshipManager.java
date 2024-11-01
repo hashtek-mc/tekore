@@ -2,7 +2,7 @@ package fr.hashtek.tekore.common.friendship;
 
 import fr.hashtek.tekore.common.account.io.AccountProvider;
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
-import fr.hashtek.tekore.common.exceptions.EntryNotFoundException;
+import fr.hashtek.tekore.common.exception.EntryNotFoundException;
 import fr.hashtek.tekore.common.friendship.io.FriendshipProvider;
 import fr.hashtek.tekore.common.friendship.io.FriendshipPublisher;
 import fr.hashtek.tekore.spigot.Tekore;

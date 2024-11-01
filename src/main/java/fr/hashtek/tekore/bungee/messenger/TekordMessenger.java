@@ -6,7 +6,7 @@ import com.google.common.io.ByteStreams;
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.tekore.bungee.Tekord;
 import fr.hashtek.tekore.bungee.messenger.routes.TekordMessengerRouter;
-import fr.hashtek.tekore.common.constants.Constants;
+import fr.hashtek.tekore.common.constant.Constants;
 import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;

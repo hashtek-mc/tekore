@@ -1,4 +1,4 @@
-package fr.hashtek.tekore.bungee.listeners;
+package fr.hashtek.tekore.bungee.listener;
 
 import fr.hashtek.tekore.bungee.Tekord;
 import fr.hashtek.tekore.common.friendship.Friendship;
@@ -7,14 +7,14 @@ import fr.hashtek.tekore.common.friendship.io.FriendshipProvider;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.PostLoginEvent;
+import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
 import java.util.List;
 import java.util.UUID;
 
-public class ListenerProxyLogin
+public class ListenerProxyDisconnect
     implements Listener
 {
 
@@ -43,15 +43,15 @@ public class ListenerProxyLogin
                 return;
             }
 
-            target.sendMessage(new TextComponent(ChatColor.AQUA + player.getName() + ChatColor.RESET + " a rejoint le serveur! ! !1"));
+            target.sendMessage(new TextComponent(ChatColor.AQUA + player.getName() + ChatColor.RESET + " a quitté le serveur.. . :( :pensive:"));
         });
     }
 
     /**
-     * Called when a player joins the proxy.
+     * Called when a player disconnects from the proxy.
      */
     @EventHandler
-    public void onLogin(PostLoginEvent event)
+    public void onDisconnect(PlayerDisconnectEvent event)
     {
         final ProxiedPlayer player = event.getPlayer();
 

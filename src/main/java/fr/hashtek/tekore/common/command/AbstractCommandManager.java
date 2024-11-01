@@ -1,4 +1,4 @@
-package fr.hashtek.tekore.common.commands;
+package fr.hashtek.tekore.common.command;
 
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;

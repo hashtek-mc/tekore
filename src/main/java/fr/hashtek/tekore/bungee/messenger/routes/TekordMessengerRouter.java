@@ -3,7 +3,7 @@ package fr.hashtek.tekore.bungee.messenger.routes;
 import com.google.common.io.ByteArrayDataInput;
 import fr.hashtek.tekore.bungee.Tekord;
 import fr.hashtek.tekore.bungee.messenger.TekordMessenger;
-import fr.hashtek.tekore.common.constants.Constants;
+import fr.hashtek.tekore.common.constant.Constants;
 import fr.hashtek.tekore.common.router.Router;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 

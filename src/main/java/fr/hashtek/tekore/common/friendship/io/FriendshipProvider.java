@@ -1,9 +1,9 @@
 package fr.hashtek.tekore.common.friendship.io;
 
-import fr.hashtek.tekore.common.constants.Constants;
+import fr.hashtek.tekore.common.constant.Constants;
 import fr.hashtek.tekore.common.data.io.AbstractProvider;
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
-import fr.hashtek.tekore.common.exceptions.EntryNotFoundException;
+import fr.hashtek.tekore.common.exception.EntryNotFoundException;
 import fr.hashtek.tekore.common.friendship.Friendship;
 import org.redisson.api.RSet;
 
@@ -38,7 +38,9 @@ public class FriendshipProvider
                     friendships.add(super.get(friendshipUuid));
                 }
                 catch (EntryNotFoundException exception) {
-                    // TODO: Log.
+                    // TODO: Log this. Even if this should never happen.
+                    new FriendshipPublisher(super.getRedisAccess())
+                        .disengagePlayerFromFriendship(playerUuid, friendshipUuid);
                 }
             });
 

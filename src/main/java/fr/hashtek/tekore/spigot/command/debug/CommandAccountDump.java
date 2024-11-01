@@ -1,12 +1,12 @@
-package fr.hashtek.tekore.spigot.commands.debug;
+package fr.hashtek.tekore.spigot.command.debug;
 
 import fr.hashtek.tekore.common.account.Account;
 import fr.hashtek.tekore.common.account.io.AccountProvider;
-import fr.hashtek.tekore.common.exceptions.EntryNotFoundException;
+import fr.hashtek.tekore.common.exception.EntryNotFoundException;
 import fr.hashtek.tekore.common.player.PlayerManager;
 import fr.hashtek.tekore.common.regex.Regexes;
 import fr.hashtek.tekore.spigot.Tekore;
-import fr.hashtek.tekore.common.commands.AbstractCommand;
+import fr.hashtek.tekore.common.command.AbstractCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

@@ -1,10 +1,10 @@
-package fr.hashtek.tekore.spigot.commands;
+package fr.hashtek.tekore.spigot.command;
 
-import fr.hashtek.tekore.common.commands.AbstractCommandManager;
-import fr.hashtek.tekore.spigot.commands.debug.CommandAccountDump;
-import fr.hashtek.tekore.spigot.commands.debug.CommandAccountEdit;
-import fr.hashtek.tekore.spigot.commands.debug.CommandRankPush;
-import fr.hashtek.tekore.spigot.commands.friend.CommandFriend;
+import fr.hashtek.tekore.common.command.AbstractCommandManager;
+import fr.hashtek.tekore.spigot.command.debug.CommandAccountDump;
+import fr.hashtek.tekore.spigot.command.debug.CommandAccountEdit;
+import fr.hashtek.tekore.spigot.command.debug.CommandRankPush;
+import fr.hashtek.tekore.spigot.command.friend.CommandFriend;
 import org.bukkit.plugin.PluginManager;
 
 public class CommandManager

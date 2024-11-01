@@ -4,7 +4,7 @@ import fr.hashtek.tekore.common.account.Account;
 import fr.hashtek.tekore.common.account.io.AccountProvider;
 import fr.hashtek.tekore.common.account.io.AccountPublisher;
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
-import fr.hashtek.tekore.common.exceptions.EntryNotFoundException;
+import fr.hashtek.tekore.common.exception.EntryNotFoundException;
 import fr.hashtek.tekore.common.friendship.FriendshipManager;
 import fr.hashtek.tekore.common.rank.Rank;
 import fr.hashtek.tekore.common.rank.RankProvider;

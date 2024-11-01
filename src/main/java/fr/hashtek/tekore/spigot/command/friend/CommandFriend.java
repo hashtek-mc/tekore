@@ -1,11 +1,11 @@
-package fr.hashtek.tekore.spigot.commands.friend;
+package fr.hashtek.tekore.spigot.command.friend;
 
-import fr.hashtek.tekore.common.commands.AbstractCommand;
+import fr.hashtek.tekore.common.command.AbstractCommand;
 import fr.hashtek.tekore.common.friendship.FriendshipManager;
 import fr.hashtek.tekore.spigot.Tekore;
-import fr.hashtek.tekore.spigot.commands.friend.subcommands.SubcommandFriendInformations;
-import fr.hashtek.tekore.spigot.commands.friend.subcommands.SubcommandFriendManagement;
-import fr.hashtek.tekore.spigot.commands.friend.subcommands.SubcommandFriendRequests;
+import fr.hashtek.tekore.spigot.command.friend.subcommand.SubcommandFriendInformations;
+import fr.hashtek.tekore.spigot.command.friend.subcommand.SubcommandFriendManagement;
+import fr.hashtek.tekore.spigot.command.friend.subcommand.SubcommandFriendRequests;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;

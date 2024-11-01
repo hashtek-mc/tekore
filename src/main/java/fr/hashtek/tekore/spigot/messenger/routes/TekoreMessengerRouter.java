@@ -1,7 +1,7 @@
 package fr.hashtek.tekore.spigot.messenger.routes;
 
 import com.google.common.io.ByteArrayDataInput;
-import fr.hashtek.tekore.common.constants.Constants;
+import fr.hashtek.tekore.common.constant.Constants;
 import fr.hashtek.tekore.common.player.PlayerManager;
 import fr.hashtek.tekore.common.router.Router;
 import fr.hashtek.tekore.spigot.Tekore;

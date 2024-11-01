@@ -3,11 +3,10 @@ package fr.hashtek.tekore.common.account;
 import java.sql.Timestamp;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import fr.hashtek.tekore.common.account.io.AccountProvider;
 import fr.hashtek.tekore.common.account.settings.AccountSettingsManager;
-import fr.hashtek.tekore.common.constants.Constants;
+import fr.hashtek.tekore.common.constant.Constants;
 import fr.hashtek.tekore.common.rank.Rank;
 
 /**
