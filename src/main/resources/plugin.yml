@@ -10,7 +10,11 @@ commands:
   friend:
     aliases: [f]
     description: "Système d'amis"
-    usage: "/friend [list [<page>]] [gui] [add <name>] [remove/rm <name>]"
+    usage: "/friend [list [<page>]] [add <name>] [remove/rm <name>]"
+  party:
+    aliases: [p]
+    description: "Système de party"
+    usage: "/party [status] [create] [disband] [add <name>] [remove/rm <name>] [kick <name>] [leave] [promote <name>] [accept <name>] [deny <name>]"
   accountdump:
   accountedit:
   rankpush:
