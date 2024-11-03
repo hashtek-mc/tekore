@@ -6,6 +6,8 @@ import fr.hashtek.tekore.common.account.io.AccountPublisher;
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
 import fr.hashtek.tekore.common.exception.EntryNotFoundException;
 import fr.hashtek.tekore.common.friendship.FriendshipManager;
+import fr.hashtek.tekore.common.party.Party;
+import fr.hashtek.tekore.common.party.io.PartyProvider;
 import fr.hashtek.tekore.common.rank.Rank;
 import fr.hashtek.tekore.common.rank.RankProvider;
 import fr.hashtek.tekore.spigot.Tekore;
@@ -70,7 +72,9 @@ public class PlayerManager
             this.pushData(redisAccess);
         }
 
+        /* Update primitive data. */
         this.fetchPlayerRank(redisAccess);
+        this.fetchPlayerParty(redisAccess);
     }
 
     /**
@@ -94,6 +98,28 @@ public class PlayerManager
         }
         catch (EntryNotFoundException exception) {
             // TODO: Should NEVER happen but yeah log just in case
+        }
+    }
+
+    /**
+     * Exactly the same as {@link PlayerManager#fetchPlayerRank(RedisAccess)}
+     *
+     * @param   redisAccess     Redis access
+     */
+    private void fetchPlayerParty(RedisAccess redisAccess)
+    {
+        if (this.account.getParty() == null) {
+            return;
+        }
+
+        try {
+            final Party party = new PartyProvider(redisAccess)
+                .get(this.account.getParty().getUuid());
+
+            this.account.setParty(party);
+        }
+        catch (EntryNotFoundException exception) {
+            // ...
         }
     }
 

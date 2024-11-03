@@ -3,11 +3,18 @@ package fr.hashtek.tekore.common.account;
 import java.sql.Timestamp;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import fr.hashtek.tekore.common.account.io.AccountProvider;
 import fr.hashtek.tekore.common.account.settings.AccountSettingsManager;
 import fr.hashtek.tekore.common.constant.Constants;
+import fr.hashtek.tekore.common.exception.EntryNotFoundException;
+import fr.hashtek.tekore.common.party.Party;
+import fr.hashtek.tekore.common.party.io.PartyProvider;
 import fr.hashtek.tekore.common.rank.Rank;
+import fr.hashtek.tekore.common.rank.RankProvider;
+import fr.hashtek.tekore.spigot.Tekore;
+import org.redisson.api.RFuture;
 
 /**
  * Unless you want beef with Redis, NEVER move
@@ -16,6 +23,9 @@ import fr.hashtek.tekore.common.rank.Rank;
 public class Account
 {
 
+    private static final Tekore CORE = Tekore.getInstance();
+
+
     private final String uuid;
     private String username;
 
@@ -23,6 +33,8 @@ public class Account
     private Timestamp lastUpdate;
 
     private Rank rank;
+
+    private Party party;
 
     private int coins;
     private int hashCoins;
@@ -33,7 +45,7 @@ public class Account
     /**
      * Creates an empty account.
      *
-     * @apiNote Solely used for Redis stuff, not for public use.
+     * @apiNote Solely used for Redis stuff. Not for public use!
      */
     public Account()
     {
@@ -59,6 +71,7 @@ public class Account
             .setCreatedAt(now)
             .setLastUpdate(now)
             .setRank(Constants.DEFAULT_RANK_UUID)
+            .setParty((Party) null)
             .setCoins(0)
             .setHashCoins(0);
 
@@ -117,6 +130,28 @@ public class Account
     }
 
     /**
+     * @return  Player's party
+     */
+    @JsonIgnore
+    public Party getParty()
+    {
+        return this.party;
+    }
+
+    /**
+     * @return  Player's party UUID
+     * @apiNote Solely used for Redis access. Prefer using {@link Account#getParty()#getUuid()}.
+     */
+    @JsonGetter("party")
+    public String getPartyUuid()
+    {
+        if (this.party == null) {
+            return null;
+        }
+        return this.party.getUuid();
+    }
+
+    /**
      * @return  Account's amount of coins
      */
     public int getCoins()
@@ -143,7 +178,7 @@ public class Account
 
     /**
      * @param   username    Account's new username
-     * @return  Account
+     * @return  Itself
      */
     public Account setUsername(String username)
     {
@@ -153,7 +188,7 @@ public class Account
 
     /**
      * @param   createdAt   New creation date timestamp
-     * @return  Account
+     * @return  Itself
      */
     public Account setCreatedAt(Timestamp createdAt)
     {
@@ -163,7 +198,7 @@ public class Account
 
     /**
      * @param   lastUpdate  New last update timestamp
-     * @return  Account
+     * @return  Itself
      */
     public Account setLastUpdate(Timestamp lastUpdate)
     {
@@ -172,24 +207,46 @@ public class Account
     }
 
     /**
+     * @param   rank    New rank
+     * @return  Itself
+     */
+    public Account setRank(Rank rank)
+    {
+        this.rank = rank;
+        return this;
+    }
+
+    /**
      * @param   rankUuid    New rank's UUID
-     * @return  Account
+     * @return  Itself
      * @apiNote Solely used for Redis access. If you're not, please use {@link Account#setRank(Rank)}.
      */
     @JsonSetter("rank")
     public Account setRank(String rankUuid)
     {
-        this.rank = new Rank(rankUuid); // TODO: Don't forget to update the rank afterwards.
+        this.rank = new Rank(rankUuid);
         return this;
     }
 
     /**
-     * @param   rank    New rank
+     * @param   party   New party
      * @return  Account
      */
-    public Account setRank(Rank rank)
+    public Account setParty(Party party)
     {
-        this.rank = rank;
+        this.party = party;
+        return this;
+    }
+
+    /**
+     * @param   partyUuid   New party's UUID
+     * @return  Itself
+     * @apiNote Solely used for Redis access. Prefer using {@link Account#setParty(Party)}.
+     */
+    @JsonSetter("party")
+    public Account setParty(String partyUuid)
+    {
+        this.party = new Party(partyUuid);
         return this;
     }
 
@@ -205,7 +262,7 @@ public class Account
 
     /**
      * @param   hashCoins   New amount of HashCoins
-     * @return  Account
+     * @return  Itself
      */
     public Account setHashCoins(int hashCoins)
     {
@@ -215,9 +272,8 @@ public class Account
 
     /**
      * @param   settingsManager     New settings manager
-     * @return  Account
-     * @apiNote Should only be used by Redisson.
-     *          Otherwise please just edit the values in the existing settings manager.
+     * @return  Itself
+     * @apiNote Solely used for Redis access. If not please just edit the values in the existing settings manager.
      */
     public Account setSettingsManager(AccountSettingsManager settingsManager)
     {
