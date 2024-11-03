@@ -1,21 +1,39 @@
-package fr.hashtek.tekore.spigot.command.friend.subcommand;
+package fr.hashtek.tekore.spigot.command.friend.subcommand.info;
 
+import fr.hashtek.tekore.common.command.AbstractCommand;
+import fr.hashtek.tekore.common.command.subcommand.AbstractSubcommand;
+import fr.hashtek.tekore.common.exception.InvalidCommandContextException;
 import fr.hashtek.tekore.common.friendship.Friendship;
 import fr.hashtek.tekore.common.friendship.FriendshipManager;
+import fr.hashtek.tekore.spigot.Tekore;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-public class SubcommandFriendInformations
+public class SubcommandFriendList
+    extends AbstractSubcommand
 {
 
-    public void list(
-        Player player,
-        FriendshipManager playerFriendshipManager,
-        String[] args
+    private static final Tekore CORE = Tekore.getInstance();
+
+
+    public SubcommandFriendList(AbstractCommand parent)
+        throws InvalidCommandContextException
+    {
+        super(parent, "list", "");
+    }
+
+
+    @Override
+    public void execute(
+        @NotNull Player player,
+        @NotNull String[] args
     )
     {
-//        playerFriendshipManager.fetchFriendships();
+        final FriendshipManager playerFriendshipManager = CORE.getPlayerManagersManager()
+            .getPlayerManager(player)
+            .getFriendshipManager();
 
         if (playerFriendshipManager.getFriendships().isEmpty()) {
             player.sendMessage(Component.text("You don't have any friendships :("));
