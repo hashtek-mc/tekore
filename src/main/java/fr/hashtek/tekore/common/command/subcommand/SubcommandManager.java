@@ -48,7 +48,8 @@ public class SubcommandManager
         final AbstractSubcommand subcommand = this.subcommands.get(name);
 
         if (subcommand == null) {
-            return false;
+            player.sendMessage(Component.text(ChatColor.RED + "Cette sous-commande n'existe pas."));
+            return true;
         }
 
         if (!subcommand.hasPermission(player)) {
