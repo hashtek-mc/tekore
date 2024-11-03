@@ -3,6 +3,7 @@ package fr.hashtek.tekore.common.data.io;
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
 import fr.hashtek.tekore.common.exception.EntryNotFoundException;
 import org.redisson.api.RBucket;
+import org.redisson.api.RFuture;
 import org.redisson.api.RedissonClient;
 
 /**
@@ -47,8 +48,8 @@ public abstract class AbstractProvider
         throws EntryNotFoundException
     {
         final String redisKey = this.keyPrefix + key;
-        final RBucket<T> accountRBucket = this.getRedissonClient().getBucket(redisKey);
-        final T data = accountRBucket.get();
+        final RBucket<T> rBucket = this.getRedissonClient().getBucket(redisKey);
+        final T data = rBucket.get();
 
         /* If the data was not found in the Redis database, throw error. */
         if (data == null) {
