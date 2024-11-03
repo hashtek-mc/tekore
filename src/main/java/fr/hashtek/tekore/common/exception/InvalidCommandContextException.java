@@ -12,7 +12,7 @@ public class InvalidCommandContextException
         AbstractSubcommand child
     )
     {
-        super(""); // TODO: Write error here pls lol
+        super("Subcommand \"" + child.getClass().getSimpleName() + "\"'s permission does not follows its parent's permission \"" + parent.getClass().getSimpleName() + "\".");
     }
 
 }
