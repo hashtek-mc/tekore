@@ -27,6 +27,7 @@ public class TekordMessengerRouter
     }
 
 
+    @Override
     protected void updateFriends(ByteArrayDataInput in)
     {
         final String playerName = in.readUTF();
@@ -39,7 +40,7 @@ public class TekordMessengerRouter
         messenger.sendPluginMessage(player.getServer(), Constants.UPDATE_FRIENDS_SUBCHANNEL, playerName);
     }
 
-
+    @Override
     public void dispatch(
         String subchannel,
         ByteArrayDataInput in

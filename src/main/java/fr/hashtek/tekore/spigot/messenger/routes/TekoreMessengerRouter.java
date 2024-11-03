@@ -28,6 +28,7 @@ public class TekoreMessengerRouter
     }
 
 
+    @Override
     protected void updateFriends(ByteArrayDataInput in)
     {
         final String playerName = in.readUTF();
@@ -43,6 +44,7 @@ public class TekoreMessengerRouter
         playerManager.getFriendshipManager().fetchFriendships();
     }
 
+    @Override
     public void dispatch(
         String subchannel,
         ByteArrayDataInput in
