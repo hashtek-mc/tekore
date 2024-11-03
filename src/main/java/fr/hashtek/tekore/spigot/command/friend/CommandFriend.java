@@ -6,7 +6,7 @@ import fr.hashtek.tekore.spigot.command.friend.subcommand.request.SubcommandFrie
 import fr.hashtek.tekore.spigot.command.friend.subcommand.request.SubcommandFriendAdd;
 import fr.hashtek.tekore.spigot.command.friend.subcommand.info.SubcommandFriendList;
 import fr.hashtek.tekore.spigot.command.friend.subcommand.request.SubcommandFriendDeny;
-import fr.hashtek.tekore.spigot.command.friend.subcommand.request.SubcommandFriendRemove;
+import fr.hashtek.tekore.spigot.command.friend.subcommand.management.SubcommandFriendRemove;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

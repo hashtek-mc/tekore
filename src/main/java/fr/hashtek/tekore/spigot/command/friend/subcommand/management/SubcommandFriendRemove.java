@@ -1,4 +1,4 @@
-package fr.hashtek.tekore.spigot.command.friend.subcommand.request;
+package fr.hashtek.tekore.spigot.command.friend.subcommand.management;
 
 import fr.hashtek.tekore.common.account.Account;
 import fr.hashtek.tekore.common.account.io.AccountProvider;
