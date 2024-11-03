@@ -26,8 +26,8 @@ public abstract class AbstractPublisher
      * @param   redisAccess     Redis access
      * @param   keyPrefix       Key prefix
      *                          </br>
-     *                          For example, in <code>accounts:{uuid}</code>,
-     *                          <code>accounts:</code> is the key prefix.
+     *                          For example, in {@code accounts:{uuid}},
+     *                          {@code accounts:} is the key prefix.
      */
     public AbstractPublisher(
         RedisAccess redisAccess,

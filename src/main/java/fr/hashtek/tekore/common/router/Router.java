@@ -8,7 +8,7 @@ public abstract class Router
     /**
      * <p>
      *     <u>Route:</u>
-     *     <code>UpdateFriends</code>
+     *     {@code UpdateFriends}
      * </p>
      * <p>
      * <u>Arguments:</u>

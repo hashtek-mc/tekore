@@ -35,7 +35,7 @@ public abstract class AbstractCommandManager
     /**
      * Registers a command in the server.
      *
-     * @param   command         Command as string (in <code>/friend</code>, <code>friend</code> is the command)
+     * @param   command         Command as string (in {@code /friend}, {@code friend} is the command)
      * @param   commandClass    Command class
      */
     protected void registerCommand(String command, Class<? extends AbstractCommand> commandClass)
