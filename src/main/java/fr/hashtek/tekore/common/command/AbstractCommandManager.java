@@ -24,6 +24,7 @@ public abstract class AbstractCommandManager
         this.registerCommands(pluginManager);
     }
 
+
     /**
      * Registers commands in the server.
      *
