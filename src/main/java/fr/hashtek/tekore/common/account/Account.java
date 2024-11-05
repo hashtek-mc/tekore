@@ -6,15 +6,14 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import fr.hashtek.tekore.common.account.io.AccountProvider;
+import fr.hashtek.tekore.common.account.io.AccountPublisher;
 import fr.hashtek.tekore.common.account.settings.AccountSettingsManager;
 import fr.hashtek.tekore.common.constant.Constants;
-import fr.hashtek.tekore.common.exception.EntryNotFoundException;
+import fr.hashtek.tekore.common.data.redis.RedisAccess;
 import fr.hashtek.tekore.common.party.Party;
-import fr.hashtek.tekore.common.party.io.PartyProvider;
+import fr.hashtek.tekore.common.party.PartyManager;
 import fr.hashtek.tekore.common.rank.Rank;
-import fr.hashtek.tekore.common.rank.RankProvider;
 import fr.hashtek.tekore.spigot.Tekore;
-import org.redisson.api.RFuture;
 
 /**
  * Unless you want beef with Redis, NEVER move
@@ -34,12 +33,12 @@ public class Account
 
     private Rank rank;
 
-    private Party party;
-
     private int coins;
     private int hashCoins;
 
     private AccountSettingsManager settingsManager;
+
+    private PartyManager partyManager;
 
 
     /**
@@ -71,11 +70,26 @@ public class Account
             .setCreatedAt(now)
             .setLastUpdate(now)
             .setRank(Constants.DEFAULT_RANK_UUID)
-            .setParty((Party) null)
+            .setPartyManager(null)
             .setCoins(0)
             .setHashCoins(0);
 
         this.settingsManager = new AccountSettingsManager();
+    }
+
+
+    /**
+     * Pushes player's account data to the Redis database.
+     *
+     * @param   redisAccess     Redis access
+     */
+    public void pushData(RedisAccess redisAccess)
+    {
+        /* Updating account's last update timestamp. */
+        this.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+
+        new AccountPublisher(redisAccess)
+            .push(this.getUsername(), this.getUuid(), this);
     }
 
 
@@ -130,28 +144,6 @@ public class Account
     }
 
     /**
-     * @return  Player's party
-     */
-    @JsonIgnore
-    public Party getParty()
-    {
-        return this.party;
-    }
-
-    /**
-     * @return  Player's party UUID
-     * @apiNote Solely used for Redis access. Prefer using {@link Account#getParty()#getUuid()}.
-     */
-    @JsonGetter("party")
-    public String getPartyUuid()
-    {
-        if (this.party == null) {
-            return null;
-        }
-        return this.party.getUuid();
-    }
-
-    /**
      * @return  Account's amount of coins
      */
     public int getCoins()
@@ -174,6 +166,28 @@ public class Account
     public AccountSettingsManager getSettingsManager()
     {
         return this.settingsManager;
+    }
+
+    /**
+     * @return  Player's party
+     */
+    @JsonIgnore
+    public PartyManager getPartyManager()
+    {
+        return this.partyManager;
+    }
+
+    /**
+     * @return  Player's party UUID
+     * @apiNote Solely used for Redis access. Prefer using {@link Account#getPartyManager()#getCurrentParty()#getUuid()}.
+     */
+    @JsonGetter("party")
+    public String getPartyUuid()
+    {
+        if (this.partyManager.getCurrentParty() == null) {
+            return null;
+        }
+        return this.partyManager.getCurrentParty().getUuid();
     }
 
     /**
@@ -229,28 +243,6 @@ public class Account
     }
 
     /**
-     * @param   party   New party
-     * @return  Account
-     */
-    public Account setParty(Party party)
-    {
-        this.party = party;
-        return this;
-    }
-
-    /**
-     * @param   partyUuid   New party's UUID
-     * @return  Itself
-     * @apiNote Solely used for Redis access. Prefer using {@link Account#setParty(Party)}.
-     */
-    @JsonSetter("party")
-    public Account setParty(String partyUuid)
-    {
-        this.party = new Party(partyUuid);
-        return this;
-    }
-
-    /**
      * @param   coins   New amount of coins
      * @return  Account
      */
@@ -278,6 +270,18 @@ public class Account
     public Account setSettingsManager(AccountSettingsManager settingsManager)
     {
         this.settingsManager = settingsManager;
+        return this;
+    }
+
+    /**
+     * @param   partyUuid   New party's UUID
+     * @return  Itself
+     * @apiNote Solely used for Redis access. Prefer using {@link Account#getPartyManager()#setCurrentParty(Party)}.
+     */
+    @JsonSetter("party")
+    public Account setPartyManager(String partyUuid)
+    {
+        this.partyManager = new PartyManager(partyUuid);
         return this;
     }
 
