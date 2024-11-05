@@ -22,8 +22,26 @@ public class AccountProvider
 
 
     /**
-     * Gets the UUID from the Redis database from a player's
-     * username.
+     * Gets the username of a player from the Redis database
+     * from its UUID.
+     *
+     * @param   uuid    Player's UUID
+     * @return  Fetched username
+     * @throws  EntryNotFoundException  If account does not exist
+     */
+    public String getUsernameFromUuid(String uuid)
+        throws EntryNotFoundException
+    {
+        if (uuid == null) {
+            throw new EntryNotFoundException(null);
+        }
+
+        return super.get(uuid).getUuid();
+    }
+
+    /**
+     * Gets the UUID of a player from the Redis database from
+     * its username.
      *
      * @param   username    Player's username
      * @return  Fetched UUID
@@ -32,6 +50,10 @@ public class AccountProvider
     public String getUuidFromUsername(String username)
         throws EntryNotFoundException
     {
+        if (username == null) {
+            throw new EntryNotFoundException(null);
+        }
+
         final String fetchedUuid;
 
         final RBucket<String> rBucket = super.getRedissonClient()
@@ -51,6 +73,10 @@ public class AccountProvider
      */
     public boolean hasAccount(String tag)
     {
+        if (tag == null) {
+            return false;
+        }
+
         return super.getRedissonClient().getKeys()
             .getKeys(KeysScanOptions.defaults().pattern(PREFIX_KEY + tag))
             .iterator().hasNext();
