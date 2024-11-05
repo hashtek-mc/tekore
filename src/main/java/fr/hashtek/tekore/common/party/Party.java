@@ -4,7 +4,14 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import fr.hashtek.tekore.common.account.Account;
+import fr.hashtek.tekore.common.account.io.AccountProvider;
+import fr.hashtek.tekore.common.constant.Constants;
+import fr.hashtek.tekore.common.exception.EntryNotFoundException;
+import fr.hashtek.tekore.common.exception.PlayerNotInPartyException;
+import fr.hashtek.tekore.common.party.io.PartyPublisher;
+import fr.hashtek.tekore.spigot.Tekore;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.sql.Timestamp;
@@ -14,6 +21,9 @@ import java.util.UUID;
 
 public class Party
 {
+
+    private static final Tekore CORE = Tekore.getInstance();
+
 
     private String uuid;
     private Set<String> members;
@@ -46,29 +56,32 @@ public class Party
 
     /**
      * Creates a new Party.
-     * <p>
-     * This "replaces" a static {@code create} function.
-     * </p>
      *
      * @param   owner   Party owner
      */
-    public Party(Player owner)
+    public static Party create(Player owner)
     {
-        this.uuid = UUID.randomUUID().toString();
-        this.members = new HashSet<String>();
-        this.owner = owner.getUniqueId().toString();
-        this.createdAt = new Timestamp(System.currentTimeMillis());
+        final String ownerUuid = owner.getUniqueId().toString();
 
-        this.addMember(this.owner);
+        return new Party(UUID.randomUUID().toString())
+            .setMembers(new HashSet<String>())
+            .setOwner(ownerUuid)
+            .setCreatedAt(new Timestamp(System.currentTimeMillis()))
+            .addMember(ownerUuid);
     }
 
-
     /**
-     * Adds a new player to the party.
+     * Removes a member from the party.
      *
-     * @param   playerUuid  Player to add
+     * @param   memberUuid  Member's UUID
      * @return  Itself
      */
+    public Party removeMember(String memberUuid)
+    {
+        this.members.remove(memberUuid);
+        return this;
+    }
+
     public Party addMember(String playerUuid)
     {
         this.members.add(playerUuid);
@@ -76,15 +89,157 @@ public class Party
     }
 
     /**
-     * Removes a player from the party.
-     *
-     * @param   playerUuid  Player to remove
-     * @return  Itself
+     * @see #kickMember(Player, String, boolean)
      */
-    public Party removeMember(String playerUuid)
+    public String kickMember(String memberName)
+        throws EntryNotFoundException, PlayerNotInPartyException
     {
-        this.members.remove(playerUuid);
-        return this;
+        return this.kickMember(this.getOwner(), memberName, false);
+    }
+
+    /**
+     * <p>
+     * Kicks a member from the Party.
+     * </p>
+     * <p>
+     * Full self-sufficient, everything is done :
+     * <ul>
+     *     <li>Updating party informations</li>
+     *     <li>Updating RAM-stored members accounts party informations</li>
+     *     <li>Sending a message to the kicked member to notify him from the kick.</li>
+     * </ul>
+     * </p>
+     *
+     * @param   author      Player who kicked the member
+     * @param   memberTag   Member to kick (tag = either a username or a UUID)
+     * @param   disbandMode If kick provides from a party disband.</br>
+     *                      Basically just modifies the message sent to the targeted member.</br>
+     *                      If set to true, memberTag MUST be a UUID.
+     * @return  Kicked member's username
+     * @throws  EntryNotFoundException      If targeted member doesn't exist or never connected to the server
+     * @throws  PlayerNotInPartyException   If targeted member isn't in the party
+     */
+    public String kickMember(Player author, String memberTag, boolean disbandMode)
+        throws EntryNotFoundException, PlayerNotInPartyException
+    {
+        final AccountProvider accountProvider = new AccountProvider(CORE.getRedisAccess());
+
+        final Account memberAccount = accountProvider.get(
+            disbandMode
+                ? memberTag
+                : accountProvider.getUuidFromUsername(memberTag)
+        );
+        final String memberUsername = memberAccount.getUsername();
+        final String memberUuid = memberAccount.getUuid();
+
+        if (!this.members.contains(memberUuid)) {
+            throw new PlayerNotInPartyException(memberUsername);
+        }
+
+        /* Here we remove the member from the party... */
+        this.members.remove(memberUuid);
+
+        /* ...we push the modifications to the Redis database... */
+        this.pushData();
+
+        /* ...we ask BungeeCord to update the RAM-stored removed member's account to take into account the modifications... */
+        CORE.getMessenger().sendPluginMessage(
+            author,
+            Constants.UPDATE_PARTY_SUBCHANNEL,
+            memberUsername
+        );
+
+        /* ...and we send him a message. */
+        CORE.getMessenger().sendPluginMessage(
+            author,
+            "Message",
+            memberUsername,
+            disbandMode
+                ? ChatColor.RED + "You've been kicked from the party."
+                : ChatColor.RED + "The party you were in has been disbanded."
+        );
+
+        return memberAccount.getUsername();
+    }
+
+    /**
+     * @see     {@link Party#disband(Player)}
+     * @apiNote Must be called when the party owner is online.</br>
+     *          Otherwise, an error will be thrown during runtime at some point.
+     */
+    public void disband()
+    {
+        this.disband(this.getOwner()); // TODO: Maybe check if owner is online?
+    }
+
+    /**
+     * Disbands the party.
+     *
+     * @param   author  Disband author
+     */
+    public void disband(Player author)
+    {
+        /* Kicking everyone from the party */
+        for (String memberUuid : this.members) {
+            try {
+                this.kickMember(author, memberUuid, true);
+            }
+            catch (EntryNotFoundException | PlayerNotInPartyException exception) {
+                /**
+                 * @OccursWhen  Targeted member's account has been inappropriately terminated.
+                 *
+                 * ... but we can pretty much don't care about this as the party is getting
+                 * disbanded.
+                 */
+            }
+        }
+
+        /* Deleting the party. */
+        this.deleteParty();
+    }
+
+    /**
+     * Removes this party from the Redis database.
+     */
+    public void deleteParty()
+    {
+        this.pushData(this.getUuid(), null);
+    }
+
+    /**
+     * Sends a PartyUpdate signal to every member of this party.
+     * <p>
+     * Used for synchronization.
+     * </p>
+     */
+    public void refreshMembersRamStoredParty(Player author)
+    {
+        for (String memberUuid : this.members) {
+            CORE.getMessenger().sendPluginMessage(
+                author,
+                Constants.UPDATE_PARTY_SUBCHANNEL,
+                memberUuid
+            );
+        }
+    }
+
+    /**
+     * Pushes the party's data to the Redis database.
+     */
+    public void pushData()
+    {
+        this.pushData(this.getUuid(), this);
+    }
+
+    /**
+     * Pushes the party's data to the Redis database.
+     *
+     * @param   uuid    Party's UUID
+     * @param   data    Data to push
+     */
+    public void pushData(String uuid, Party data)
+    {
+        new PartyPublisher(CORE.getRedisAccess()).push(uuid, data);
     }
 
     /**
@@ -154,35 +309,39 @@ public class Party
      * @param   uuid    New UUID
      * @apiNote Solely used for Redis access. Not for public use!
      */
-    public void setUuid(String uuid)
+    public Party setUuid(String uuid)
     {
         this.uuid = uuid;
+        return this;
     }
 
     /**
      * @param   members New party members
      */
     @JsonSetter("members")
-    public void setMembers(Set<String> members)
+    public Party setMembers(Set<String> members)
     {
         this.members = members;
+        return this;
     }
 
     /**
      * @param   owner   New party owner
      */
     @JsonSetter("owner")
-    public void setOwner(String owner)
+    public Party setOwner(String owner)
     {
         this.owner = owner;
+        return this;
     }
 
     /**
      * @param   createdAt   Party creation date
      */
-    public void setCreatedAt(Timestamp createdAt)
+    public Party setCreatedAt(Timestamp createdAt)
     {
         this.createdAt = createdAt;
+        return this;
     }
 
 }
