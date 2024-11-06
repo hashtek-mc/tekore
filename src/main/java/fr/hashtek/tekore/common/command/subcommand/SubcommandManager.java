@@ -31,7 +31,9 @@ public class SubcommandManager
      */
     public SubcommandManager registerSubcommand(AbstractSubcommand subcommand)
     {
-        this.subcommands.put(subcommand.getName(), subcommand);
+        for (String s : subcommand.getName().split(":")) {
+            this.subcommands.put(s, subcommand);
+        }
         return this;
     }
 
