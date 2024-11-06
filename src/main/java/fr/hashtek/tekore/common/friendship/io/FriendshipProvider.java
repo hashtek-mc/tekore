@@ -26,6 +26,10 @@ public class FriendshipProvider
      */
     public List<Friendship> getPlayerFriendships(String playerUuid)
     {
+        if (playerUuid == null) {
+            return List.of();
+        }
+
         final List<Friendship> friendships = new ArrayList<Friendship>();
 
         final RSet<String> involvedFriendships = super.getRedissonClient().getSet(

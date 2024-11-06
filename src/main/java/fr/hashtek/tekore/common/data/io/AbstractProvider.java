@@ -47,6 +47,10 @@ public abstract class AbstractProvider
     public T get(String key)
         throws EntryNotFoundException
     {
+        if (key == null) {
+            throw new EntryNotFoundException(null);
+        }
+
         final String redisKey = this.keyPrefix + key;
         final RBucket<T> rBucket = this.getRedissonClient().getBucket(redisKey);
         final T data = rBucket.get();
