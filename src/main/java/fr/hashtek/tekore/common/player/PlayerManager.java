@@ -6,14 +6,10 @@ import fr.hashtek.tekore.common.account.io.AccountPublisher;
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
 import fr.hashtek.tekore.common.exception.EntryNotFoundException;
 import fr.hashtek.tekore.common.friendship.FriendshipManager;
-import fr.hashtek.tekore.common.party.Party;
-import fr.hashtek.tekore.common.party.io.PartyProvider;
 import fr.hashtek.tekore.common.rank.Rank;
 import fr.hashtek.tekore.common.rank.RankProvider;
 import fr.hashtek.tekore.spigot.Tekore;
 import org.bukkit.entity.Player;
-
-import java.sql.Timestamp;
 
 public class PlayerManager
 {
@@ -69,12 +65,12 @@ public class PlayerManager
             this.account = new Account(playerUuid)
                 .setUsername(playerName);
 
-            this.pushData(redisAccess);
+            this.account.pushData(redisAccess);
         }
 
         /* Update primitive data. */
         this.fetchPlayerRank(redisAccess);
-        this.fetchPlayerParty(redisAccess);
+        this.account.getPartyManager().updateParty();
     }
 
     /**
@@ -102,28 +98,6 @@ public class PlayerManager
     }
 
     /**
-     * Exactly the same as {@link PlayerManager#fetchPlayerRank(RedisAccess)}
-     *
-     * @param   redisAccess     Redis access
-     */
-    private void fetchPlayerParty(RedisAccess redisAccess)
-    {
-        if (this.account.getParty() == null) {
-            return;
-        }
-
-        try {
-            final Party party = new PartyProvider(redisAccess)
-                .get(this.account.getParty().getUuid());
-
-            this.account.setParty(party);
-        }
-        catch (EntryNotFoundException exception) {
-            // ...
-        }
-    }
-
-    /**
      * Fetches the fresh new account data from the
      * Redis database and then store it in RAM.
      *
@@ -140,20 +114,6 @@ public class PlayerManager
         catch (EntryNotFoundException exception) {
             // TODO: Log?
         }
-    }
-
-    /**
-     * Pushes player's account data to the Redis database.
-     *
-     * @param   redisAccess     Redis access
-     */
-    public void pushData(RedisAccess redisAccess)
-    {
-        /* Updating account's last update timestamp. */
-        account.setLastUpdate(new Timestamp(System.currentTimeMillis()));
-
-        new AccountPublisher(redisAccess)
-            .push(this.account.getUsername(), this.account.getUuid(), account);
     }
 
     /**
