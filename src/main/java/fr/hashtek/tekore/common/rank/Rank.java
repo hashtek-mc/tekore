@@ -32,6 +32,7 @@ public class Rank
      * an {@link Account}, during its creation.
      *
      * @param   uuid    Rank's UUID
+     * @apiNote Solely used for Redis access. Not for public use!
      */
     public Rank(String uuid)
     {
@@ -119,6 +120,7 @@ public class Rank
      */
     public boolean hasPermission(String permission)
     {
+        // TODO: Permission globbing system
         return this.permissions.contains(permission);
     }
 

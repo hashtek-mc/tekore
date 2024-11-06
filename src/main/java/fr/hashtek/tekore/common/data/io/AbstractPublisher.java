@@ -24,8 +24,7 @@ public abstract class AbstractPublisher
      * Creates a new Publisher.
      *
      * @param   redisAccess     Redis access
-     * @param   keyPrefix       Key prefix
-     *                          </br>
+     * @param   keyPrefix       Key prefix.
      *                          For example, in {@code accounts:{uuid}},
      *                          {@code accounts:} is the key prefix.
      */

@@ -26,7 +26,11 @@ public abstract class AbstractSubcommand
      * @param   description Description
      * @throws  InvalidCommandContextException  You can ignore this one.
      */
-    public AbstractSubcommand(AbstractCommand parent, String name, String description)
+    public AbstractSubcommand(
+        AbstractCommand parent,
+        String name,
+        String description
+    )
         throws InvalidCommandContextException
     {
         this(parent, name, description, null);
