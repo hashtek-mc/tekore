@@ -23,6 +23,7 @@ public class Constants
     public static final String BUNGEECORD_CHANNEL = "BungeeCord";
 
     public static final String UPDATE_FRIENDS_SUBCHANNEL = "UpdateFriends";
+    public static final String UPDATE_PARTY_SUBCHANNEL = "UpdateParty";
     /* ------------------------------------------------------------------- */
 
     /* Symbols ----------------------------------------------------------- */
