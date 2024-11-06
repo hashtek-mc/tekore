@@ -50,7 +50,7 @@ public class CommandParty
         @NotNull String[] args
     )
     {
-        player.chat("/party status");
+        player.performCommand("party status");
     }
 
 }

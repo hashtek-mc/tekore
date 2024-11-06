@@ -24,9 +24,14 @@ public class CommandFriend
 
         try {
             super.getSubcommandManager()
+                // info
                 .registerSubcommand(new SubcommandFriendList(this))
-                .registerSubcommand(new SubcommandFriendAdd(this))
+
+                // management
                 .registerSubcommand(new SubcommandFriendRemove(this))
+
+                // request
+                .registerSubcommand(new SubcommandFriendAdd(this))
                 .registerSubcommand(new SubcommandFriendAccept(this))
                 .registerSubcommand(new SubcommandFriendDeny(this));
         }
@@ -74,7 +79,7 @@ public class CommandFriend
         @NotNull String[] args
     )
     {
-        player.chat("/friend list");
+        player.performCommand("friend list");
     }
 
 }
