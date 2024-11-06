@@ -5,6 +5,7 @@ import fr.hashtek.tekore.common.command.AbstractCommand;
 import fr.hashtek.tekore.common.command.subcommand.AbstractSubcommand;
 import fr.hashtek.tekore.common.exception.InvalidCommandContextException;
 import fr.hashtek.tekore.common.party.Party;
+import fr.hashtek.tekore.common.party.PartyManager;
 import fr.hashtek.tekore.common.player.PlayerManager;
 import fr.hashtek.tekore.spigot.Tekore;
 import net.kyori.adventure.text.Component;
@@ -36,17 +37,22 @@ public class SubcommandPartyDisband
             .getPlayerManager(player);
 
         final Account playerAccount = playerManager.getAccount();
-        final Party playerParty = playerAccount.getParty();
+        final PartyManager partyManager = playerAccount.getPartyManager();
+        final Party currentParty = partyManager.getCurrentParty();
 
-        if (playerParty == null) {
+        if (currentParty == null) {
             player.sendMessage(Component.text(ChatColor.RED + "You are not in a party."));
             return;
         }
 
-        if (!playerParty.getOwner().equals(player)) {
+        if (!currentParty.getOwnerUuid().equals(player.getUniqueId().toString())) {
             player.sendMessage(Component.text(ChatColor.RED + "You are not the owner of this party. Type /party leave to leave."));
             return;
         }
+
+        currentParty.disband();
+
+        player.sendMessage(Component.text(ChatColor.GREEN + "You have successfully disbanded your party."));
     }
 
 }

@@ -5,6 +5,7 @@ import fr.hashtek.tekore.common.command.AbstractCommand;
 import fr.hashtek.tekore.common.command.subcommand.AbstractSubcommand;
 import fr.hashtek.tekore.common.exception.InvalidCommandContextException;
 import fr.hashtek.tekore.common.party.Party;
+import fr.hashtek.tekore.common.party.PartyManager;
 import fr.hashtek.tekore.common.party.io.PartyPublisher;
 import fr.hashtek.tekore.common.player.PlayerManager;
 import fr.hashtek.tekore.spigot.Tekore;
@@ -36,22 +37,23 @@ public class SubcommandPartyCreate
         final PlayerManager playerManager = CORE.getPlayerManagersManager()
             .getPlayerManager(player);
 
-        final Account playerAccount = playerManager.getAccount();
+        final Account account = playerManager.getAccount();
+        final PartyManager partyManager = account.getPartyManager();
 
-        if (playerAccount.getParty() != null) {
+        if (partyManager.getCurrentParty() != null) {
             player.sendMessage(Component.text(ChatColor.RED + "You already are in a party. If you want to create a new one, type /party leave and go ahead."));
             return;
         }
 
         /* Creating a new Party */
-        final Party createdParty = new Party(player);
+        final Party createdParty = Party.create(player);
 
         /* Setting player's party to the freshly new created party */
-        playerAccount.setParty(createdParty);
+        partyManager.setCurrentParty(createdParty);
 
         /* Pushing modifications to the Redis access */
         new PartyPublisher(CORE.getRedisAccess()).push(createdParty);
-        playerManager.pushData(CORE.getRedisAccess());
+        account.pushData(CORE.getRedisAccess());
 
         player.sendMessage(Component.text(ChatColor.GREEN + "Party created!"));
     }

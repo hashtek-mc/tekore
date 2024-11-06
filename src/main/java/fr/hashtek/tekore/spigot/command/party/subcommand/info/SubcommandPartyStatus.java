@@ -33,10 +33,11 @@ public class SubcommandPartyStatus
         final Party currentParty = CORE.getPlayerManagersManager()
             .getPlayerManager(player)
             .getAccount()
-            .getParty();
+            .getPartyManager()
+            .getCurrentParty();
 
         if (currentParty == null) {
-            player.sendMessage(Component.text(ChatColor.RED + "You are not in party. Create one by executing /party create."));
+            player.sendMessage(Component.text(ChatColor.RED + "You are not in a party. Create one by executing /party create."));
             return;
         }
 
