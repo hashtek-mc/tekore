@@ -36,7 +36,7 @@ public class AccountProvider
             throw new EntryNotFoundException(null);
         }
 
-        return super.get(uuid).getUuid();
+        return super.get(uuid).getUsername();
     }
 
     /**
