@@ -2,7 +2,6 @@ package fr.hashtek.tekore.spigot.command.party.subcommand.management;
 
 import fr.hashtek.tekore.common.account.Account;
 import fr.hashtek.tekore.common.account.io.AccountProvider;
-import fr.hashtek.tekore.common.command.AbstractCommand;
 import fr.hashtek.tekore.common.command.subcommand.AbstractSubcommand;
 import fr.hashtek.tekore.common.exception.EntryNotFoundException;
 import fr.hashtek.tekore.common.exception.InvalidCommandContextException;
@@ -10,6 +9,7 @@ import fr.hashtek.tekore.common.party.Party;
 import fr.hashtek.tekore.common.party.PartyManager;
 import fr.hashtek.tekore.common.regex.Regexes;
 import fr.hashtek.tekore.spigot.Tekore;
+import fr.hashtek.tekore.spigot.command.party.CommandParty;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -25,7 +25,7 @@ public class SubcommandPartyPromote
     private final ThreadLocal<String> buffer = ThreadLocal.withInitial(String::new);
 
 
-    public SubcommandPartyPromote(AbstractCommand parent)
+    public SubcommandPartyPromote(CommandParty parent)
         throws InvalidCommandContextException
     {
         super(parent, "promote:setowner", "");

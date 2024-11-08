@@ -1,13 +1,13 @@
 package fr.hashtek.tekore.spigot.command.party.subcommand.management;
 
 import fr.hashtek.tekore.common.account.Account;
-import fr.hashtek.tekore.common.command.AbstractCommand;
 import fr.hashtek.tekore.common.command.subcommand.AbstractSubcommand;
 import fr.hashtek.tekore.common.exception.InvalidCommandContextException;
 import fr.hashtek.tekore.common.party.Party;
 import fr.hashtek.tekore.common.party.PartyManager;
 import fr.hashtek.tekore.common.player.PlayerManager;
 import fr.hashtek.tekore.spigot.Tekore;
+import fr.hashtek.tekore.spigot.command.party.CommandParty;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -20,7 +20,7 @@ public class SubcommandPartyDisband
     private static final Tekore CORE = Tekore.getInstance();
 
 
-    public SubcommandPartyDisband(AbstractCommand parent)
+    public SubcommandPartyDisband(CommandParty parent)
         throws InvalidCommandContextException
     {
         super(parent, "disband", "");

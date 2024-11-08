@@ -1,10 +1,10 @@
 package fr.hashtek.tekore.spigot.command.party.subcommand.info;
 
-import fr.hashtek.tekore.common.command.AbstractCommand;
 import fr.hashtek.tekore.common.command.subcommand.AbstractSubcommand;
 import fr.hashtek.tekore.common.exception.InvalidCommandContextException;
 import fr.hashtek.tekore.common.party.Party;
 import fr.hashtek.tekore.spigot.Tekore;
+import fr.hashtek.tekore.spigot.command.party.CommandParty;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -17,7 +17,7 @@ public class SubcommandPartyStatus
     private static final Tekore CORE = Tekore.getInstance();
 
 
-    public SubcommandPartyStatus(AbstractCommand parent)
+    public SubcommandPartyStatus(CommandParty parent)
         throws InvalidCommandContextException
     {
         super(parent, "status", "");

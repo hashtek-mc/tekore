@@ -1,9 +1,9 @@
 package fr.hashtek.tekore.spigot.command.party.subcommand.request;
 
-import fr.hashtek.tekore.common.command.AbstractCommand;
 import fr.hashtek.tekore.common.command.subcommand.AbstractSubcommand;
 import fr.hashtek.tekore.common.exception.InvalidCommandContextException;
 import fr.hashtek.tekore.spigot.Tekore;
+import fr.hashtek.tekore.spigot.command.party.CommandParty;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ public class SubcommandPartyDeny
     private static final Tekore CORE = Tekore.getInstance();
 
 
-    public SubcommandPartyDeny(AbstractCommand parent)
+    public SubcommandPartyDeny(CommandParty parent)
         throws InvalidCommandContextException
     {
         super(parent, "deny", "");
