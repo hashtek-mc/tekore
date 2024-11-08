@@ -70,7 +70,7 @@ public class PlayerManager
 
         /* Update primitive data. */
         this.fetchPlayerRank(redisAccess);
-        this.account.getPartyManager().updateParty();
+        this.account.getPartyManager().updateParty(this.account.getUuid());
     }
 
     /**

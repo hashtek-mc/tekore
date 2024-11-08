@@ -102,7 +102,7 @@ public class Party
      * Kicks a member from the Party.
      * </p>
      * <p>
-     * Full self-sufficient, everything is done :
+     * Full self-sufficient, everything is done:
      * <ul>
      *     <li>Updating party informations</li>
      *     <li>Updating RAM-stored members accounts party informations</li>
@@ -142,7 +142,10 @@ public class Party
         /* ...we push the modifications to the Redis database... */
         this.pushData();
 
-        /* ...we ask BungeeCord to update the RAM-stored removed member's account to take into account the modifications... */
+        /**
+         * ...we ask BungeeCord to update the RAM-stored removed member's account to take into account the modifications...
+         * NOTE: The party UUID stored in the account of the kicked member will automatically be deleted.
+         */
         CORE.getMessenger().sendPluginMessage(
             author,
             Constants.UPDATE_PARTY_SUBCHANNEL,

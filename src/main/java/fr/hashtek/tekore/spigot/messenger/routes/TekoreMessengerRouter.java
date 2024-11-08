@@ -61,7 +61,11 @@ public class TekoreMessengerRouter
             return;
         }
 
-        CORE.getPlayerManagersManager().getPlayerManager(player).getAccount().getPartyManager().updateParty();
+        CORE.getPlayerManagersManager()
+            .getPlayerManager(player)
+            .getAccount()
+            .getPartyManager()
+            .updateParty(player.getUniqueId().toString());
     }
 
     @Override
