@@ -38,18 +38,6 @@ public class SubcommandPartyKick
             return;
         }
 
-        final String targetName = args[0];
-
-        if (!Regexes.matches(Regexes.USERNAME_REGEX, targetName)) {
-            player.sendMessage(Component.text(ChatColor.RED + "Invalid username."));
-            return;
-        }
-
-        if (targetName.equalsIgnoreCase(player.getName())) {
-            player.sendMessage(Component.text(ChatColor.RED + "You can't kick yourself. If you want to leave the party, either disband it or give the ownership to another player and then leave."));
-            return;
-        }
-
         final Party playerParty = CORE.getPlayerManagersManager()
             .getPlayerManager(player)
             .getAccount()
@@ -63,6 +51,18 @@ public class SubcommandPartyKick
 
         if (!playerParty.getOwnerUuid().equals(player.getUniqueId().toString())) {
             player.sendMessage(Component.text(ChatColor.RED + "You are not the owner of this party. Type /party leave to leave."));
+            return;
+        }
+
+        final String targetName = args[0];
+
+        if (targetName.equalsIgnoreCase(player.getName())) {
+            player.sendMessage(Component.text(ChatColor.RED + "You can't kick yourself. If you want to leave the party, either disband it or give the ownership to another player and then leave."));
+            return;
+        }
+
+        if (!Regexes.matches(Regexes.USERNAME_REGEX, targetName)) {
+            player.sendMessage(Component.text(ChatColor.RED + "Invalid username."));
             return;
         }
 
