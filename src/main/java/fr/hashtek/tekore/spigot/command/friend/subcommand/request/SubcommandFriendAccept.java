@@ -2,7 +2,6 @@ package fr.hashtek.tekore.spigot.command.friend.subcommand.request;
 
 import fr.hashtek.tekore.common.account.Account;
 import fr.hashtek.tekore.common.account.io.AccountProvider;
-import fr.hashtek.tekore.common.command.AbstractCommand;
 import fr.hashtek.tekore.common.command.subcommand.AbstractSubcommand;
 import fr.hashtek.tekore.common.constant.Constants;
 import fr.hashtek.tekore.common.exception.EntryNotFoundException;
@@ -13,6 +12,7 @@ import fr.hashtek.tekore.common.friendship.FriendshipRequestState;
 import fr.hashtek.tekore.common.friendship.io.FriendshipPublisher;
 import fr.hashtek.tekore.common.regex.Regexes;
 import fr.hashtek.tekore.spigot.Tekore;
+import fr.hashtek.tekore.spigot.command.friend.CommandFriend;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -27,7 +27,7 @@ public class SubcommandFriendAccept
     private static final Tekore CORE = Tekore.getInstance();
 
 
-    public SubcommandFriendAccept(AbstractCommand parent)
+    public SubcommandFriendAccept(CommandFriend parent)
         throws InvalidCommandContextException
     {
         super(parent, "accept", "");

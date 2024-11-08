@@ -1,11 +1,11 @@
 package fr.hashtek.tekore.spigot.command.friend.subcommand.info;
 
-import fr.hashtek.tekore.common.command.AbstractCommand;
 import fr.hashtek.tekore.common.command.subcommand.AbstractSubcommand;
 import fr.hashtek.tekore.common.exception.InvalidCommandContextException;
 import fr.hashtek.tekore.common.friendship.Friendship;
 import fr.hashtek.tekore.common.friendship.FriendshipManager;
 import fr.hashtek.tekore.spigot.Tekore;
+import fr.hashtek.tekore.spigot.command.friend.CommandFriend;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ public class SubcommandFriendList
     private static final Tekore CORE = Tekore.getInstance();
 
 
-    public SubcommandFriendList(AbstractCommand parent)
+    public SubcommandFriendList(CommandFriend parent)
         throws InvalidCommandContextException
     {
         super(parent, "list", "");
