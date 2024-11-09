@@ -120,8 +120,11 @@ public class Rank
      */
     public boolean hasPermission(String permission)
     {
-        /* If rank directly has the permission or have every permission, return true. */
-        if (this.permissions.contains("*") || this.permissions.contains(permission)) {
+        if (permission == null ||
+            permission.isEmpty() ||
+            this.permissions.contains("*") ||
+            this.permissions.contains(permission)
+        ) {
             return true;
         }
 
@@ -130,6 +133,10 @@ public class Rank
 
         do {
             dotIndex = permission.indexOf('.', dotIndex + 1);
+            if (dotIndex == -1) {
+                break;
+            }
+
             final String prefix = permission.substring(0, dotIndex) + ".*";
 
             if (this.permissions.contains(prefix)) {
