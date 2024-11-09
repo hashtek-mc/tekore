@@ -69,6 +69,23 @@ public class TekoreMessengerRouter
     }
 
     @Override
+    protected void updateAccount(ByteArrayDataInput in)
+    {
+        final String playerName = in.readUTF();
+        final Player player = CORE.getServer().getPlayer(playerName);
+
+        if (player == null) {
+            return;
+        }
+
+        CORE.getPlayerManagersManager()
+            .getPlayerManager(player)
+            .getAccount()
+            .pushData(CORE.getRedisAccess());
+    }
+
+
+    @Override
     public void dispatch(
         String subchannel,
         ByteArrayDataInput in
@@ -80,6 +97,9 @@ public class TekoreMessengerRouter
                 break;
             case Constants.UPDATE_PARTY_SUBCHANNEL:
                 this.updateParty(in);
+                break;
+            case Constants.UPDATE_ACCOUNT_SUBCHANNEL:
+                this.updateAccount(in);
                 break;
             default:
                 CORE.getHashLogger().error(

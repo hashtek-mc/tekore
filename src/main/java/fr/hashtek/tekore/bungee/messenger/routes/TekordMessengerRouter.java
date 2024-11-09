@@ -83,6 +83,20 @@ public class TekordMessengerRouter
     }
 
     @Override
+    protected void updateAccount(ByteArrayDataInput in)
+    {
+        final String playerName = in.readUTF();
+        final ProxiedPlayer player = CORD.getProxy().getPlayer(playerName);
+
+        if (player == null) {
+            return;
+        }
+
+        messenger.sendPluginMessage(player.getServer(), Constants.UPDATE_ACCOUNT_SUBCHANNEL, playerName);
+    }
+
+
+    @Override
     public void dispatch(
         String subchannel,
         ByteArrayDataInput in
@@ -94,6 +108,9 @@ public class TekordMessengerRouter
                 break;
             case Constants.UPDATE_PARTY_SUBCHANNEL:
                 this.updateParty(in);
+                break;
+            case Constants.UPDATE_ACCOUNT_SUBCHANNEL:
+                this.updateAccount(in);
                 break;
             default:
                 if (!List.of(DEFAULT_CHANNELS).contains(subchannel)) {

@@ -45,6 +45,26 @@ public abstract class Router
      */
     protected abstract void updateParty(ByteArrayDataInput in);
 
+    /**
+     * <p>
+     *     <u>Route:</u>
+     *     {@code UpdateAccount}
+     * </p>
+     * <p>
+     * <u>Arguments:</u>
+     * <ul>
+     *     <li>Target's name</li>
+     * </ul>
+     * </p>
+     * <p>
+     *     <u>Description:</u>
+     *     Sends a party update signal to a player's server.
+     * </p>
+     *
+     * @param   in  Raw data input
+     */
+    protected abstract void updateAccount(ByteArrayDataInput in);
+
 
     /**
      * Dispatches the routes to custom functions.

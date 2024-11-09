@@ -3,6 +3,7 @@ package fr.hashtek.tekore.spigot.command.party.subcommand.management;
 import fr.hashtek.tekore.common.account.Account;
 import fr.hashtek.tekore.common.account.io.AccountProvider;
 import fr.hashtek.tekore.common.command.subcommand.AbstractSubcommand;
+import fr.hashtek.tekore.common.constant.Constants;
 import fr.hashtek.tekore.common.exception.EntryNotFoundException;
 import fr.hashtek.tekore.common.exception.InvalidCommandContextException;
 import fr.hashtek.tekore.common.party.Party;
@@ -28,7 +29,7 @@ public class SubcommandPartyPromote
     public SubcommandPartyPromote(CommandParty parent)
         throws InvalidCommandContextException
     {
-        super(parent, "promote:setowner", "");
+        super(parent, "promote", "");
     }
 
 
@@ -152,6 +153,12 @@ public class SubcommandPartyPromote
             "Message",
             targetAccountName,
             "You are the new party owner."
+        );
+
+        CORE.getMessenger().sendPluginMessage(
+            player,
+            Constants.UPDATE_ACCOUNT_SUBCHANNEL,
+            targetAccountName
         );
 
         player.sendMessage(Component.text(ChatColor.GREEN + "You made " + targetAccountName + " the new party owner."));
