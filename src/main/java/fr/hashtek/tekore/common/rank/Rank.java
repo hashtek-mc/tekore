@@ -120,8 +120,25 @@ public class Rank
      */
     public boolean hasPermission(String permission)
     {
-        // TODO: Permission globbing system
-        return this.permissions.contains(permission);
+        /* If rank directly has the permission or have every permission, return true. */
+        if (this.permissions.contains("*") || this.permissions.contains(permission)) {
+            return true;
+        }
+
+        /* Globbing system (wildcard *) ------------------------------------ */
+        int dotIndex = -1;
+
+        do {
+            dotIndex = permission.indexOf('.', dotIndex + 1);
+            final String prefix = permission.substring(0, dotIndex) + ".*";
+
+            if (this.permissions.contains(prefix)) {
+                return true;
+            }
+        } while (dotIndex != -1);
+        /* ----------------------------------------------------------------- */
+
+        return false;
     }
 
 }
