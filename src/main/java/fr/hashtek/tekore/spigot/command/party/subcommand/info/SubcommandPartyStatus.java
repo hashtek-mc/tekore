@@ -47,7 +47,15 @@ public class SubcommandPartyStatus
         for (String memberUuid : currentParty.getMembersUuid()) {
             player.sendMessage("- " + memberUuid);
         }
-        player.sendMessage(Component.text("Owner: " + currentParty.getOwnerUuid()));
+        if (currentParty.getActiveRequests().isEmpty()) {
+            player.sendMessage(Component.text("No active requests."));
+        } else {
+            player.sendMessage(Component.text("Active requests:"));
+            for (String request : currentParty.getActiveRequests()) {
+                player.sendMessage("- " + request);
+            }
+        }
+        player.sendMessage(Component.text("Party owner: " + currentParty.getOwnerUuid()));
     }
 
 }

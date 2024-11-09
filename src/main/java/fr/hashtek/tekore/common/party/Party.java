@@ -27,6 +27,7 @@ public class Party
 
     private String uuid;
     private Set<String> members;
+    private Set<String> activeRequests;
     private String owner;
     private Timestamp createdAt;
 
@@ -49,9 +50,6 @@ public class Party
     public Party(String uuid)
     {
         this.uuid = uuid;
-        this.members = null;
-        this.owner = null;
-        this.createdAt = null;
     }
 
     /**
@@ -70,21 +68,54 @@ public class Party
             .addMember(ownerUuid);
     }
 
+
+    /**
+     * Broadcasts a message to the party's members.
+     *
+     * @param   author  Broadcast author
+     * @param   message Message to broadcast
+     */
+    public void broadcastToMembers(Player author, String message)
+    {
+        for (String memberUuid : this.members) {
+            try {
+                final String memberName = new AccountProvider(CORE.getRedisAccess())
+                    .getUsernameFromUuid(memberUuid);
+
+                CORE.getMessenger().sendPluginMessage(
+                    author,
+                    "Message",
+                    memberName,
+                    message
+                );
+            }
+            catch (EntryNotFoundException exception) {
+                // osef mdrrr
+            }
+        }
+    }
+
+    /**
+     * Adds a member to the party.
+     *
+     * @param   playerUuid  Member to add's UUID
+     * @return  Itself
+     */
+    public Party addMember(String playerUuid)
+    {
+        this.members.add(playerUuid);
+        return this;
+    }
+
     /**
      * Removes a member from the party.
      *
-     * @param   memberUuid  Member's UUID
+     * @param   memberUuid  Member to remove's UUID
      * @return  Itself
      */
     public Party removeMember(String memberUuid)
     {
         this.members.remove(memberUuid);
-        return this;
-    }
-
-    public Party addMember(String playerUuid)
-    {
-        this.members.add(playerUuid);
         return this;
     }
 
@@ -136,11 +167,13 @@ public class Party
             throw new PlayerNotInPartyException(memberUsername);
         }
 
-        /* Here we remove the member from the party... */
-        this.members.remove(memberUuid);
+        if (!disbandMode) {
+            /* Here we remove the member from the party... */
+            this.members.remove(memberUuid);
 
-        /* ...we push the modifications to the Redis database... */
-        this.pushData();
+            /* ...we push the modifications to the Redis database... */
+            this.pushData();
+        }
 
         /**
          * ...we ask BungeeCord to update the RAM-stored removed member's account to take into account the modifications...
@@ -152,15 +185,17 @@ public class Party
             memberUsername
         );
 
-        /* ...and we send him a message. */
-        CORE.getMessenger().sendPluginMessage(
-            author,
-            "Message",
-            memberUsername,
-            disbandMode
-                ? ChatColor.RED + "You've been kicked from the party."
-                : ChatColor.RED + "The party you were in has been disbanded."
-        );
+        /* ...and we send him a message (only for players that are not the disband author). */
+        if (!author.getUniqueId().toString().equals(memberAccount.getUuid())) {
+            CORE.getMessenger().sendPluginMessage(
+                author,
+                "Message",
+                memberUsername,
+                disbandMode
+                    ? ChatColor.RED + "The party you were in has been disbanded."
+                    : ChatColor.RED + "You've been kicked from the party."
+            );
+        }
 
         return memberAccount.getUsername();
     }
@@ -229,20 +264,24 @@ public class Party
     /**
      * Pushes the party's data to the Redis database.
      */
-    public void pushData()
+    public Party pushData()
     {
-        this.pushData(this.getUuid(), this);
+        return this.pushData(this.getUuid(), this);
     }
 
     /**
      * Pushes the party's data to the Redis database.
+     * <p>
+     * For basic push, please use {@link #pushData()}.
+     * </p>
      *
      * @param   uuid    Party's UUID
      * @param   data    Data to push
      */
-    public void pushData(String uuid, Party data)
+    public Party pushData(String uuid, Party data)
     {
         new PartyPublisher(CORE.getRedisAccess()).push(uuid, data);
+        return this;
     }
 
     /**
@@ -280,6 +319,32 @@ public class Party
         }
 
         return members;
+    }
+
+    /**
+     * @return  Party's active requests
+     */
+    @JsonIgnore
+    public Set<String> getActiveRequests()
+    {
+        /* Lazy loading */
+        if (this.activeRequests == null) {
+            this.activeRequests = new HashSet<String>();
+        }
+        return this.activeRequests;
+    }
+
+    /**
+     * Same as {@link #getActiveRequests()} but without lazy loading.
+     * @apiNote Solely used for Redis access. Not for public use, unless you know what you're doing!
+     */
+    @JsonGetter("activeRequests")
+    public Set<String> getRawActiveRequests()
+    {
+        if (this.activeRequests == null) {
+            return null;
+        }
+        return this.activeRequests;
     }
 
     /**
@@ -325,6 +390,17 @@ public class Party
     public Party setMembers(Set<String> members)
     {
         this.members = members;
+        return this;
+    }
+
+    /**
+     * @param   activeRequests  New active requests
+     * @return  Itself
+     */
+    @JsonSetter("activeRequests")
+    public Party setActiveRequests(Set<String> activeRequests)
+    {
+        this.activeRequests = activeRequests;
         return this;
     }
 
