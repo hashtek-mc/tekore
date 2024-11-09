@@ -85,24 +85,32 @@ public class SubcommandPartyPromote
             .getAccount()
             .getPartyManager();
 
-        if (partyManager.getCurrentParty() == null) {
+        final Party currentParty = partyManager.getCurrentParty();
+
+        if (currentParty == null) {
             player.sendMessage(Component.text(ChatColor.RED + "You are not in a party."));
             return;
         }
 
-        if (!partyManager.getCurrentParty().getOwnerUuid().equals(player.getUniqueId().toString())) {
+        if (!currentParty.getOwnerUuid().equals(player.getUniqueId().toString())) {
             player.sendMessage(Component.text(ChatColor.RED + "You are not the leader of your party."));
             return;
         }
 
-        String targetName = args[0];
+        String targetName = args[0].toLowerCase();
 
         /* Flag handling */
         if (targetName.startsWith("-")) {
             if (!handleFlags(targetName, player, partyManager.getCurrentParty())) {
                 return;
             }
-            targetName = buffer.get();
+            targetName = buffer.get().toLowerCase();
+        }
+
+        /* If player tries to promote itself, cancel. */
+        if (targetName.equalsIgnoreCase(player.getName())) {
+            player.sendMessage(Component.text("haha veri funi"));
+            return;
         }
 
         final Account targetAccount;
@@ -110,12 +118,6 @@ public class SubcommandPartyPromote
 
         if (!Regexes.matches(Regexes.USERNAME_REGEX, targetName)) {
             player.sendMessage(Component.text("Invalid username."));
-            return;
-        }
-
-        /* If player tries to promote itself, cancel. */
-        if (targetName.equalsIgnoreCase(player.getName())) {
-            player.sendMessage(Component.text("haha veri funi"));
             return;
         }
 
@@ -130,14 +132,29 @@ public class SubcommandPartyPromote
             return;
         }
 
-        if (!partyManager.getCurrentParty().getMembersUuid().contains(targetAccount.getUuid())) {
+        if (!currentParty.getMembersUuid().contains(targetAccount.getUuid())) {
             player.sendMessage(Component.text(ChatColor.RED + "Targeted player is not in your party."));
             return;
         }
 
-        partyManager.getCurrentParty()
+        currentParty
             .setOwner(targetAccount.getUuid())
+            .pushData()
             .refreshMembersRamStoredParty(player);
+
+        currentParty.broadcastToMembers(
+            player,
+            targetAccountName + " is the new party owner."
+        );
+
+        CORE.getMessenger().sendPluginMessage(
+            player,
+            "Message",
+            targetAccountName,
+            "You are the new party owner."
+        );
+
+        player.sendMessage(Component.text(ChatColor.GREEN + "You made " + targetAccountName + " the new party owner."));
     }
 
 }
