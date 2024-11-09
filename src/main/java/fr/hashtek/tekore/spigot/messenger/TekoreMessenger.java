@@ -90,7 +90,7 @@ public class TekoreMessenger
      * @param   data        Data to send
      * @apiNote Keep in mind that if an error occurs when sending out the data,
      *          the player responsible for the communication will be kicked
-     *          out of the proxy.
+     *          out of the proxy (at least for default BungeeCord subchannels).
      */
     public void sendPluginMessage(
         Player player,

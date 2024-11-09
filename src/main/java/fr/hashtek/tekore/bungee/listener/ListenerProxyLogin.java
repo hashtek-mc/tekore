@@ -22,7 +22,7 @@ public class ListenerProxyLogin
 
 
     /**
-     * Broacasts the login to player's friends.
+     * Broadcasts the login to player's friends.
      *
      * @param   player  Player
      */
