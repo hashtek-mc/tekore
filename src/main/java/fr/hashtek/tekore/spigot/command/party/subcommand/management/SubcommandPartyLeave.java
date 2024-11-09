@@ -102,6 +102,13 @@ public class SubcommandPartyLeave
         currentParty.removeMember(account.getUuid());
         currentParty.pushData();
         currentParty.refreshMembersRamStoredParty(player);
+
+        currentParty.broadcastToMembers(
+            player,
+            ChatColor.AQUA + player.getName() + ChatColor.RED + " has left the party."
+        );
+
+        player.sendMessage(Component.text(ChatColor.RED + "You left the party."));
     }
 
 }
