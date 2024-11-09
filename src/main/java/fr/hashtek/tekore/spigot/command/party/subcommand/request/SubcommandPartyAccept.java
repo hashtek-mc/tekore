@@ -1,9 +1,17 @@
 package fr.hashtek.tekore.spigot.command.party.subcommand.request;
 
+import fr.hashtek.tekore.common.account.Account;
+import fr.hashtek.tekore.common.account.io.AccountProvider;
 import fr.hashtek.tekore.common.command.subcommand.AbstractSubcommand;
+import fr.hashtek.tekore.common.exception.EntryNotFoundException;
 import fr.hashtek.tekore.common.exception.InvalidCommandContextException;
+import fr.hashtek.tekore.common.party.Party;
+import fr.hashtek.tekore.common.party.PartyManager;
+import fr.hashtek.tekore.common.regex.Regexes;
 import fr.hashtek.tekore.spigot.Tekore;
 import fr.hashtek.tekore.spigot.command.party.CommandParty;
+import net.kyori.adventure.text.Component;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +35,77 @@ public class SubcommandPartyAccept
         @NotNull String[] args
     )
     {
-        // ...
+        if (args.length != 1) {
+            player.sendMessage(Component.text(ChatColor.RED + "Wrong syntax."));
+            return;
+        }
+
+        final String playerUuid = player.getUniqueId().toString();
+
+        final PartyManager partyManager = CORE.getPlayerManagersManager()
+            .getPlayerManager(player)
+            .getAccount()
+            .getPartyManager();
+
+        if (partyManager.getCurrentParty() != null) {
+            player.sendMessage(Component.text(ChatColor.RED + "You are already in a party. Leave it to join this one."));
+            return;
+        }
+
+        final String targetName = args[0].toLowerCase();
+
+        /* If player tries to "accept" itself, cancel. */
+        if (targetName.equalsIgnoreCase(player.getName())) {
+            player.sendMessage(Component.text(ChatColor.RED + "You can't accept an invite from yourself. This is impossible."));
+            return;
+        }
+
+        if (!Regexes.matches(Regexes.USERNAME_REGEX, targetName)) {
+            player.sendMessage(Component.text(ChatColor.RED + "Invalid username."));
+            return;
+        }
+
+        final Account targetAccount;
+
+        try {
+            final AccountProvider accountProvider = new AccountProvider(CORE.getRedisAccess());
+
+            targetAccount = accountProvider.get(accountProvider.getUuidFromUsername(targetName));
+        }
+        catch (EntryNotFoundException exception) {
+            player.sendMessage(Component.text(ChatColor.RED + "This player doesn't exist or never connected to this server."));
+            return;
+        }
+
+        final Party targetParty = targetAccount.getPartyManager()
+            .updateParty(targetAccount.getUuid())
+            .getCurrentParty();
+
+        if (targetParty == null || !targetParty.getActiveRequests().contains(playerUuid)) {
+            player.sendMessage(Component.text(ChatColor.RED + "This player didn't invite you."));
+            return;
+        }
+
+        /* Setting player's current party to the target's party. */
+        partyManager.setCurrentParty(targetParty);
+
+        /* Removing player's uuid from target party's active requests... */
+        targetParty.getActiveRequests().remove(playerUuid);
+        /* ...adding player to party members... */
+        targetParty.addMember(playerUuid);
+        /* ...then pushing party data to the Redis database... */
+        targetParty.pushData();
+        /* ...and finally refresh member's RAM-stored party data from the Redis database. */
+        targetParty.refreshMembersRamStoredParty(player);
+
+        CORE.getMessenger().sendPluginMessage(
+            player,
+            "Message",
+            targetAccount.getUsername(),
+            ChatColor.GREEN + player.getName() + " accepted your party invite!"
+        );
+
+        player.sendMessage(Component.text(ChatColor.GREEN + "You are now in " + targetAccount.getUsername() + "'s party."));
     }
 
 }
