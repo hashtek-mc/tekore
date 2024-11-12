@@ -1,4 +1,4 @@
-package fr.hashtek.tekore.spigot.command.party.subcommand.management;
+package fr.hashtek.tekore.spigot.command.party.subcommand.management.promote;
 
 import fr.hashtek.tekore.common.account.Account;
 import fr.hashtek.tekore.common.account.io.AccountProvider;
@@ -76,11 +76,6 @@ public class SubcommandPartyPromote
         @NotNull String[] args
     )
     {
-        if (args.length != 1) {
-            player.sendMessage(Component.text(ChatColor.RED + "Wrong syntax."));
-            return;
-        }
-
         final PartyManager partyManager = CORE.getPlayerManagersManager()
             .getPlayerManager(player)
             .getAccount()
@@ -95,6 +90,12 @@ public class SubcommandPartyPromote
 
         if (!currentParty.getOwnerUuid().equals(player.getUniqueId().toString())) {
             player.sendMessage(Component.text(ChatColor.RED + "You are not the leader of your party."));
+            return;
+        }
+
+        /* Open promote GUI if player just executed "/party promote" */
+        if (args.length == 0) {
+            new SubcommandPartyPromoteGui(currentParty).open(player);
             return;
         }
 

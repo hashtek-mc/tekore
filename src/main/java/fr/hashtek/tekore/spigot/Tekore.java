@@ -3,6 +3,7 @@ package fr.hashtek.tekore.spigot;
 import fr.hashtek.hashconfig.HashConfig;
 import fr.hashtek.hashlogger.HashLoggable;
 import fr.hashtek.hashlogger.HashLogger;
+import fr.hashtek.spigot.hashgui.manager.HashGuiManager;
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
 import fr.hashtek.tekore.common.data.redis.RedisConfiguration;
 import fr.hashtek.tekore.common.data.redis.RedisCredentials;
@@ -32,6 +33,7 @@ public class Tekore
     private RedisAccess redisAccess;
     private TekoreMessenger messenger;
 
+    private HashGuiManager guiManager;
     private PlayerManagersManager playerManagersManager;
 
 
@@ -49,9 +51,12 @@ public class Tekore
         logger.info(this, "Starting up...");
 
         this.initializeRedisAccess();
-        this.initializePlayerManagersManager();
-
         this.loadMessenger();
+
+        this.guiManager =
+            new HashGuiManager(this, this.getServer().getPluginManager())
+                .setup();
+        this.initializePlayerManagersManager();
 
         this.registerListeners();
         new CommandManager(this.getServer().getPluginManager());
@@ -231,6 +236,14 @@ public class Tekore
     public TekoreMessenger getMessenger()
     {
         return this.messenger;
+    }
+
+    /**
+     * @return  Gui manager
+     */
+    public HashGuiManager getGuiManager()
+    {
+        return this.guiManager;
     }
 
     /**
