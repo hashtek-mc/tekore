@@ -4,6 +4,7 @@ import fr.hashtek.tekore.common.command.AbstractCommand;
 import fr.hashtek.tekore.common.exception.InvalidCommandContextException;
 import fr.hashtek.tekore.spigot.command.party.subcommand.info.SubcommandPartyStatus;
 import fr.hashtek.tekore.spigot.command.party.subcommand.management.*;
+import fr.hashtek.tekore.spigot.command.party.subcommand.management.promote.SubcommandPartyPromote;
 import fr.hashtek.tekore.spigot.command.party.subcommand.request.SubcommandPartyAccept;
 import fr.hashtek.tekore.spigot.command.party.subcommand.request.SubcommandPartyDeny;
 import fr.hashtek.tekore.spigot.command.party.subcommand.request.SubcommandPartyInvite;

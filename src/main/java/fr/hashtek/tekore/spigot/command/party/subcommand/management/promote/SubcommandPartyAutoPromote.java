@@ -1,4 +1,4 @@
-package fr.hashtek.tekore.spigot.command.party.subcommand.management;
+package fr.hashtek.tekore.spigot.command.party.subcommand.management.promote;
 
 import fr.hashtek.tekore.common.command.subcommand.AbstractSubcommand;
 import fr.hashtek.tekore.common.exception.InvalidCommandContextException;
