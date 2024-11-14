@@ -19,7 +19,6 @@ public abstract class AbstractSubcommand
      * <p>
      * Even if subcommand has no permission, player must have the subcommand's parent permission
      * (if defined) to execute the subcommand.
-     * </p>
      *
      * @param   parent      Parent
      * @param   name        Name
@@ -40,13 +39,12 @@ public abstract class AbstractSubcommand
      * Creates a new subcommand, with a defined permission.
      * <p>
      * <strong>NOTE:</strong> Subcommand's permission <u>MUST</u> start with its parent's permission.
-     * </br>
+     * <br>
      * For example, let's say the parent have the permission {@code "player.friend"}.
-     * </br>
+     * <br>
      * Therefore, the subcommand's permission <u>MUST</u> start with {@code "player.friend."}.
-     * </br>
+     * <br>
      * Otherwise, {@link InvalidCommandContextException} will be thrown.
-     * </p>
      *
      * @param   parent      Parent
      * @param   name        Name

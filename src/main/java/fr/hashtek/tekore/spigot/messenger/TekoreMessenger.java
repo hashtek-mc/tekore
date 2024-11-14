@@ -33,7 +33,7 @@ public class TekoreMessenger
 
     /**
      * Loads the messenger.
-     * </br>
+     * <br>
      * Basically registers the messaging channels.
      */
     public void load()

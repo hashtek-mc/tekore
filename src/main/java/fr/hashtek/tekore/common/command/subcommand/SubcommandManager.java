@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,8 +60,14 @@ public class SubcommandManager
             return true;
         }
 
+        final Date now = new Date();
+
         subcommand.execute(player, Arrays.copyOfRange(args, 1, args.length));
         /*                         ↑ Omitting the first element (the subcommand name) for simplicity. */
+
+        final Date now1 = new Date();
+
+        player.sendMessage(Component.text(now1.getTime() - now.getTime() + "ms elapsed for this subcommand"));
 
         return true;
     }

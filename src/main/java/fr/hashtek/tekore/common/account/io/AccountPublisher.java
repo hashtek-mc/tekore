@@ -45,7 +45,6 @@ public class AccountPublisher
      * Stores the username in a Map in the Redis database.
      * <p>
      * Used for faster UUID querying from username.
-     * </p>
      *
      * @param   username    Username
      * @param   uuid        UUID

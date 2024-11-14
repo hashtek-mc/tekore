@@ -85,7 +85,7 @@ public class Tekore
 
     /**
      * Creates a new instance of HashConfig, to read configuration files.
-     * </br>
+     * <br>
      * This function doesn't use HashLogger because it is called before the
      * initialization of HashLogger. System.err.println is used instead.
      */
@@ -109,7 +109,7 @@ public class Tekore
 
     /**
      * Creates an instance of HashLogger.
-     * </br>
+     * <br>
      * This function doesn't use HashLogger because it is called before the
      * initialization of HashLogger. System.err.println is used instead.
      */

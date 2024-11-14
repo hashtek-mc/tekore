@@ -22,9 +22,6 @@ import fr.hashtek.tekore.spigot.Tekore;
 public class Account
 {
 
-    private static final Tekore CORE = Tekore.getInstance();
-
-
     private final String uuid;
     private String username;
 
@@ -55,7 +52,6 @@ public class Account
      * Creates a new Account.
      * <p>
      * To set the values inside, please use the setters.
-     * </p>
      *
      * @param   uuid    Account's UUID
      * @apiNote Should never be instantiated anywhere other than in {@link AccountProvider}.
@@ -127,7 +123,7 @@ public class Account
 
     /**
      * @return  Account's rank's UUID
-     * @apiNote Solely used for Redis access. If you're not, please use {@link Account#getRank()#getUuid()}.
+     * @apiNote Solely used for Redis access. If you're not, please use {@link Rank#getUuid()}.
      */
     @JsonGetter("rank")
     public String getRankUuid()
@@ -179,7 +175,7 @@ public class Account
 
     /**
      * @return  Player's party UUID
-     * @apiNote Solely used for Redis access. Prefer using {@link Account#getPartyManager()#getCurrentParty()#getUuid()}.
+     * @apiNote Solely used for Redis access. Prefer using {@link Party#getUuid()}.
      */
     @JsonGetter("party")
     public String getPartyUuid()
@@ -276,7 +272,7 @@ public class Account
     /**
      * @param   partyUuid   New party's UUID
      * @return  Itself
-     * @apiNote Solely used for Redis access. Prefer using {@link Account#getPartyManager()#setCurrentParty(Party)}.
+     * @apiNote Solely used for Redis access. Prefer using {@link PartyManager#setCurrentParty(Party)}.
      */
     @JsonSetter("party")
     public Account setPartyManager(String partyUuid)

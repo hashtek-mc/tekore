@@ -80,7 +80,6 @@ public class PlayerManager
      * What we're doing here is basically fetch the rank from the
      * Redis database and put it in the account, so that the
      * entire rank is stored, and we can access everything.
-     * </p>
      *
      * @param   redisAccess     Redis access
      */

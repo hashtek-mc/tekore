@@ -32,7 +32,7 @@ public class TekordMessenger
 
     /**
      * Loads the messenger.
-     * </br>
+     * <br>
      * Basically registers the messaging channels.
      */
     public void load()

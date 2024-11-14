@@ -40,7 +40,7 @@ public class Party
 
     /**
      * Creates an empty Party, just with the UUID.
-     * </br>
+     * <br>
      * Basically only used at the very first state of
      * an {@link Account}, during its creation.
      *
@@ -131,7 +131,6 @@ public class Party
     /**
      * <p>
      * Kicks a member from the Party.
-     * </p>
      * <p>
      * Full self-sufficient, everything is done:
      * <ul>
@@ -139,18 +138,21 @@ public class Party
      *     <li>Updating RAM-stored members accounts party informations</li>
      *     <li>Sending a message to the kicked member to notify him from the kick.</li>
      * </ul>
-     * </p>
      *
      * @param   author      Player who kicked the member
      * @param   memberTag   Member to kick (tag = either a username or a UUID)
-     * @param   disbandMode If kick provides from a party disband.</br>
-     *                      Basically just modifies the message sent to the targeted member.</br>
+     * @param   disbandMode If kick provides from a party disband.<br>
+     *                      Basically just modifies the message sent to the targeted member.<br>
      *                      If set to true, memberTag MUST be a UUID.
      * @return  Kicked member's username
      * @throws  EntryNotFoundException      If targeted member doesn't exist or never connected to the server
      * @throws  PlayerNotInPartyException   If targeted member isn't in the party
      */
-    public String kickMember(Player author, String memberTag, boolean disbandMode)
+    public String kickMember(
+        Player author,
+        String memberTag,
+        boolean disbandMode
+    )
         throws EntryNotFoundException, PlayerNotInPartyException
     {
         final AccountProvider accountProvider = new AccountProvider(CORE.getRedisAccess());
@@ -201,8 +203,8 @@ public class Party
     }
 
     /**
-     * @see     {@link Party#disband(Player)}
-     * @apiNote Must be called when the party owner is online.</br>
+     * @see     Party#disband(Player)
+     * @apiNote Must be called when the party owner is online.<br>
      *          Otherwise, an error will be thrown during runtime at some point.
      */
     public void disband()
@@ -225,7 +227,6 @@ public class Party
             catch (EntryNotFoundException | PlayerNotInPartyException exception) {
                 /**
                  * @OccursWhen  Targeted member's account has been inappropriately terminated.
-                 *
                  * ... but we can pretty much don't care about this as the party is getting
                  * disbanded.
                  */
@@ -248,7 +249,6 @@ public class Party
      * Sends a PartyUpdate signal to every member of this party.
      * <p>
      * Used for synchronization.
-     * </p>
      */
     public void refreshMembersRamStoredParty(Player author)
     {
@@ -273,7 +273,6 @@ public class Party
      * Pushes the party's data to the Redis database.
      * <p>
      * For basic push, please use {@link #pushData()}.
-     * </p>
      *
      * @param   uuid    Party's UUID
      * @param   data    Data to push

@@ -7,19 +7,15 @@ public abstract class Router
 
     /**
      * <p>
-     *     <u>Route:</u>
-     *     {@code UpdateFriends}
-     * </p>
+     * <u>Route:</u> {@code UpdateFriends}
      * <p>
      * <u>Arguments:</u>
      * <ul>
      *     <li>Target's name</li>
      * </ul>
-     * </p>
      * <p>
-     *     <u>Description:</u>
-     *     Sends a friend update signal to a player's server.
-     * </p>
+     * <u>Description:</u>
+     * Sends a friend update signal to a player's server.
      *
      * @param   in  Raw data input
      */
@@ -27,19 +23,15 @@ public abstract class Router
 
     /**
      * <p>
-     *     <u>Route:</u>
-     *     {@code UpdateParty}
-     * </p>
+     * <u>Route:</u> {@code UpdateParty}
      * <p>
      * <u>Arguments:</u>
      * <ul>
      *     <li>Target's tag (name or UUID)</li>
      * </ul>
-     * </p>
      * <p>
-     *     <u>Description:</u>
-     *     Sends a party update signal to a player's server.
-     * </p>
+     * <u>Description:</u>
+     * Sends a party update signal to a player's server.
      *
      * @param   in  Raw data input
      */
@@ -47,19 +39,15 @@ public abstract class Router
 
     /**
      * <p>
-     *     <u>Route:</u>
-     *     {@code UpdateAccount}
-     * </p>
+     * <u>Route:</u> {@code UpdateAccount}
      * <p>
      * <u>Arguments:</u>
      * <ul>
      *     <li>Target's name</li>
      * </ul>
-     * </p>
      * <p>
-     *     <u>Description:</u>
-     *     Sends a party update signal to a player's server.
-     * </p>
+     * <u>Description:</u>
+     * Sends a party update signal to a player's server.
      *
      * @param   in  Raw data input
      */

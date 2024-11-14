@@ -2,7 +2,7 @@ package fr.hashtek.tekore.common.account.settings;
 
 /**
  * Template for any player setting.
- * </br>
+ * <br>
  * This interface contains all the minimal functions that
  * a setting value must have.
  */

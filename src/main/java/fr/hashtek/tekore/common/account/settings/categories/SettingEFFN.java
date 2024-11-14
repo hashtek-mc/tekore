@@ -3,15 +3,14 @@ package fr.hashtek.tekore.common.account.settings.categories;
 import fr.hashtek.tekore.common.account.settings.AccountSettingValue;
 
 /**
- * <h3>EFFN</h3>
+ * <strong>EFFN</strong>
  * <i>Stands for:</i>
  * <p>
  * <strong>E</strong><i>veryone</i>
- * <br/>
+ * <br>
  * <strong>F</strong><i>riends of </i><strong>F</strong><i>riends only</i>
- * <br/>
+ * <br>
  * <strong>N</strong><i>obody</i>
- * </p>
  */
 public enum SettingEFFN
     implements AccountSettingValue

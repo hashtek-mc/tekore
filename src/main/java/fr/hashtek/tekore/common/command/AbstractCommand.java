@@ -2,12 +2,15 @@ package fr.hashtek.tekore.common.command;
 
 import fr.hashtek.tekore.common.command.subcommand.SubcommandManager;
 import fr.hashtek.tekore.spigot.Tekore;
+import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Date;
 
 public abstract class AbstractCommand
     implements CommandExecutor
@@ -90,7 +93,13 @@ public abstract class AbstractCommand
             return true;
         }
 
+        final Date now = new Date();
+
         this.execute(player, command, label, args);
+
+        final Date now1 = new Date();
+
+        player.sendMessage(Component.text(now1.getTime() - now.getTime() + "ms elapsed for this command"));
         return true;
     }
 
@@ -99,11 +108,9 @@ public abstract class AbstractCommand
      * <p>
      * If false is returned, then the "usage" plugin.yml entry for this command
      * (if defined) will be sent to the player.
-     * </p>
      * <p>
      * <strong>If command is subcommand-managed (c.f. {@link AbstractCommand#isSubcommandManaged()}),
      * this will be fired ONLY if arguments are empty.</strong>
-     * </p>
      *
      * @param   player      Player who executed the command
      * @param   command     Command which was executed

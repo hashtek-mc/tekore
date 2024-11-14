@@ -72,6 +72,10 @@ processResources {
     }
 }
 
+javadoc {
+    options.tags = [ "apiNote" ]
+}
+
 shadowJar {
     exclude '**/BungeeCord.jar'
 

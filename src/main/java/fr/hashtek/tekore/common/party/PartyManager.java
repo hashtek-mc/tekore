@@ -48,10 +48,9 @@ public class PartyManager
         return this.currentParty;
     }
 
-    public Party setCurrentParty(Party party)
+    public void setCurrentParty(Party party)
     {
         this.currentParty = party;
-        return this.currentParty;
     }
 
 }

@@ -24,7 +24,7 @@ public class FriendshipPublisher
     }
 
     /**
-     * Used for easier & faster Redis querying, "involve" is
+     * Used for easier and faster Redis querying, "involve" is
      * a prefix key used in the Redis database that basically returns
      * a {@link org.redisson.api.RSet<String>} of Friendship UUIDs, in
      * which the player is "involved" (is either the sender or the
@@ -48,10 +48,8 @@ public class FriendshipPublisher
      * <p>
      * Does NOT delete the friendship, this method simply removes the friendship
      * from the "involve" Set stored for faster querying.
-     * </p>
      * <p>
      * See {@link FriendshipPublisher#involvePlayerIntoFriendship(String, Friendship)}.
-     * </p>
      *
      * @param   playerUuid      Player's UUID
      * @param   friendshipUuid  UUID of friendship to remove
