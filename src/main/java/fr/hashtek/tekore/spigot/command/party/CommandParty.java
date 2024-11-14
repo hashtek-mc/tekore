@@ -31,6 +31,7 @@ public class CommandParty
                 .registerSubcommand(new SubcommandPartyKick(this))
                 .registerSubcommand(new SubcommandPartyLeave(this))
                 .registerSubcommand(new SubcommandPartyPromote(this))
+                .registerSubcommand(new SubcommandPartyForceOwn(this))
 
                 // request
                 .registerSubcommand(new SubcommandPartyInvite(this))
