@@ -7,7 +7,7 @@ import fr.hashtek.tekore.common.data.redis.RedisAccess;
 import fr.hashtek.tekore.common.exception.EntryNotFoundException;
 import fr.hashtek.tekore.common.friendship.FriendshipManager;
 import fr.hashtek.tekore.common.rank.Rank;
-import fr.hashtek.tekore.common.rank.RankProvider;
+import fr.hashtek.tekore.common.rank.io.RankProvider;
 import fr.hashtek.tekore.spigot.Tekore;
 import org.bukkit.entity.Player;
 
