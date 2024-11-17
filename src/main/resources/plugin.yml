@@ -14,7 +14,11 @@ commands:
   party:
     aliases: [p]
     description: "Système de party"
-    usage: "/party [status] [create] [disband] [add <name>] [remove/rm <name>] [kick <name>] [leave] [promote <name>] [accept <name>] [deny <name>]"
+    usage: "/party [status] [create] [disband] [invite <name>] [kick <name>] [leave] [promote <name>] [accept <name>] [deny <name>]"
+  guild:
+    aliases: [g]
+    description: "Système de guild"
+    usage: "/guild [status] [create] [disband] [invite <name>] [kick <name>] [leave] [accept <name>] [deny <name>]"
   accountdump:
   accountedit:
   rankpush:

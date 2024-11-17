@@ -5,6 +5,7 @@ import fr.hashtek.tekore.spigot.command.debug.CommandAccountDump;
 import fr.hashtek.tekore.spigot.command.debug.CommandAccountEdit;
 import fr.hashtek.tekore.spigot.command.debug.CommandRankPush;
 import fr.hashtek.tekore.spigot.command.friend.CommandFriend;
+import fr.hashtek.tekore.spigot.command.guild.CommandGuild;
 import fr.hashtek.tekore.spigot.command.party.CommandParty;
 import org.bukkit.plugin.PluginManager;
 
@@ -27,6 +28,7 @@ public class CommandManager
 
         super.registerCommand("friend", CommandFriend.class);
         super.registerCommand("party", CommandParty.class);
+        super.registerCommand("guild", CommandGuild.class);
     }
 
 }
