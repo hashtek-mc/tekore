@@ -72,6 +72,9 @@ public abstract class AbstractRank
      */
     public Set<String> getPermissions()
     {
+        if (this.permissions.isEmpty()) {
+            return null;
+        }
         return this.permissions;
     }
 
