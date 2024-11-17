@@ -10,10 +10,11 @@ import fr.hashtek.tekore.common.account.io.AccountPublisher;
 import fr.hashtek.tekore.common.account.settings.AccountSettingsManager;
 import fr.hashtek.tekore.common.constant.Constants;
 import fr.hashtek.tekore.common.data.redis.RedisAccess;
+import fr.hashtek.tekore.common.guild.Guild;
+import fr.hashtek.tekore.common.guild.GuildManager;
 import fr.hashtek.tekore.common.party.Party;
 import fr.hashtek.tekore.common.party.PartyManager;
 import fr.hashtek.tekore.common.rank.Rank;
-import fr.hashtek.tekore.spigot.Tekore;
 
 /**
  * Unless you want beef with Redis, NEVER move
@@ -36,6 +37,7 @@ public class Account
     private AccountSettingsManager settingsManager;
 
     private PartyManager partyManager;
+    private GuildManager guildManager;
 
 
     /**
@@ -67,6 +69,7 @@ public class Account
             .setLastUpdate(now)
             .setRank(Constants.DEFAULT_RANK_UUID)
             .setPartyManager(null)
+            .setGuildManager(null)
             .setCoins(0)
             .setHashCoins(0);
 
@@ -187,6 +190,28 @@ public class Account
     }
 
     /**
+     * @return  Player's guild
+     */
+    @JsonIgnore
+    public GuildManager getGuildManager()
+    {
+        return this.guildManager;
+    }
+
+    /**
+     * @return  Player's guild UUID
+     * @apiNote Solely used for Redis access. Prefer using {@link Guild#getUuid()}.
+     */
+    @JsonGetter("guild")
+    public String getGuildUuid()
+    {
+        if (this.guildManager.getCurrentGuild() == null) {
+            return null;
+        }
+        return this.guildManager.getCurrentGuild().getUuid();
+    }
+
+    /**
      * @param   username    Account's new username
      * @return  Itself
      */
@@ -278,6 +303,18 @@ public class Account
     public Account setPartyManager(String partyUuid)
     {
         this.partyManager = new PartyManager(partyUuid);
+        return this;
+    }
+
+    /**
+     * @param   guildUuid   New guild's UUID
+     * @return  Itself
+     * @apiNote Solely used for Redis access. Prefer using {@link GuildManager#setCurrentGuild(Guild)}.
+     */
+    @JsonSetter("guild")
+    public Account setGuildManager(String guildUuid)
+    {
+        this.guildManager = new GuildManager(guildUuid);
         return this;
     }
 
